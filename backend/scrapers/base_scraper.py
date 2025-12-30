@@ -46,7 +46,7 @@ class CentralBankScraper:
             
             query = """
             INSERT INTO transcripts (bank_name, publish_date, content, url)
-            VALUES (%s, %s, %s);
+            VALUES (%s, %s, %s, %s)
             ON CONFLICT (url) DO NOTHING;
             """
             self.cursor.execute(query, (self.bank_name, date, cleaned, url))
