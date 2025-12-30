@@ -9,37 +9,48 @@ load_dotenv()
 class CentralBankScraper:
     def __init__(self, bank_name):
         self.bank_name = bank_name
-        self.conn = psycopg2.connect(
-            dbname=os.getenv("DB_NAME"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASS"),
-            host=os.getenv("DB_HOST"),
-            port=os.getenv("DB_PORT")
-        )
-        self.cursor = self.conn.cursor()
+
+        db_url = os.getenv("DATABASE_URL")
+        
+        try:
+            self.conn = psycopg2.connect(db_url)
+            self.cursor = self.conn.cursor()
+            print(f"Connected to Neon for {self.bank_name}")
+        except Exception as e:
+            print(f"Connection Error: {e}")
+            raise
 
     def clean_text(self, text):
         if not text:
             return ""
         
+        text = unicodedata.normalize('NFKC', text)
+        text = re.sub(r'[\x00-\x1F\x7F-\x9F]', ' ', text)
+        text = text.replace('\xa0', ' ').replace('\u200b', ' ')
+        text = re.sub(r'[-–—]{2,}', ' ', text)
+        text = re.sub(r'[_*#]{2,}', ' ', text)
+        text = re.sub(r'\s+', ' ', text)
+        
         return text.strip()
 
-    def save_to_db(self, date, url, text, report_type):
+    def save_to_db(self, date, url, text):
+        """
+        Saves the scraped text to the 'transcripts' table.
+        """
         try:
             cleaned = self.clean_text(text)
             
             if len(cleaned) < 100:
-                print(f"Text too short ({len(cleaned)} chars), skipping: {url}")
+                print(f"Text too short, skipping.")
                 return
             
             query = """
-            INSERT INTO transcripts (bank_name, publish_date, url, raw_text, report_type)
-            VALUES (%s, %s, %s, %s, %s)
-            ON CONFLICT (url) DO NOTHING;
+            INSERT INTO transcripts (bank_name, publish_date, content)
+            VALUES (%s, %s, %s);
             """
-            self.cursor.execute(query, (self.bank_name, date, url, cleaned, report_type))
+            self.cursor.execute(query, (self.bank_name, date, cleaned))
             self.conn.commit()
-            print(f"Saved: {url[:60]}")
+            print(f"Saved {self.bank_name} transcript for {date}")
             
         except Exception as e:
             print(f"DB error: {e}")

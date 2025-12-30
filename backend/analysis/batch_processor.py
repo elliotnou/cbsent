@@ -6,18 +6,9 @@ from sentiment_eng import ToneAnalyzer
 load_dotenv()
 
 def process_transcript_sentences():
-    """
-    Gets unparsed transcripts, analyzes them at the sentence level, 
-    and saves the results to the database table 'transcript_sentences'.
-    """
     analyzer = ToneAnalyzer()
     try:
-        connection = psycopg2.connect(
-            dbname=os.getenv("DB_NAME"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASS"),
-            host=os.getenv("DB_HOST")
-        )
+        connection = psycopg2.connect(os.getenv("DATABASE_URL"))
     except Exception as e:
         print(f"Database connection failed: {e}")
         return
@@ -25,9 +16,8 @@ def process_transcript_sentences():
     try:
         with connection:
             with connection.cursor() as cur:
-                # Identify transcripts that haven't been processed into sentences yet
                 fetch_query = """
-                    SELECT t.id, t.raw_text
+                    SELECT t.id, t.content
                     FROM transcripts t
                     LEFT JOIN transcript_sentences s ON t.id = s.transcript_id
                     WHERE s.id IS NULL
@@ -54,7 +44,6 @@ def process_transcript_sentences():
                         VALUES (%s, %s, %s, %s, %s, %s);
                     """
                     
-                    # Prepare data for batch insertion
                     sentence_data = [
                         (p_id, s.text, s.topic, s.score, s.weight, s.reasoning)
                         for s in analysis_result.sentences

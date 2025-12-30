@@ -26,7 +26,7 @@ class BoCScraper(CentralBankScraper):
 
         return ' '.join(paras)
 
-    def run(self):
+    def run(self): 
         url = "https://www.bankofcanada.ca/press/press-releases/"
         
         try:
@@ -71,7 +71,7 @@ class BoCScraper(CentralBankScraper):
             if len(text) < 200:
                 continue
             
-            self.save_to_db(date, article_url, text, "Policy Statement")
+            self.save_to_db(date, article_url, text)
         
         print("Done")
 
