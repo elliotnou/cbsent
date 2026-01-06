@@ -51,12 +51,20 @@ class BoCScraper(CentralBankScraper):
                 continue
             
             article_url = urljoin(url, link['href'])
+            # Skip if already in DB
+            try:
+                if self.url_exists(article_url):
+                    continue
+            except Exception:
+                pass
+
             print(f"Scraping: {title}")
-            
+
             try:
                 r = requests.get(article_url, timeout=15)
                 r.raise_for_status()
-            except:
+            except Exception as err:
+                print(f"Failed to fetch {article_url}: {err}")
                 continue
             
             article_soup = BeautifulSoup(r.text, 'html.parser')
@@ -73,7 +81,7 @@ class BoCScraper(CentralBankScraper):
             
             self.save_to_db(date, article_url, text)
         
-        print("Done")
+        print("Done.")
 
 if __name__ == "__main__":
     scraper = BoCScraper()

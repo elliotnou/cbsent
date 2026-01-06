@@ -33,6 +33,7 @@ class CentralBankScraper:
         
         return text.strip()
 
+    # Saves scraped content to the Neon database
     def save_to_db(self, date, url, text):
         """
         Saves the scraped text to the 'transcripts' table.
@@ -56,6 +57,17 @@ class CentralBankScraper:
         except Exception as e:
             print(f"DB error: {e}")
             self.conn.rollback()
+
+    def url_exists(self, url: str) -> bool:
+        """Return True if the given URL already exists in the transcripts table."""
+        try:
+            q = "SELECT 1 FROM transcripts WHERE url = %s LIMIT 1;"
+            self.cursor.execute(q, (url,))
+            return self.cursor.fetchone() is not None
+        except Exception as e:
+            # On error, conservatively return False so scraping proceeds
+            print(f"DB check error for url_exists({url}): {e}")
+            return False
 
     def close(self):
         if self.cursor:
