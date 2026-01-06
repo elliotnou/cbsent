@@ -40,6 +40,6 @@ jobs:
         run: |
           python backend/scrapers/boc_scraper.py
           
-          # python backend/scrapers/fed_scraper.py
+          python backend/scrapers/fed_scraper.py
           
           python backend/analysis/batch_processor.py
