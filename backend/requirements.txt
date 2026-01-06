@@ -1,5 +1,0 @@
-beautifulsoup4
-requests
-psycopg2-binary
-sentence-transformers
-python-dotenv
