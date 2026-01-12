@@ -199,7 +199,6 @@ const DivergenceChart = () => {
                   contentStyle={{ backgroundColor: '#181818', border: '2px solid #8d8d8d', fontSize: '14px', color: '#8d8d8d', fontWeight: 700 }} 
                   formatter={(value) => typeof value === 'number' ? value.toFixed(2) : value}
                   itemStyle={{ color: '#8d8d8d' }} 
-                  formatter={(value) => typeof value === 'number' ? value.toFixed(2) : value}
                 />
                 <ReferenceLine y={0} stroke="#a7a7a7" strokeWidth={1} />
                 <Bar dataKey="divergence">
