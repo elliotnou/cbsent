@@ -7,3 +7,5 @@ fastapi
 uvicorn
 openai
 PyPDF2
+yfinance
+pandas
