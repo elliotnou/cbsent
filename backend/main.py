@@ -1,12 +1,15 @@
+
 import os
 import re
 import io
 import json
 import psycopg2
 import pandas as pd
+import yfinance as yf
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from datetime import datetime, timedelta
 
 load_dotenv()
 app = FastAPI()
@@ -63,7 +66,68 @@ def get_divergence():
     except Exception as e:
         print(f"Server Error: {e}")
         return []
-    
+
+# NEW ENDPOINT FOR USD/CAD DATA
+@app.get("/api/usdcad")
+def get_usdcad():
+    try:
+        # Get date range from your sentiment data
+        conn = get_db_connection()
+        query = "SELECT MIN(publish_date) as min_date, MAX(publish_date) as max_date FROM transcripts"
+        df = pd.read_sql(query, conn)
+        conn.close()
+        
+        if df.empty or df['min_date'].isna().any():
+            # Fallback: get last 2 years of data
+            end_date = datetime.now()
+            start_date = end_date - timedelta(days=730)
+        else:
+            start_date = df['min_date'].iloc[0]
+            end_date = df['max_date'].iloc[0]
+            # Add some buffer
+            start_date = start_date - timedelta(days=30)
+            end_date = end_date + timedelta(days=30)
+        
+        # Fetch USD/CAD data from Yahoo Finance
+        ticker = yf.Ticker("USDCAD=X")
+        hist = ticker.history(start=start_date, end=end_date)
+        
+        if hist.empty:
+            return []
+        
+        # Convert to DataFrame with date index
+        fx_df = pd.DataFrame({
+            'price': hist['Close']
+        })
+        fx_df.index = pd.to_datetime(fx_df.index).date
+        
+        # Create continuous date range and forward-fill
+        all_dates = pd.date_range(start=start_date, end=end_date, freq='D')
+        fx_df = fx_df.reindex(all_dates.date)
+        fx_df = fx_df.ffill()  # Forward fill missing dates
+        
+        # Normalize the close price to 0-1 range for easier visualization
+        min_price = fx_df['price'].min()
+        max_price = fx_df['price'].max()
+        fx_df['normalized'] = (fx_df['price'] - min_price) / (max_price - min_price)
+        
+        # Format for frontend
+        result = []
+        for date, row in fx_df.iterrows():
+            if pd.notna(row['price']):
+                result.append({
+                    'date': pd.Timestamp(date).strftime('%Y-%m-%d'),
+                    'price': round(float(row['price']), 4),
+                    'normalized': round(float(row['normalized']), 4)
+                })
+        
+        return result
+        
+    except Exception as e:
+        print(f"USD/CAD fetch error: {e}")
+        return []
+        
+
 if __name__ == "__main__":
     import uvicorn
     print("Starting Dovetail Terminal API...")

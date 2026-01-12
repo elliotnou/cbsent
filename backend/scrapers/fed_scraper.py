@@ -15,11 +15,11 @@ class FedScraper(CentralBankScraper):
         self.feed_url = "https://www.federalreserve.gov/json/ne-press.json"
         self.session = requests.Session()
 
-        raw_cutoff = os.getenv('SCRAPER_EARLIEST_DATE', '2025-01-01')
+        raw_cutoff = os.getenv('SCRAPER_EARLIEST_DATE', '2023-09-06')
         try:
             self.cutoff = datetime.datetime.strptime(raw_cutoff, '%Y-%m-%d').date()
         except ValueError:
-            self.cutoff = datetime.date(2025, 1, 1)
+            self.cutoff = datetime.date(2024, 1, 1)
 
     def get_pdf_text(self, url):
         try:
