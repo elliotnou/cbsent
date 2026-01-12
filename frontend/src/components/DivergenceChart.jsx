@@ -13,8 +13,8 @@ const DivergenceChart = () => {
 
   useEffect(() => {
     
-    const fetchSentiment = fetch('${API_BASE_URL}/api/divergence').then(res => res.json());
-    const fetchUSDCAD = fetch('${API_BASE_URL}/api/usdcad').then(res => res.json());
+    const fetchSentiment = fetch(`${API_BASE_URL}/api/divergence`).then(res => res.json());
+    const fetchUSDCAD = fetch(`${API_BASE_URL}/api/usdcad`).then(res => res.json());
 
     Promise.all([fetchSentiment, fetchUSDCAD])
       .then(([sentimentData, fxData]) => {
