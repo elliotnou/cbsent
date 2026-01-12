@@ -9,10 +9,12 @@ const DivergenceChart = () => {
   const [usdcadData, setUsdcadData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('all');
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
   useEffect(() => {
-    const fetchSentiment = fetch('http://127.0.0.1:8000/api/divergence').then(res => res.json());
-    const fetchUSDCAD = fetch('http://127.0.0.1:8000/api/usdcad').then(res => res.json());
+    
+    const fetchSentiment = fetch('${API_BASE_URL}/api/divergence').then(res => res.json());
+    const fetchUSDCAD = fetch('${API_BASE_URL}/api/usdcad').then(res => res.json());
 
     Promise.all([fetchSentiment, fetchUSDCAD])
       .then(([sentimentData, fxData]) => {

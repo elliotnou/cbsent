@@ -16,7 +16,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
+    allow_origins=["https://finsent-530o.onrender.com", "http://localhost:5173"], 
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -131,4 +131,5 @@ def get_usdcad():
 if __name__ == "__main__":
     import uvicorn
     print("Starting Dovetail Terminal API...")
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
