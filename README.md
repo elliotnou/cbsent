@@ -1,4 +1,4 @@
-# finSENT: Monetary Policy Divergence Engine
+# FinSENT: Monetary Policy Divergence Engine
 
 _"The economy is a dynamic system characterized by evolving human behaviour and
 decision-making. Economic relationships change over time, and, to obtain accurate forecast, it is crucial to recognize structural changes as they occur"_ - Cogley & Sargent
@@ -13,7 +13,7 @@ I built finSENT as an experimental study to see if LLMs could effectively quanti
 
 ## What It Does
 
-RegimeMapper is a **Quantitative Narrative Monitor** that automates policy sentiment extraction and visualizes how aligned or divergent the two central banks are at any point in time.
+FinSENT is a **Quantitative Narrative Monitor** that automates policy sentiment extraction and visualizes how aligned or divergent the two central banks are at any point in time.
 
 1. **Automated ETL** — Python scrapers monitor official RSS feeds and HTML statements
 2. **Sentiment Scoring** — Each communication is analyzed and scored on a hawkish-dovish spectrum
