@@ -8,6 +8,7 @@ const TranscriptsPage = () => {
   const [expandedId, setExpandedId] = useState(null);
   const [sentences, setSentences] = useState({});
   const [loadingSentences, setLoadingSentences] = useState({});
+  const [showHelp, setShowHelp] = useState(false);
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
   useEffect(() => {
@@ -85,24 +86,120 @@ const TranscriptsPage = () => {
                 Central Bank Sentiment Analysis Archive
               </p>
             </div>
-            <Link
-              to="/"
-              className="px-6 py-2 text-xs font-bold border border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-200 transition-all uppercase"
-            >
-              ← Back to Dashboard
-            </Link>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setShowHelp(true)}
+                className="px-6 py-2 text-xs font-bold border border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-200 transition-all duration-300 uppercase"
+              >
+                ? Help
+              </button>
+              <Link
+                to="/"
+                className="px-6 py-2 text-xs font-bold border border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-200 transition-all duration-300 uppercase"
+              >
+                ← Back to Dashboard
+              </Link>
+            </div>
           </div>
         </header>
+
+        {showHelp && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-6" onClick={() => setShowHelp(false)}>
+            <div className="bg-gradient-to-br from-[#0d0d0d] to-[#1a1a1a] border-2 border-slate-700 max-w-3xl w-full max-h-[80vh] overflow-y-auto shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              <div className="sticky top-0 bg-gradient-to-r from-[#0d0d0d] to-[#1a1a1a] border-b-2 border-slate-700 p-6 flex items-center justify-between">
+                <h2 className="text-2xl font-black uppercase tracking-wider text-white">Help & Information</h2>
+                <button
+                  onClick={() => setShowHelp(false)}
+                  className="text-slate-400 hover:text-white text-2xl font-bold transition-colors"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="p-8 space-y-8 text-slate-300">
+                <section>
+                  <h3 className="text-lg font-black uppercase tracking-wider text-blue-400 mb-3 border-l-2 border-blue-500 pl-3">What is FinSENT?</h3>
+                  <p className="leading-relaxed text-sm">
+                    FinSENT is a real-time sentiment analysis platform that tracks and compares monetary policy stances between the Federal Reserve (Fed) and the Bank of Canada (BoC). By analyzing official transcripts using AI, we quantify policy divergence and explore its relationship with USD/CAD exchange rates.
+                  </p>
+                </section>
+
+                <section>
+                  <h3 className="text-lg font-black uppercase tracking-wider text-green-400 mb-3 border-l-2 border-green-500 pl-3">How Scoring Works</h3>
+                  <div className="space-y-3 text-sm">
+                    <div>
+                      <span className="font-bold text-green-400">Hawkish (+1.0):</span> Signals tighter monetary policy, higher interest rates, and inflation control focus.
+                    </div>
+                    <div>
+                      <span className="font-bold text-slate-300">Neutral (0.0):</span> Balanced stance with no clear directional bias in policy.
+                    </div>
+                    <div>
+                      <span className="font-bold text-red-400">Dovish (-1.0):</span> Indicates accommodative policy, lower interest rates, and growth stimulus.
+                    </div>
+                    <div className="mt-4 p-4 bg-slate-900/50 border-l-2 border-slate-700">
+                      <span className="font-bold text-white">Divergence Score:</span> Calculated as Fed sentiment minus BoC sentiment. Positive values mean Fed is more hawkish than BoC, negative values indicate the opposite.
+                    </div>
+                  </div>
+                </section>
+
+                <section>
+                  <h3 className="text-lg font-black uppercase tracking-wider text-purple-400 mb-3 border-l-2 border-purple-500 pl-3">Key Metrics Explained</h3>
+                  <div className="space-y-4 text-sm">
+                    <div>
+                      <span className="font-bold text-white uppercase text-xs">Current Divergence:</span>
+                      <p className="text-slate-400 mt-1">The latest difference between Fed and BoC sentiment. Shows real-time policy stance gap.</p>
+                    </div>
+                    <div>
+                      <span className="font-bold text-white uppercase text-xs">Mean Divergence:</span>
+                      <p className="text-slate-400 mt-1">Average divergence over the selected period. Reveals historical policy relationship trends.</p>
+                    </div>
+                    <div>
+                      <span className="font-bold text-white uppercase text-xs">Volatility:</span>
+                      <p className="text-slate-400 mt-1">Measures fluctuation in policy stance differences. Higher values indicate unstable divergence.</p>
+                    </div>
+                    <div>
+                      <span className="font-bold text-white uppercase text-xs">Correlation:</span>
+                      <p className="text-slate-400 mt-1">Statistical relationship between divergence and USD/CAD price movements. Values near +1 or -1 indicate strong predictive power.</p>
+                    </div>
+                  </div>
+                </section>
+
+                <section>
+                  <h3 className="text-lg font-black uppercase tracking-wider text-yellow-400 mb-3 border-l-2 border-yellow-500 pl-3">Data & Methodology</h3>
+                  <div className="space-y-2 text-sm">
+                    <p><span className="font-bold text-white">Source:</span> Official FOMC and BoC meeting transcripts</p>
+                    <p><span className="font-bold text-white">Analysis:</span> AI-powered sentence-level sentiment scoring using OpenAI GPT-4</p>
+                    <p><span className="font-bold text-white">Updates:</span> Automated scraping and analysis runs hourly via GitHub Actions</p>
+                    <p><span className="font-bold text-white">FX Data:</span> USD/CAD exchange rates from Alpha Vantage API</p>
+                  </div>
+                </section>
+
+                <section>
+                  <h3 className="text-lg font-black uppercase tracking-wider text-red-400 mb-3 border-l-2 border-red-500 pl-3">Navigation</h3>
+                  <div className="space-y-2 text-sm">
+                    <p><span className="font-bold text-white">Dashboard:</span> View policy divergence charts, statistics, and currency correlation</p>
+                    <p><span className="font-bold text-white">Transcripts:</span> Browse full transcript archive with sentence-by-sentence analysis</p>
+                    <p><span className="font-bold text-white">Time Ranges:</span> Filter data by All, 30d, 90d, or 1y periods</p>
+                  </div>
+                </section>
+
+                <div className="pt-6 border-t border-slate-800 text-xs text-slate-500 text-center">
+                  Built with React, FastAPI, PostgreSQL, and OpenAI GPT-4 • Deployed on Vercel and Render
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="flex gap-4 mb-10 border-b border-slate-900 pb-5">
           {['all', 'fed', 'boc'].map(bank => (
             <button
               key={bank}
               onClick={() => setFilterBank(bank)}
-              className={`px-4 py-1.5 text-[10px] font-bold border transition-all uppercase ${
+              className={`px-4 py-1.5 text-[10px] font-bold border transition-all duration-300 uppercase ${
                 filterBank === bank
-                  ? 'bg-[#fff] text-black border-[#fff]'
-                  : 'border-slate-800 text-slate-500 hover:border-slate-600'
+                  ? 'bg-[#fff] text-black border-[#fff] shadow-lg scale-105'
+                  : 'border-slate-800 text-slate-500 hover:border-slate-600 hover:text-slate-300 hover:scale-105'
               }`}
             >
               {bank === 'all' ? 'All Banks' : bank === 'fed' ? 'Federal Reserve' : 'Bank of Canada'}
@@ -122,7 +219,7 @@ const TranscriptsPage = () => {
             filteredTranscripts.map((transcript, idx) => (
               <div
                 key={idx}
-                className="bg-[#0d0d0d] border border-slate-900 hover:border-slate-700 transition-all"
+                className="bg-gradient-to-br from-[#0d0d0d] to-[#1a1a1a] border border-slate-900 hover:border-slate-700 hover:card-glow hover:scale-[1.01] transition-all duration-300"
               >
                 <div
                   className="p-6 cursor-pointer"
@@ -157,9 +254,9 @@ const TranscriptsPage = () => {
                       <div className="text-xs text-slate-500 uppercase mb-1">Sentiment</div>
                       <div className={`text-3xl font-bold ${
                         transcript.sentiment > 0
-                          ? 'text-green-400'
+                          ? 'text-green-400 glow-green'
                           : transcript.sentiment < 0
-                          ? 'text-red-400'
+                          ? 'text-red-400 glow-red'
                           : 'text-slate-400'
                       }`}>
                         {transcript.sentiment > 0 ? '+' : ''}{transcript.sentiment.toFixed(3)}
@@ -200,7 +297,7 @@ const TranscriptsPage = () => {
                         {sentences[transcript.id].map((sentence, idx) => (
                           <div
                             key={sentence.id}
-                            className="bg-slate-900/40 border border-slate-800 p-4 rounded"
+                            className="bg-slate-900/40 border border-slate-800 p-4 rounded hover:border-slate-700 transition-all duration-300"
                           >
                             <div className="mb-3">
                               <span className="text-slate-600 text-xs mr-2">#{idx + 1}</span>

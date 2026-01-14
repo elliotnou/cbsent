@@ -215,26 +215,27 @@ const DivergenceChart = () => {
       `}</style>
       <div className="flex items-center gap-8">
         <div className="flex-1">
-          <div className="relative bg-slate-800/50 border border-slate-700 rounded px-4 py-3">
+          <div className="relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700 rounded px-4 py-3 hover:border-slate-600 transition-all duration-300 shadow-lg">
             <div className="text-xs text-slate-400 mb-2 uppercase tracking-wide">Score Guide:</div>
-            <div className="relative h-2 bg-gradient-to-r from-red-500/70 via-slate-600 to-green-500/70 rounded-full">
-              <div className="absolute left-0 top-0 bottom-0 w-1/3 group cursor-help -top-2 -bottom-2">
+            <div className="relative h-16 flex items-center">
+              <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-2 bg-gradient-to-r from-red-500/70 via-slate-600 to-green-500/70 rounded-full shadow-inner"></div>
+              <div className="absolute left-0 top-0 bottom-0 w-1/3 group cursor-help flex items-center">
                 <span className="absolute bottom-full left-0 mb-2 w-64 p-2 bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
                   Dovish: Favors lower interest rates and accommodative monetary policy to stimulate economic growth and employment
                 </span>
               </div>
-              <div className="absolute left-1/3 top-0 bottom-0 w-1/3 group cursor-help -top-2 -bottom-2">
+              <div className="absolute left-1/3 top-0 bottom-0 w-1/3 group cursor-help flex items-center">
                 <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
                   Neutral: Balanced stance with no clear bias toward raising or lowering interest rates
                 </span>
               </div>
-              <div className="absolute right-0 top-0 bottom-0 w-1/3 group cursor-help -top-2 -bottom-2">
+              <div className="absolute right-0 top-0 bottom-0 w-1/3 group cursor-help flex items-center">
                 <span className="absolute bottom-full right-0 mb-2 w-64 p-2 bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
                   Hawkish: Favors higher interest rates and restrictive monetary policy to control inflation
                 </span>
               </div>
             </div>
-            <div className="flex justify-between mt-2 text-xs text-slate-400">
+            <div className="flex justify-between text-xs text-slate-400">
               <span className="text-red-400">-1.0 Dovish</span>
               <span className="text-slate-300">0 Neutral</span>
               <span className="text-green-400">1.0 Hawkish</span>
@@ -249,10 +250,10 @@ const DivergenceChart = () => {
 
       <div className="flex gap-4 border-b border-slate-900 pb-5">
         {['all','30d','90d','1y'].map(r => (
-          <button 
-            key={r} 
-            onClick={() => setTimeRange(r)} 
-            className={`px-4 py-1.5 text-[10px] font-bold border transition-all uppercase ${timeRange === r ? 'bg-[#fff] text-black border-[#fff]' : 'border-slate-800 text-slate-500 hover:border-slate-600'}`}
+          <button
+            key={r}
+            onClick={() => setTimeRange(r)}
+            className={`px-4 py-1.5 text-[10px] font-bold border transition-all duration-300 uppercase ${timeRange === r ? 'bg-[#fff] text-black border-[#fff] shadow-lg scale-105' : 'border-slate-800 text-slate-500 hover:border-slate-600 hover:text-slate-300 hover:scale-105'}`}
           >
             {r}
           </button>
@@ -260,14 +261,42 @@ const DivergenceChart = () => {
       </div>
 
       <div className="grid grid-cols-4 gap-6">
-        {[{ label: 'Current DIvergence', val: stats.current, color: stats.current > 0 ? 'text-green-400' : 'text-red-400' },
-          { label: 'Mean divergence', val: stats.avg, color: 'text-blue-400' },
-          { label: 'Volatility', val: stats.volatility, color: 'text-purple-400' },
-          { label: `Correlation.(${stats.lagDays}d)`, val: stats.forwardCorrelation, color: 'text-yellow-400' }
+        {[
+          {
+            label: 'Current DIvergence',
+            val: stats.current,
+            color: stats.current > 0 ? 'text-green-400' : 'text-red-400',
+            glow: stats.current > 0 ? 'glow-green' : 'glow-red',
+            tooltip: 'The most recent difference between Fed and BoC sentiment scores. Positive means Fed is more hawkish than BoC.'
+          },
+          {
+            label: 'Mean divergence',
+            val: stats.avg,
+            color: 'text-blue-400',
+            glow: 'glow-blue',
+            tooltip: 'Average divergence over the selected time period. Shows the typical policy stance difference between the two central banks.'
+          },
+          {
+            label: 'Volatility',
+            val: stats.volatility,
+            color: 'text-purple-400',
+            glow: '',
+            tooltip: 'Standard deviation of the divergence. Higher values indicate more fluctuation in policy stance differences.'
+          },
+          {
+            label: `Correlation.(${stats.lagDays}d)`,
+            val: stats.forwardCorrelation,
+            color: 'text-yellow-400',
+            glow: '',
+            tooltip: `Correlation between policy divergence and USD/CAD price ${stats.lagDays} day(s) later. Measures predictive relationship between central bank sentiment and currency movement.`
+          }
         ].map((s, i) => (
-          <div key={i} className="border border-slate-900 p-6 bg-[#0d0d0d]">
-            <p className="text-[13px] text-white uppercase font-black mb-3">{s.label}</p>
-            <h3 className={`text-3xl font-bold tracking-tighter ${s.color}`}>
+          <div key={i} className="relative border border-slate-900 p-6 bg-gradient-to-br from-[#0d0d0d] to-[#1a1a1a] hover:border-slate-700 hover:card-glow hover:scale-[1.02] transition-all duration-300 group cursor-help">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-2 w-72 p-3 bg-slate-900 border border-slate-700 rounded text-[11px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+              {s.tooltip}
+            </div>
+            <p className="text-[13px] text-slate-400 uppercase font-black mb-3 group-hover:text-white transition-colors">{s.label}</p>
+            <h3 className={`text-3xl font-bold tracking-tighter ${s.color} ${s.glow} ${i === 0 ? 'pulse-glow' : ''}`}>
               {s.val > 0 && i < 2 ? '+' : ''}{Number(s.val).toFixed(3)}
             </h3>
           </div>
@@ -275,8 +304,8 @@ const DivergenceChart = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-10">
-        <div className="bg-[#0d0d0d] border border-slate-900 p-8">
-          <h2 className="text-xs font-black uppercase tracking-[0.3em] text-[#fff] mb-8 border-l-2 border-blue-500 pl-4">Policy_Vs_USDCAD</h2>
+        <div className="bg-gradient-to-br from-[#0d0d0d] to-[#1a1a1a] border border-slate-900 p-8 hover:border-slate-600 hover:shadow-2xl transition-all duration-500 group">
+          <h2 className="text-xs font-black uppercase tracking-[0.3em] text-[#fff] mb-8 border-l-2 border-blue-500 pl-4 group-hover:border-blue-400 transition-colors">Policy_Vs_USDCAD</h2>
           <div className="h-[500px] w-full">
             <ResponsiveContainer>
               <LineChart data={mergedData}>
@@ -319,8 +348,8 @@ const DivergenceChart = () => {
           </div>
         </div>
 
-        <div className="bg-[#0d0d0d] border border-slate-900 p-8">
-          <h2 className="text-xs font-black uppercase tracking-[0.3em] text-[#fff] mb-8 border-l-2 border-slate-700 pl-4">Sentiment_Delta</h2>
+        <div className="bg-gradient-to-br from-[#0d0d0d] to-[#1a1a1a] border border-slate-900 p-8 hover:border-slate-600 hover:shadow-2xl transition-all duration-500 group">
+          <h2 className="text-xs font-black uppercase tracking-[0.3em] text-[#fff] mb-8 border-l-2 border-slate-700 pl-4 group-hover:border-slate-500 transition-colors">Sentiment_Delta</h2>
           <div className="h-[500px] w-full">
             <ResponsiveContainer>
               <BarChart data={filteredData}>
