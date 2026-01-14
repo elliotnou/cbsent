@@ -42,6 +42,12 @@ Central banks don't release statements on the same days. To calculate a spread, 
 | **AI** | OpenAI API (GPT-4o-mini) |
 | **Infra** | GitHub Actions, Render, Vercel |
 
+## Data Sources & Attribution
+
+### Primary Sources
+- **Federal Reserve Transcripts & Statements**: [Board of Governors of the Federal Reserve System](https://www.federalreserve.gov)
+- **Bank of Canada Transcripts & Statements**: [Bank of Canada](https://www.bankofcanada.ca)
+
 ## License
 
 MIT

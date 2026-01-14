@@ -349,12 +349,32 @@ const TranscriptsPage = () => {
                 </section>
 
                 <section>
-                  <h3 className="text-lg font-black uppercase tracking-wider text-yellow-400 mb-3 border-l-2 border-yellow-500 pl-3">Data & Methodology</h3>
-                  <div className="space-y-2 text-sm">
-                    <p><span className="font-bold text-white">Source:</span> Official FOMC and BoC meeting transcripts</p>
-                    <p><span className="font-bold text-white">Analysis:</span> AI-powered sentence-level sentiment scoring using OpenAI GPT-4</p>
-                    <p><span className="font-bold text-white">Updates:</span> Automated scraping and analysis runs hourly via GitHub Actions</p>
-                    <p><span className="font-bold text-white">FX Data:</span> USD/CAD exchange rates from Alpha Vantage API</p>
+                  <h3 className="text-lg font-black uppercase tracking-wider text-yellow-400 mb-3 border-l-2 border-yellow-500 pl-3">Data Sources & Attribution</h3>
+                  <div className="space-y-3 text-sm">
+                    <div>
+                      <p className="font-bold text-white mb-1">Central Bank Transcripts:</p>
+                      <p className="text-slate-400 leading-relaxed">
+                        Official meeting transcripts and policy statements are sourced from the <span className="text-white">Federal Reserve Board of Governors</span> (federalreserve.gov) and the <span className="text-white">Bank of Canada</span> (bankofcanada.ca). All source materials are publicly available and used for educational and analytical purposes.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="font-bold text-white mb-1">Analysis Methodology:</p>
+                      <p className="text-slate-400 leading-relaxed">
+                        Sentiment analysis powered by OpenAI GPT-4. Scores and interpretations are generated algorithmically and do not represent official positions of the Federal Reserve or Bank of Canada.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="font-bold text-white mb-1">Exchange Rate Data:</p>
+                      <p className="text-slate-400 leading-relaxed">
+                        USD/CAD exchange rates provided by Alpha Vantage API.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="font-bold text-white mb-1">Updates:</p>
+                      <p className="text-slate-400 leading-relaxed">
+                        Automated scraping and analysis runs hourly via GitHub Actions.
+                      </p>
+                    </div>
                   </div>
                 </section>
 
@@ -367,8 +387,11 @@ const TranscriptsPage = () => {
                   </div>
                 </section>
 
-                <div className="pt-6 border-t border-slate-800 text-xs text-slate-500 text-center">
-                  Built with React, FastAPI, PostgreSQL, and OpenAI GPT-4 • Deployed on Vercel and Render
+                <div className="pt-6 border-t border-slate-800 text-xs text-slate-500">
+                  <p className="text-center mb-3">Built with React, FastAPI, PostgreSQL, and OpenAI GPT-4 • Deployed on Vercel and Render</p>
+                  <p className="text-center text-[10px] leading-relaxed">
+                    <span className="font-bold text-slate-400">Disclaimer:</span> This is an independent research project. FinSENT is not affiliated with, endorsed by, or representative of the Federal Reserve System or the Bank of Canada. All analysis and interpretations are solely those of this application.
+                  </p>
                 </div>
               </div>
             </div>
@@ -541,6 +564,18 @@ const TranscriptsPage = () => {
             ))
           )}
         </div>
+
+        <footer className="mt-24 pt-10 border-t-2 border-slate-700 text-xs text-slate-400">
+          <div className="space-y-3">
+            <p className="uppercase tracking-widest font-bold">Data Sources</p>
+            <p className="text-[10px] leading-relaxed normal-case font-normal tracking-normal">
+              Transcripts: <span className="text-slate-300">Federal Reserve Board of Governors</span> (federalreserve.gov) and <span className="text-slate-300">Bank of Canada</span> (bankofcanada.ca)
+            </p>
+            <p className="text-[10px] leading-relaxed normal-case font-normal tracking-normal opacity-70">
+              This is an independent research project. FinSENT is not affiliated with, endorsed by, or representative of the Federal Reserve System or the Bank of Canada.
+            </p>
+          </div>
+        </footer>
       </div>
     </div>
   );
