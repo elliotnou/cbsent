@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 const TranscriptsPage = () => {
@@ -11,6 +12,18 @@ const TranscriptsPage = () => {
   const [showHelp, setShowHelp] = useState(false);
   const [expandedScoring, setExpandedScoring] = useState(false);
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (showHelp) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showHelp]);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/transcripts`)
@@ -105,9 +118,9 @@ const TranscriptsPage = () => {
         </header>
 
         {showHelp && (
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-6" onClick={() => setShowHelp(false)}>
-            <div className="bg-gradient-to-br from-[#0d0d0d] to-[#1a1a1a] border-2 border-slate-700 max-w-3xl w-full max-h-[80vh] overflow-y-auto shadow-2xl" onClick={(e) => e.stopPropagation()}>
-              <div className="sticky top-0 bg-gradient-to-r from-[#0d0d0d] to-[#1a1a1a] border-b-2 border-slate-700 p-6 flex items-center justify-between">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-6 overflow-y-auto" onClick={() => setShowHelp(false)}>
+            <div className="bg-gradient-to-br from-[#0d0d0d] to-[#1a1a1a] border-2 border-slate-700 max-w-3xl w-full max-h-[80vh] overflow-y-auto shadow-2xl relative" onClick={(e) => e.stopPropagation()}>
+              <div className="sticky top-0 bg-gradient-to-r from-[#0d0d0d] to-[#1a1a1a] border-b-2 border-slate-700 p-6 flex items-center justify-between z-10">
                 <h2 className="text-2xl font-black uppercase tracking-wider text-white">Help & Information</h2>
                 <button
                   onClick={() => setShowHelp(false)}
@@ -193,7 +206,7 @@ const TranscriptsPage = () => {
 
                           <div className="grid grid-cols-2 gap-3">
                             <div className="group relative bg-slate-900/50 border border-slate-800 p-3 hover:border-slate-600 transition-all cursor-help">
-                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-30">
+                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[5]">
                                 Direct statements about interest rate decisions or forward guidance. Highest impact on overall policy stance.
                               </div>
                               <div className="flex items-center justify-between mb-1">
@@ -206,7 +219,7 @@ const TranscriptsPage = () => {
                             </div>
 
                             <div className="group relative bg-slate-900/50 border border-slate-800 p-3 hover:border-slate-600 transition-all cursor-help">
-                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-30">
+                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[5]">
                                 Labor market conditions, unemployment rates, GDP growth, and economic expansion. Important for policy timing.
                               </div>
                               <div className="flex items-center justify-between mb-1">
@@ -219,7 +232,7 @@ const TranscriptsPage = () => {
                             </div>
 
                             <div className="group relative bg-slate-900/50 border border-slate-800 p-3 hover:border-slate-600 transition-all cursor-help">
-                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-30">
+                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[5]">
                                 Financial stability concerns, global risks, and external factors. Secondary consideration for policy decisions.
                               </div>
                               <div className="flex items-center justify-between mb-1">
@@ -232,7 +245,7 @@ const TranscriptsPage = () => {
                             </div>
 
                             <div className="group relative bg-slate-900/50 border border-slate-800 p-3 hover:border-slate-600 transition-all cursor-help">
-                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-30">
+                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[5]">
                                 General statements, procedural comments, or boilerplate content. No impact on policy interpretation.
                               </div>
                               <div className="flex items-center justify-between mb-1">
