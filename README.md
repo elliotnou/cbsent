@@ -9,7 +9,6 @@ I built finSENT as an experimental study to see if LLMs could effectively quanti
 
 [Live Dashboard](https://fin-sent.vercel.app/)
 
----
 
 ## What It Does
 
@@ -19,7 +18,6 @@ FinSENT is a **Quantitative Narrative Monitor** that automates policy sentiment 
 2. **Sentiment Scoring** — Each communication is analyzed and scored on a hawkish-dovish spectrum
 3. **Visualization** — Sentiment spread (Δ) is overlaid against USD/CAD price data to surface correlations between policy language and market movement
 
----
 
 ## How It Works
 
@@ -34,8 +32,6 @@ Rather than keyword matching (which misses context), the system uses GPT-4o-mini
 
 Central banks don't release statements on the same days. To calculate a spread, the engine uses forward-fill (`ffill`) to treat the most recent sentiment as "active" until the next release—enabling daily 1:1 comparison.
 
----
-
 ## Tech Stack
 
 | Layer | Technologies |
@@ -45,8 +41,6 @@ Central banks don't release statements on the same days. To calculate a spread, 
 | **Data** | Pandas, NumPy, yfinance, PostgreSQL (Neon) |
 | **AI** | OpenAI API (GPT-4o-mini) |
 | **Infra** | GitHub Actions, Render, Vercel |
-
----
 
 ## License
 
