@@ -9,6 +9,7 @@ const TranscriptsPage = () => {
   const [sentences, setSentences] = useState({});
   const [loadingSentences, setLoadingSentences] = useState({});
   const [showHelp, setShowHelp] = useState(false);
+  const [expandedScoring, setExpandedScoring] = useState(false);
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
   useEffect(() => {
@@ -126,19 +127,189 @@ const TranscriptsPage = () => {
 
                 <section>
                   <h3 className="text-lg font-black uppercase tracking-wider text-green-400 mb-3 border-l-2 border-green-500 pl-3">How Scoring Works</h3>
-                  <div className="space-y-3 text-sm">
-                    <div>
-                      <span className="font-bold text-green-400">Hawkish (+1.0):</span> Signals tighter monetary policy, higher interest rates, and inflation control focus.
+
+                  <div className="space-y-4 text-sm">
+                    <p className="leading-relaxed text-slate-300">
+                      Each transcript is analyzed using a sophisticated AI-powered system that breaks down text into individual sentences, scores them, and aggregates results into a final transcript score.
+                    </p>
+
+                    <div className="space-y-3">
+                      <div>
+                        <span className="font-bold text-green-400">Hawkish (+1.0):</span> Signals tighter monetary policy, higher interest rates, and inflation control focus.
+                      </div>
+                      <div>
+                        <span className="font-bold text-slate-300">Neutral (0.0):</span> Balanced stance with no clear bias toward raising or lowering interest rates.
+                      </div>
+                      <div>
+                        <span className="font-bold text-red-400">Dovish (-1.0):</span> Indicates accommodative policy, lower interest rates, and growth stimulus.
+                      </div>
                     </div>
-                    <div>
-                      <span className="font-bold text-slate-300">Neutral (0.0):</span> Balanced stance with no clear directional bias in policy.
-                    </div>
-                    <div>
-                      <span className="font-bold text-red-400">Dovish (-1.0):</span> Indicates accommodative policy, lower interest rates, and growth stimulus.
-                    </div>
+
                     <div className="mt-4 p-4 bg-slate-900/50 border-l-2 border-slate-700">
                       <span className="font-bold text-white">Divergence Score:</span> Calculated as Fed sentiment minus BoC sentiment. Positive values mean Fed is more hawkish than BoC, negative values indicate the opposite.
                     </div>
+
+                    <button
+                      onClick={() => setExpandedScoring(!expandedScoring)}
+                      className="mt-4 w-full px-4 py-3 bg-gradient-to-r from-green-900/30 to-green-800/30 border border-green-700/50 hover:border-green-600 transition-all duration-300 text-left flex items-center justify-between group"
+                    >
+                      <span className="font-bold text-green-400 uppercase text-xs tracking-wider">Deep Dive: Scoring Methodology</span>
+                      <span className="text-green-400 text-xl group-hover:scale-110 transition-transform">{expandedScoring ? '−' : '+'}</span>
+                    </button>
+
+                    {expandedScoring && (
+                      <div className="mt-4 space-y-6 p-6 bg-black/40 border border-slate-800 animate-in fade-in duration-300">
+
+                        <div>
+                          <h4 className="font-black text-white uppercase text-sm mb-3 border-b border-slate-800 pb-2">1. Sentence-Level Analysis</h4>
+                          <p className="text-slate-400 text-xs leading-relaxed mb-3">
+                            Each sentence in a transcript is individually analyzed by GPT-4, which assigns:
+                          </p>
+                          <ul className="space-y-2 text-xs text-slate-400 ml-4">
+                            <li className="flex items-start gap-2">
+                              <span className="text-green-400 mt-0.5">▸</span>
+                              <span><span className="font-bold text-white">Stance Score (-1.0 to +1.0):</span> Hawkish/dovish sentiment of the sentence</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="text-blue-400 mt-0.5">▸</span>
+                              <span><span className="font-bold text-white">Impact Weight (0.0 to 1.0):</span> Importance and influence of the sentence</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="text-purple-400 mt-0.5">▸</span>
+                              <span><span className="font-bold text-white">Topic Classification:</span> Interest rates, inflation, employment, growth, risk assessment, etc.</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="text-yellow-400 mt-0.5">▸</span>
+                              <span><span className="font-bold text-white">Reasoning:</span> AI justification for the assigned scores</span>
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div>
+                          <h4 className="font-black text-white uppercase text-sm mb-3 border-b border-slate-800 pb-2">2. Impact Weight Assignment</h4>
+                          <p className="text-slate-400 text-xs leading-relaxed mb-4">
+                            GPT-4 assigns each sentence an impact weight (0.0 to 1.0) based on its topic category and relevance to monetary policy:
+                          </p>
+
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="group relative bg-slate-900/50 border border-slate-800 p-3 hover:border-slate-600 transition-all cursor-help">
+                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-30">
+                                Direct statements about interest rate decisions or forward guidance. Highest impact on overall policy stance.
+                              </div>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="font-bold text-white uppercase text-[10px]">Interest Rates & Inflation</span>
+                                <span className="text-green-400 font-black text-sm">1.0</span>
+                              </div>
+                              <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div className="h-full bg-gradient-to-r from-green-600 to-green-400" style={{width: '100%'}}></div>
+                              </div>
+                            </div>
+
+                            <div className="group relative bg-slate-900/50 border border-slate-800 p-3 hover:border-slate-600 transition-all cursor-help">
+                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-30">
+                                Labor market conditions, unemployment rates, GDP growth, and economic expansion. Important for policy timing.
+                              </div>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="font-bold text-white uppercase text-[10px]">Employment & GDP Growth</span>
+                                <span className="text-blue-400 font-black text-sm">0.7</span>
+                              </div>
+                              <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div className="h-full bg-gradient-to-r from-blue-600 to-blue-400" style={{width: '70%'}}></div>
+                              </div>
+                            </div>
+
+                            <div className="group relative bg-slate-900/50 border border-slate-800 p-3 hover:border-slate-600 transition-all cursor-help">
+                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-30">
+                                Financial stability concerns, global risks, and external factors. Secondary consideration for policy decisions.
+                              </div>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="font-bold text-white uppercase text-[10px]">Global Risks & External Factors</span>
+                                <span className="text-purple-400 font-black text-sm">0.4</span>
+                              </div>
+                              <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div className="h-full bg-gradient-to-r from-purple-600 to-purple-400" style={{width: '40%'}}></div>
+                              </div>
+                            </div>
+
+                            <div className="group relative bg-slate-900/50 border border-slate-800 p-3 hover:border-slate-600 transition-all cursor-help">
+                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-950 border border-slate-700 rounded text-[10px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-30">
+                                General statements, procedural comments, or boilerplate content. No impact on policy interpretation.
+                              </div>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="font-bold text-white uppercase text-[10px]">Boilerplate</span>
+                                <span className="text-slate-500 font-black text-sm">0.0</span>
+                              </div>
+                              <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div className="h-full bg-gradient-to-r from-slate-700 to-slate-500" style={{width: '0%'}}></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4 className="font-black text-white uppercase text-sm mb-3 border-b border-slate-800 pb-2">3. Weighted Aggregation Formula</h4>
+                          <p className="text-slate-400 text-xs leading-relaxed mb-3">
+                            The final transcript score is calculated using a weighted average:
+                          </p>
+                          <div className="p-4 bg-slate-950 border border-slate-800 rounded font-mono text-xs">
+                            <div className="text-slate-300">
+                              <span className="text-green-400">Transcript Score</span> = <span className="text-blue-400">Σ</span> (<span className="text-purple-400">Stance</span> × <span className="text-yellow-400">Impact</span>) / <span className="text-blue-400">Σ</span> (<span className="text-yellow-400">Impact</span>)
+                            </div>
+                            <div className="mt-3 text-[10px] text-slate-500">
+                              Each sentence contributes proportionally to its impact weight, ensuring policy-critical statements dominate the score
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4 className="font-black text-white uppercase text-sm mb-3 border-b border-slate-800 pb-2">4. Example Calculation</h4>
+                          <div className="space-y-2 text-[11px]">
+                            <div className="p-3 bg-slate-950 border-l-2 border-green-500">
+                              <p className="text-slate-300 mb-2">"We are raising the policy rate by 25 basis points today."</p>
+                              <div className="flex gap-4 text-[10px]">
+                                <span className="text-green-400">Stance: +0.85</span>
+                                <span className="text-blue-400">Impact: 1.0</span>
+                                <span className="text-purple-400">Category: Interest Rates & Inflation</span>
+                              </div>
+                              <p className="text-slate-500 mt-1 text-[10px]">→ Weighted contribution: 0.85 × 1.0 = 0.85</p>
+                            </div>
+
+                            <div className="p-3 bg-slate-950 border-l-2 border-blue-500">
+                              <p className="text-slate-300 mb-2">"Employment growth remains robust in most sectors."</p>
+                              <div className="flex gap-4 text-[10px]">
+                                <span className="text-green-400">Stance: +0.40</span>
+                                <span className="text-blue-400">Impact: 0.7</span>
+                                <span className="text-purple-400">Category: Employment & GDP Growth</span>
+                              </div>
+                              <p className="text-slate-500 mt-1 text-[10px]">→ Weighted contribution: 0.40 × 0.7 = 0.28</p>
+                            </div>
+
+                            <div className="p-3 bg-slate-950 border-l-2 border-slate-600">
+                              <p className="text-slate-300 mb-2">"We will continue to monitor economic data closely."</p>
+                              <div className="flex gap-4 text-[10px]">
+                                <span className="text-green-400">Stance: 0.00</span>
+                                <span className="text-blue-400">Impact: 0.0</span>
+                                <span className="text-purple-400">Category: Boilerplate</span>
+                              </div>
+                              <p className="text-slate-500 mt-1 text-[10px]">→ Weighted contribution: 0.00 × 0.0 = 0.00</p>
+                            </div>
+
+                            <div className="p-3 bg-slate-900 border border-slate-700 mt-3">
+                              <p className="text-white font-bold text-xs mb-1">Final Transcript Score:</p>
+                              <p className="text-slate-300 text-[10px] font-mono">
+                                (0.85 + 0.28 + 0.00) / (1.0 + 0.7 + 0.0) = 1.13 / 1.7 = <span className="text-green-400 font-bold">+0.665</span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="pt-4 border-t border-slate-800">
+                          <p className="text-[10px] text-slate-500 italic">
+                            This multi-layered approach ensures that policy-critical statements (like rate decisions) carry more weight than procedural or general comments, producing more accurate sentiment scores.
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </section>
 

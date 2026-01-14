@@ -16,6 +16,7 @@ def get_divergence_data():
     conn = psycopg2.connect(...)
     cur = conn.cursor()
     
+    # calculation of final sentiment score for each transcript
     query = """
         SELECT 
             t.publish_date,
