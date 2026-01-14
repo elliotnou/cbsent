@@ -1,8 +1,70 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { 
-  LineChart, Line, BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, 
-  Tooltip, Legend, ResponsiveContainer, ReferenceLine 
+import React, { useEffect, useState, useMemo, Suspense, useRef } from 'react';
+import {
+  LineChart, Line, BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid,
+  Tooltip, Legend, ResponsiveContainer, ReferenceLine
 } from 'recharts';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, useGLTF } from '@react-three/drei';
+
+
+const Model3D = () => {
+  const { scene } = useGLTF('/model.glb');
+  const modelRef = useRef();
+
+  useFrame(() => {
+    if (modelRef.current) {
+      modelRef.current.rotation.y += 0.005;
+    }
+  });
+
+  return <primitive ref={modelRef} object={scene} scale={1.5} />;
+};
+
+const Fallback3D = () => {
+  return (
+    <div className="w-full h-full flex items-center justify-center text-slate-600 text-xs">
+      <div className="text-center">
+        <div className="mb-1 text-[10px]">3D Model</div>
+        <div className="text-[8px] text-slate-700">model.glb</div>
+      </div>
+    </div>
+  );
+};
+
+const Model3DWrapper = () => {
+  const [modelExists, setModelExists] = useState(null);
+
+  useEffect(() => {
+    fetch('/model.glb', { method: 'HEAD' })
+      .then(() => setModelExists(true))
+      .catch(() => setModelExists(false));
+  }, []);
+
+  if (modelExists === null) {
+    return <Fallback3D />;
+  }
+
+  if (modelExists === false) {
+    return <Fallback3D />;
+  }
+
+  return (
+    <Canvas
+      camera={{ position: [0, 0, 5], fov: 50 }}
+      onCreated={({ gl }) => {
+        gl.setClearColor('#050505', 1);
+      }}
+      style={{ background: 'transparent' }}
+    >
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 5]} intensity={1} />
+      <Suspense fallback={null}>
+        <Model3D />
+      </Suspense>
+      <OrbitControls enableZoom={false} enablePan={false} />
+    </Canvas>
+  );
+};
 
 const DivergenceChart = () => {
   const [data, setData] = useState([]);
@@ -11,8 +73,54 @@ const DivergenceChart = () => {
   const [timeRange, setTimeRange] = useState('all');
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div style={{ backgroundColor: '#181818', border: '2px solid #8d8d8d', padding: '10px', fontSize: '14px', fontWeight: 700 }}>
+          <p style={{ color: '#8d8d8d', marginBottom: '8px' }}>{label}</p>
+          {payload.map((entry, index) => {
+            let color = '#8d8d8d';
+            if (entry.name === 'FED_SENTIMENT') color = '#3b82f6';
+            else if (entry.name === 'BOC_SENTIMENT') color = '#ef4444';
+            else if (entry.name === 'USD_CAD_PRICE') color = '#22c55e';
+
+            return (
+              <p key={index} style={{ color, margin: '4px 0' }}>
+                {entry.name}: {typeof entry.value === 'number' ? entry.value.toFixed(2) : entry.value}
+              </p>
+            );
+          })}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const DivergenceTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      const value = payload[0].value;
+      const color = value > 0 ? '#10b981' : '#f43f5e';
+
+      return (
+        <div style={{ backgroundColor: '#181818', border: '2px solid #8d8d8d', padding: '12px', fontSize: '14px', fontWeight: 700, maxWidth: '280px' }}>
+          <p style={{ color: '#8d8d8d', marginBottom: '8px' }}>{label}</p>
+          <p style={{ color, margin: '4px 0', marginBottom: '8px' }}>
+            Divergence: {typeof value === 'number' ? value.toFixed(2) : value}
+          </p>
+          <p style={{ color: '#a0a0a0', fontSize: '11px', lineHeight: '1.4', margin: '0' }}>
+            {value > 0
+              ? 'Positive: Fed is more hawkish than BoC (Fed - BoC > 0)'
+              : value < 0
+              ? 'Negative: BoC is more hawkish than Fed (Fed - BoC < 0)'
+              : 'Zero: Both central banks have equal sentiment'}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   useEffect(() => {
-    
     const fetchSentiment = fetch(`${API_BASE_URL}/api/divergence`).then(res => res.json());
     const fetchUSDCAD = fetch(`${API_BASE_URL}/api/usdcad`).then(res => res.json());
 
@@ -25,11 +133,11 @@ const DivergenceChart = () => {
           let fedVal = 0, bocVal = 0;
           for (const k of fedKeys) if (row[k] !== undefined) { fedVal = Number(row[k]); break; }
           for (const k of bocKeys) if (row[k] !== undefined) { bocVal = Number(row[k]); break; }
-          return { 
-            date: row.date, 
-            fed: Number(fedVal.toFixed(2)), 
-            boc: Number(bocVal.toFixed(2)), 
-            divergence: Number((fedVal - bocVal).toFixed(2)) 
+          return {
+            date: row.date,
+            fed: Number(fedVal.toFixed(2)),
+            boc: Number(bocVal.toFixed(2)),
+            divergence: Number((fedVal - bocVal).toFixed(2))
           };
         }).filter(r => r.date);
 
@@ -75,7 +183,6 @@ const DivergenceChart = () => {
     const avg = filteredData.reduce((sum, d) => sum + d.divergence, 0) / filteredData.length;
     const volatility = Math.sqrt(filteredData.reduce((sum, d) => sum + Math.pow(d.divergence - avg, 2), 0) / filteredData.length);
 
-
     const lagDays = 1;
     let forwardCorrelation = 0;
     if (mergedData.length > lagDays + 10) {
@@ -97,10 +204,51 @@ const DivergenceChart = () => {
   if (loading) return <div className="p-20 text-center animate-pulse tracking-widest text-slate-500 font-mono text-xl uppercase">INIT_SYSTEM_SEQ...</div>;
 
   return (
-    <div className="space-y-10 font-mono">
-      {/* Range Selectors */}
-      <div className="flex gap-4 border-b border-slate-900 pb-6">
-        {['all', '30d', '90d', '1y'].map(r => (
+    <div className="space-y-8 font-mono">
+      <style>{`
+        * {
+          outline: none !important;
+        }
+        *:focus {
+          outline: none !important;
+        }
+      `}</style>
+      <div className="flex items-center gap-8">
+        <div className="flex-1">
+          <div className="relative bg-slate-800/50 border border-slate-700 rounded px-4 py-3">
+            <div className="text-xs text-slate-400 mb-2 uppercase tracking-wide">Score Guide:</div>
+            <div className="relative h-2 bg-gradient-to-r from-red-500/70 via-slate-600 to-green-500/70 rounded-full">
+              <div className="absolute left-0 top-0 bottom-0 w-1/3 group cursor-help -top-2 -bottom-2">
+                <span className="absolute bottom-full left-0 mb-2 w-64 p-2 bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                  Dovish: Favors lower interest rates and accommodative monetary policy to stimulate economic growth and employment
+                </span>
+              </div>
+              <div className="absolute left-1/3 top-0 bottom-0 w-1/3 group cursor-help -top-2 -bottom-2">
+                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                  Neutral: Balanced stance with no clear bias toward raising or lowering interest rates
+                </span>
+              </div>
+              <div className="absolute right-0 top-0 bottom-0 w-1/3 group cursor-help -top-2 -bottom-2">
+                <span className="absolute bottom-full right-0 mb-2 w-64 p-2 bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                  Hawkish: Favors higher interest rates and restrictive monetary policy to control inflation
+                </span>
+              </div>
+            </div>
+            <div className="flex justify-between mt-2 text-xs text-slate-400">
+              <span className="text-red-400">-1.0 Dovish</span>
+              <span className="text-slate-300">0 Neutral</span>
+              <span className="text-green-400">1.0 Hawkish</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-40 h-28">
+          <Model3DWrapper />
+        </div>
+      </div>
+
+      <div className="flex gap-4 border-b border-slate-900 pb-5">
+        {['all','30d','90d','1y'].map(r => (
           <button 
             key={r} 
             onClick={() => setTimeRange(r)} 
@@ -111,7 +259,6 @@ const DivergenceChart = () => {
         ))}
       </div>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-4 gap-6">
         {[{ label: 'Current DIvergence', val: stats.current, color: stats.current > 0 ? 'text-green-400' : 'text-red-400' },
           { label: 'Mean divergence', val: stats.avg, color: 'text-blue-400' },
@@ -127,7 +274,6 @@ const DivergenceChart = () => {
         ))}
       </div>
 
-      {/* Main Analysis Windows */}
       <div className="grid grid-cols-2 gap-10">
         <div className="bg-[#0d0d0d] border border-slate-900 p-8">
           <h2 className="text-xs font-black uppercase tracking-[0.3em] text-[#fff] mb-8 border-l-2 border-blue-500 pl-4">Policy_Vs_USDCAD</h2>
@@ -161,13 +307,7 @@ const DivergenceChart = () => {
                   }}
                 />
 
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#181818', border: '2px solid #8d8d8d', fontSize: '14px', color: '#8d8d8d', fontWeight: 700 }} 
-                  labelStyle={{ color: '#8d8d8d', fontWeight: 700 }} 
-                  itemStyle={{ color: '#8d8d8d', fontWeight: 700 }}
-                  formatter={(value) => typeof value === 'number'? value.toFixed(2) : value}
-    
-                />
+                <Tooltip content={<CustomTooltip />} />
                 
                 <ReferenceLine y={0} yAxisId="left" stroke="#8d8d8d" strokeWidth={1} />
                 
@@ -197,11 +337,7 @@ const DivergenceChart = () => {
                   }}
                 />
                 <YAxis domain={[-1, 1]} stroke="#8d8d8d" tick={{fontSize: 16, fontWeight: 700, fill: '#8d8d8d'}} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#181818', border: '2px solid #8d8d8d', fontSize: '14px', color: '#8d8d8d', fontWeight: 700 }} 
-                  formatter={(value) => typeof value === 'number' ? value.toFixed(2) : value}
-                  itemStyle={{ color: '#8d8d8d' }} 
-                />
+                <Tooltip content={<DivergenceTooltip />} />
                 <ReferenceLine y={0} stroke="#a7a7a7" strokeWidth={1} />
                 <Bar dataKey="divergence">
                   {filteredData.map((e, i) => (
