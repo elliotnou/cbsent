@@ -8,7 +8,7 @@ import { OrbitControls, useGLTF } from '@react-three/drei';
 
 
 const Model3D = () => {
-  const { scene } = useGLTF('/model.glb');
+  const { scene } = useGLTF('/cadpenny.glb');
   const modelRef = useRef();
 
   useFrame(() => {
@@ -35,7 +35,7 @@ const Model3DWrapper = () => {
   const [modelExists, setModelExists] = useState(null);
 
   useEffect(() => {
-    fetch('/model.glb', { method: 'HEAD' })
+    fetch('/model.glb', { method:'HEAD'})
       .then(() => setModelExists(true))
       .catch(() => setModelExists(false));
   }, []);
@@ -50,14 +50,15 @@ const Model3DWrapper = () => {
 
   return (
     <Canvas
-      camera={{ position: [0, 0, 5], fov: 50 }}
+      camera={{ position: [0, 0, 38], fov: 50 }}
       onCreated={({ gl }) => {
         gl.setClearColor('#050505', 1);
       }}
       style={{ background: 'transparent' }}
     >
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 5]} intensity={1} />
+      <ambientLight intensity={1.2} />
+      <directionalLight position={[10, 10, 5]} intensity={2} />
+      <directionalLight position={[-10, -10, -5]} intensity={0.5} />
       <Suspense fallback={null}>
         <Model3D />
       </Suspense>

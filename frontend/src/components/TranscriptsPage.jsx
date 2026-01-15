@@ -80,7 +80,7 @@ const TranscriptsPage = () => {
         <header className="mb-14 border-b-2 border-slate-700 pb-10">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-5xl font-extrabold text-[#e0e0e0] uppercase tracking-tight drop-shadow-lg">
+              <h1 className="text-5xl font-extrabold uppercase tracking-tight bg-gradient-to-r from-blue-400 via-white to-red-400 bg-clip-text text-transparent" style={{ textShadow: '0 0 40px rgba(59, 130, 246, 0.3), 0 0 40px rgba(239, 68, 68, 0.3)' }}>
                 Transcripts
               </h1>
               <p className="text-slate-300 mt-4 text-lg uppercase font-bold tracking-wider">

@@ -43,7 +43,7 @@ const HelpModal = ({ showHelp, setShowHelp }) => {
 
             <div className="space-y-4 text-sm">
               <p className="leading-relaxed text-slate-300">
-                Each transcript is analyzed using a sophisticated AI-powered system that breaks down text into individual sentences, scores them, and aggregates results into a final transcript score.
+                Each transcript is analyzed using an AI-powered system that breaks down text into individual sentences, scores them, and aggregates results into a final transcript score.
               </p>
 
               <div className="space-y-3">
