@@ -11,6 +11,18 @@ const Model3D = () => {
   const { scene } = useGLTF('/cadpenny.glb');
   const modelRef = useRef();
 
+  // Set metallic material properties after model loads
+  useEffect(() => {
+    scene.traverse((child) => {
+      if (child.isMesh && child.material) {
+        child.material.metalness = 1.0;
+        child.material.roughness = 0.2;
+        child.material.envMapIntensity = 1.5;
+        child.material.needsUpdate = true;
+      }
+    });
+  }, [scene]);
+
   useFrame(() => {
     if (modelRef.current) {
       modelRef.current.rotation.y += 0.005;
@@ -57,7 +69,7 @@ const Model3DWrapper = () => {
       style={{ background: 'transparent' }}
     >
       <ambientLight intensity={1.2} />
-      <directionalLight position={[10, 10, 5]} intensity={2} />
+      <directionalLight position={[3, 3, 20]} intensity={2} />
       <directionalLight position={[-10, -10, -5]} intensity={0.5} />
       <Suspense fallback={null}>
         <Model3D />
