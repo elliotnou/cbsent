@@ -15,7 +15,7 @@ class FedScraper(CentralBankScraper):
         self.feed_url = "https://www.federalreserve.gov/json/ne-press.json"
         self.session = requests.Session()
 
-        raw_cutoff = os.getenv('SCRAPER_EARLIEST_DATE', '2023-09-06')
+        raw_cutoff = os.getenv('SCRAPER_EARLIEST_DATE', '2021-07-29')
         try:
             self.cutoff = datetime.datetime.strptime(raw_cutoff, '%Y-%m-%d').date()
         except ValueError:

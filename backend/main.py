@@ -6,17 +6,21 @@ import json
 import psycopg2
 import pandas as pd
 import yfinance as yf
+import warnings
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
+
+# Suppress pandas SQLAlchemy warnings
+warnings.filterwarnings('ignore', message='.*pandas only supports SQLAlchemy.*')
 
 load_dotenv()
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://fin-sent.vercel.app", "http://localhost:5173", "https://finsent-530o.onrender.com"],
+    allow_origins=["https://fin-sent.vercel.app", "http://localhost:5173", "http://localhost:5174", "https://finsent-530o.onrender.com"],
     allow_methods=["*"],
     allow_headers=["*"],
     allow_credentials=True,
