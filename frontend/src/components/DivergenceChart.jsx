@@ -150,18 +150,18 @@ const DivergenceChart = () => {
   const filteredData = useMemo(() => {
     if (timeRange === 'all') return data;
     const cutoff = new Date();
-    if (timeRange === '30d') cutoff.setDate(cutoff.getDate() - 30);
     if (timeRange === '90d') cutoff.setDate(cutoff.getDate() - 90);
     if (timeRange === '1y') cutoff.setFullYear(cutoff.getFullYear() - 1);
+    if (timeRange === '3y') cutoff.setFullYear(cutoff.getFullYear() - 3);
     return data.filter(d => new Date(d.date) >= cutoff);
   }, [data, timeRange]);
 
   const filteredUSDCAD = useMemo(() => {
     if (timeRange === 'all') return usdcadData;
     const cutoff = new Date();
-    if (timeRange === '30d') cutoff.setDate(cutoff.getDate() - 30);
     if (timeRange === '90d') cutoff.setDate(cutoff.getDate() - 90);
     if (timeRange === '1y') cutoff.setFullYear(cutoff.getFullYear() - 1);
+    if (timeRange === '3y') cutoff.setFullYear(cutoff.getFullYear() - 3);
     return usdcadData.filter(d => new Date(d.date) >= cutoff);
   }, [usdcadData, timeRange]);
 
@@ -217,19 +217,19 @@ const DivergenceChart = () => {
         <div className="flex-1">
           <div className="relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700 rounded px-4 py-3 hover:border-slate-600 transition-all duration-300 shadow-lg">
             <div className="text-xs text-slate-400 mb-2 uppercase tracking-wide">Score Guide:</div>
-            <div className="relative h-16 flex items-center">
+            <div className="relative h-8 flex items-center">
               <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-2 bg-gradient-to-r from-red-500/70 via-slate-600 to-green-500/70 rounded-full shadow-inner"></div>
-              <div className="absolute left-0 top-0 bottom-0 w-1/3 group cursor-help flex items-center">
+              <div className="absolute left-0 top-0 bottom-0 w-1/3 group flex items-center">
                 <span className="absolute bottom-full left-0 mb-2 w-64 p-2 bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
                   Dovish: Favors lower interest rates and accommodative monetary policy to stimulate economic growth and employment
                 </span>
               </div>
-              <div className="absolute left-1/3 top-0 bottom-0 w-1/3 group cursor-help flex items-center">
+              <div className="absolute left-1/3 top-0 bottom-0 w-1/3 group flex items-center">
                 <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
                   Neutral: Balanced stance with no clear bias toward raising or lowering interest rates
                 </span>
               </div>
-              <div className="absolute right-0 top-0 bottom-0 w-1/3 group cursor-help flex items-center">
+              <div className="absolute right-0 top-0 bottom-0 w-1/3 group flex items-center">
                 <span className="absolute bottom-full right-0 mb-2 w-64 p-2 bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
                   Hawkish: Favors higher interest rates and restrictive monetary policy to control inflation
                 </span>
@@ -249,7 +249,7 @@ const DivergenceChart = () => {
       </div>
 
       <div className="flex gap-4 border-b border-slate-900 pb-5">
-        {['all','30d','90d','1y'].map(r => (
+        {['all','90d','1y','3y'].map(r => (
           <button
             key={r}
             onClick={() => setTimeRange(r)}
@@ -288,10 +288,10 @@ const DivergenceChart = () => {
             val: stats.forwardCorrelation,
             color: 'text-yellow-400',
             glow: '',
-            tooltip: `Correlation between policy divergence and USD/CAD price ${stats.lagDays} day(s) later. Measures predictive relationship between central bank sentiment and currency movement.`
+            tooltip: `Correlation between policy divergence and USD/CAD price ${stats.lagDays} day later. Measures predictive relationship between central bank sentiment and currency movement.`
           }
         ].map((s, i) => (
-          <div key={i} className="relative border border-slate-900 p-6 bg-gradient-to-br from-[#0d0d0d] to-[#1a1a1a] hover:border-slate-700 hover:card-glow hover:scale-[1.02] transition-all duration-300 group cursor-help">
+          <div key={i} className="relative border border-slate-900 p-6 bg-gradient-to-br from-[#0d0d0d] to-[#1a1a1a] hover:border-slate-700 hover:card-glow hover:scale-[1.02] transition-all duration-300 group">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-2 w-72 p-3 bg-slate-900 border border-slate-700 rounded text-[11px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
               {s.tooltip}
             </div>

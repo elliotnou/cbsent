@@ -45,8 +45,8 @@ Central banks don't release statements on the same days. To calculate a spread, 
 ## Data Sources & Attribution
 
 ### Primary Sources
-- **Federal Reserve Transcripts & Statements**: [Board of Governors of the Federal Reserve System](https://www.federalreserve.gov)
-- **Bank of Canada Transcripts & Statements**: [Bank of Canada](https://www.bankofcanada.ca)
+- **Federal Reserve Monetary Policy Press Releases**: [Board of Governors of the Federal Reserve System](https://www.federalreserve.gov)
+- **Bank of Canada Press Releases**: [Bank of Canada](https://www.bankofcanada.ca)
 
 ## License
 
