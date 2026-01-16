@@ -358,11 +358,21 @@ const DivergenceChart = () => {
                 <Line yAxisId="right" name="USD_CAD_PRICE" type="monotone" dataKey="usdcad_price" stroke="#22c55e" strokeWidth={2} dot={false}  />
               </LineChart>
             </ResponsiveContainer>
+            
           </div>
         </div>
 
         <div className="bg-gradient-to-br from-[#0d0d0d] to-[#1a1a1a] border border-slate-900 p-8 hover:border-slate-600 hover:shadow-2xl transition-all duration-500 group">
-          <h2 className="text-xs font-black uppercase tracking-[0.3em] text-[#fff] mb-8 border-l-2 border-slate-700 pl-4 group-hover:border-slate-500 transition-colors">Sentiment_Delta</h2>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-xs font-black uppercase tracking-[0.3em] text-[#fff] border-l-2 border-slate-700 pl-4 group-hover:border-slate-500 transition-colors">Sentiment_Delta</h2>
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-red-400">Live</span>
+            </div>
+          </div>
           <div className="h-[500px] w-full">
             <ResponsiveContainer>
               <BarChart data={filteredData}>

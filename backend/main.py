@@ -20,7 +20,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://fin-sent.vercel.app", "http://localhost:5173", "http://localhost:5174", "https://finsent-530o.onrender.com"],
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
     allow_credentials=True,
