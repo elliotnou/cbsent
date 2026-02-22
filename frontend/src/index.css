@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 #root {
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   width: 100%;
   color-scheme: dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #111;
+  color: #e2e2e2;
+  background-color: #0c0c0c;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -18,21 +18,30 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: #111;
+  background: #0c0c0c;
+}
+
+*:focus {
+  outline: none;
+}
+
+/* selection */
+::selection {
+  background: rgba(59, 130, 246, 0.3);
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #444;
-  border-radius: 3px;
+  background: #333;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

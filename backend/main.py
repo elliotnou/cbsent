@@ -60,12 +60,9 @@ def get_divergence():
 
         df['divergence'] = df[fed_col] - df[boc_col]
         df = df.reset_index().rename(columns={'index': 'date'})
+        df['date'] = df['date'].dt.strftime('%Y-%m-%d')
         df = df.rename(columns={fed_col: 'fed', boc_col: 'boc'})
 
-        if len(df) > 400:
-            df = df.set_index('date').resample('W').mean().reset_index()
-
-        df['date'] = df['date'].dt.strftime('%Y-%m-%d')
         return df.to_dict(orient='records')
 
     except Exception as e:
@@ -104,10 +101,6 @@ def get_usdcad():
         min_price = fx_df['price'].min()
         max_price = fx_df['price'].max()
         fx_df['normalized'] = (fx_df['price'] - min_price) / (max_price - min_price)
-
-        if len(fx_df) > 400:
-            fx_df.index = pd.to_datetime(fx_df.index)
-            fx_df = fx_df.resample('W').mean().dropna()
 
         result = []
         for date, row in fx_df.iterrows():

@@ -4,6 +4,13 @@ import {
   Tooltip, Legend, ResponsiveContainer, ReferenceLine
 } from 'recharts';
 
+const STAT_DESCRIPTIONS = {
+  'Current Divergence': 'Latest gap between Fed and BoC sentiment. Positive = Fed more hawkish.',
+  'Mean Divergence': 'Average policy divergence over the selected time window.',
+  'Volatility (σ)': 'Standard deviation of divergence — measures how much the gap fluctuates.',
+  'Correlation': 'Pearson correlation between sentiment divergence and USD/CAD price movement.',
+};
+
 const DivergenceChart = () => {
   const [data, setData] = useState([]);
   const [usdcadData, setUsdcadData] = useState([]);
@@ -14,16 +21,16 @@ const DivergenceChart = () => {
   const SentimentTooltip = ({ active, payload, label }) => {
     if (!active || !payload?.length) return null;
     return (
-      <div style={{ backgroundColor: '#1a1a1a', border: '1px solid #444', padding: '10px', fontSize: '13px' }}>
-        <p style={{ color: '#999', marginBottom: '6px' }}>{label}</p>
+      <div className="bg-[#161616] border border-gray-700/60 rounded px-3 py-2.5 text-xs shadow-lg">
+        <p className="text-gray-400 mb-1.5 font-medium">{label}</p>
         {payload.map((entry, i) => {
           let color = '#999';
-          if (entry.name === 'Fed Sentiment') color = '#3b82f6';
-          else if (entry.name === 'BoC Sentiment') color = '#ef4444';
-          else if (entry.name === 'USD/CAD') color = '#22c55e';
+          if (entry.name === 'Fed') color = '#60a5fa';
+          else if (entry.name === 'BoC') color = '#f87171';
+          else if (entry.name === 'USD/CAD') color = '#4ade80';
           return (
-            <p key={i} style={{ color, margin: '3px 0' }}>
-              {entry.name}: {typeof entry.value === 'number' ? entry.value.toFixed(2) : entry.value}
+            <p key={i} style={{ color }} className="my-0.5">
+              {entry.name}: {typeof entry.value === 'number' ? entry.value.toFixed(3) : entry.value}
             </p>
           );
         })}
@@ -34,19 +41,15 @@ const DivergenceChart = () => {
   const DivergenceTooltip = ({ active, payload, label }) => {
     if (!active || !payload?.length) return null;
     const val = payload[0].value;
-    const color = val > 0 ? '#10b981' : '#f43f5e';
+    const color = val > 0 ? '#34d399' : '#fb7185';
     return (
-      <div style={{ backgroundColor: '#1a1a1a', border: '1px solid #444', padding: '10px', fontSize: '13px', maxWidth: '260px' }}>
-        <p style={{ color: '#999', marginBottom: '6px' }}>{label}</p>
-        <p style={{ color, margin: '3px 0' }}>
-          Divergence: {typeof val === 'number' ? val.toFixed(2) : val}
+      <div className="bg-[#161616] border border-gray-700/60 rounded px-3 py-2.5 text-xs shadow-lg max-w-[240px]">
+        <p className="text-gray-400 mb-1.5 font-medium">{label}</p>
+        <p style={{ color }} className="my-0.5">
+          Divergence: {typeof val === 'number' ? val.toFixed(3) : val}
         </p>
-        <p style={{ color: '#888', fontSize: '11px', lineHeight: '1.4', margin: 0 }}>
-          {val > 0
-            ? 'Fed is more hawkish than BoC'
-            : val < 0
-              ? 'BoC is more hawkish than Fed'
-              : 'Equal sentiment'}
+        <p className="text-gray-500 text-[11px] leading-snug mt-1">
+          {val > 0 ? 'Fed is more hawkish than BoC' : val < 0 ? 'BoC is more hawkish than Fed' : 'Equal sentiment'}
         </p>
       </div>
     );
@@ -135,37 +138,50 @@ const DivergenceChart = () => {
     return { current, avg, volatility, correlation, lagDays };
   }, [filteredData, mergedData]);
 
-  if (loading) return <div className="p-20 text-center text-gray-500 text-sm">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-24">
+        <div className="text-sm text-gray-500">Loading data...</div>
+      </div>
+    );
+  }
 
   const formatDate = (date) => {
     const d = new Date(date);
     return isNaN(d) ? date : `${d.getMonth() + 1}/${d.getFullYear()}`;
   };
 
+  const statCards = [
+    { label: 'Current Divergence', val: stats.current, color: stats.current > 0 ? 'text-emerald-400' : 'text-rose-400', sign: true },
+    { label: 'Mean Divergence', val: stats.avg, color: 'text-blue-400', sign: true },
+    { label: 'Volatility (σ)', val: stats.volatility, color: 'text-violet-400', sign: false },
+    { label: `Correlation (${stats.lagDays}d lag)`, val: stats.correlation, color: 'text-amber-400', sign: false },
+  ];
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* score guide */}
-      <div className="bg-[#1a1a1a] border border-gray-800 rounded-md px-4 py-3">
-        <div className="text-xs text-gray-500 mb-2">Score guide</div>
-        <div className="relative h-6 flex items-center">
-          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-1.5 bg-gradient-to-r from-red-500/60 via-gray-600 to-green-500/60 rounded-full"></div>
+      <div className="bg-[#141414] border border-gray-800/80 rounded-lg px-5 py-3">
+        <div className="text-[11px] text-gray-500 mb-2 font-medium uppercase tracking-wide">Score range</div>
+        <div className="relative h-5 flex items-center">
+          <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-rose-500/50 via-gray-700 to-emerald-500/50 rounded-full"></div>
         </div>
-        <div className="flex justify-between text-xs text-gray-500">
-          <span className="text-red-400">-1.0 Dovish</span>
+        <div className="flex justify-between text-[11px] text-gray-500 mt-1">
+          <span className="text-rose-400/80">−1.0 Dovish</span>
           <span>0 Neutral</span>
-          <span className="text-green-400">+1.0 Hawkish</span>
+          <span className="text-emerald-400/80">+1.0 Hawkish</span>
         </div>
       </div>
 
-      {/* time range buttons */}
-      <div className="flex gap-2 border-b border-gray-800 pb-4">
+      {/* time range */}
+      <div className="flex gap-1.5">
         {['all', '90d', '1y', '3y'].map(r => (
           <button
             key={r}
             onClick={() => setTimeRange(r)}
-            className={`px-3 py-1 text-xs font-medium rounded transition-colors ${timeRange === r
-                ? 'bg-white text-black'
-                : 'text-gray-500 hover:text-gray-300 border border-gray-800 hover:border-gray-600'
+            className={`px-3 py-1 text-xs rounded-md transition-all duration-150 ${timeRange === r
+              ? 'bg-white text-gray-900 font-medium shadow-sm'
+              : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
               }`}
           >
             {r === 'all' ? 'All' : r.toUpperCase()}
@@ -173,77 +189,82 @@ const DivergenceChart = () => {
         ))}
       </div>
 
-      {/* stats cards */}
-      <div className="grid grid-cols-4 gap-4">
-        {[
-          { label: 'Current Divergence', val: stats.current, color: stats.current > 0 ? 'text-green-400' : 'text-red-400' },
-          { label: 'Mean Divergence', val: stats.avg, color: 'text-blue-400' },
-          { label: 'Volatility (σ)', val: stats.volatility, color: 'text-purple-400' },
-          { label: `Correlation (${stats.lagDays}d lag)`, val: stats.correlation, color: 'text-yellow-400' },
-        ].map((s, i) => (
-          <div key={i} className="border border-gray-800 rounded-md p-4 bg-[#1a1a1a]">
-            <p className="text-xs text-gray-500 mb-2">{s.label}</p>
-            <p className={`text-2xl font-semibold tabular-nums ${s.color}`}>
-              {s.val > 0 && i < 2 ? '+' : ''}{Number(s.val).toFixed(3)}
+      {/* stat cards */}
+      <div className="grid grid-cols-4 gap-3">
+        {statCards.map((s, i) => (
+          <div
+            key={i}
+            className="relative bg-[#141414] border border-gray-800/80 rounded-lg p-4 hover:border-gray-700 transition-colors cursor-default group"
+          >
+            <p className="text-[11px] text-gray-500 mb-1.5 font-medium">{s.label}</p>
+            <p className={`text-xl font-semibold tabular-nums tracking-tight ${s.color}`}>
+              {s.sign && s.val > 0 ? '+' : ''}{Number(s.val).toFixed(3)}
             </p>
+
+            <div className="absolute left-0 right-0 -bottom-1 translate-y-full z-50 px-1 hidden group-hover:block">
+              <div className="bg-[#1a1a1a] border border-gray-700 rounded-md p-2.5 shadow-xl">
+                <p className="text-[11px] text-gray-400 leading-relaxed">{STAT_DESCRIPTIONS[s.label] || STAT_DESCRIPTIONS[s.label.split('(')[0].trim()]}</p>
+              </div>
+            </div>
           </div>
         ))}
       </div>
 
       {/* charts */}
-      <div className="grid grid-cols-2 gap-6">
-        <div className="bg-[#1a1a1a] border border-gray-800 rounded-md p-6">
-          <h2 className="text-sm font-medium text-gray-300 mb-6">Policy Sentiment vs USD/CAD</h2>
-          <div className="h-[480px] w-full">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-[#141414] border border-gray-800/80 rounded-lg p-5">
+          <h2 className="text-[13px] font-medium text-gray-300 mb-5">Sentiment vs USD/CAD</h2>
+          <div className="h-[460px] w-full">
             <ResponsiveContainer>
               <LineChart data={mergedData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
                 <XAxis
                   dataKey="date"
-                  axisLine={{ stroke: '#555' }}
-                  tickLine={{ stroke: '#555' }}
-                  tick={{ fontSize: 11, fill: '#888' }}
-                  minTickGap={20}
+                  axisLine={{ stroke: '#333' }}
+                  tickLine={false}
+                  tick={{ fontSize: 10, fill: '#666' }}
+                  minTickGap={30}
                   tickFormatter={formatDate}
                 />
-                <YAxis yAxisId="left" domain={[-1, 1]} stroke="#555" tick={{ fontSize: 11, fill: '#888' }} />
-                <YAxis yAxisId="right" orientation="right" stroke="#555" tick={{ fontSize: 11, fill: '#888' }} />
+                <YAxis yAxisId="left" domain={[-1, 1]} axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#666' }} width={35} />
+                <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#666' }} width={45} />
                 <Legend
                   verticalAlign="top"
                   align="right"
                   iconType="line"
-                  wrapperStyle={{ paddingBottom: '16px', fontSize: '11px' }}
+                  iconSize={10}
+                  wrapperStyle={{ paddingBottom: '12px', fontSize: '11px' }}
                 />
                 <Tooltip content={<SentimentTooltip />} />
-                <ReferenceLine y={0} yAxisId="left" stroke="#555" />
-                <Line yAxisId="left" name="Fed Sentiment" type="stepAfter" dataKey="fed" stroke="#3b82f6" strokeWidth={1.5} dot={false} />
-                <Line yAxisId="left" name="BoC Sentiment" type="stepAfter" dataKey="boc" stroke="#ef4444" strokeWidth={1.5} dot={false} />
-                <Line yAxisId="right" name="USD/CAD" type="monotone" dataKey="usdcad_price" stroke="#22c55e" strokeWidth={1.5} dot={false} />
+                <ReferenceLine y={0} yAxisId="left" stroke="#333" strokeDasharray="3 3" />
+                <Line yAxisId="left" name="Fed" type="stepAfter" dataKey="fed" stroke="#60a5fa" strokeWidth={1.5} dot={false} isAnimationActive={false} />
+                <Line yAxisId="left" name="BoC" type="stepAfter" dataKey="boc" stroke="#f87171" strokeWidth={1.5} dot={false} isAnimationActive={false} />
+                <Line yAxisId="right" name="USD/CAD" type="monotone" dataKey="usdcad_price" stroke="#4ade80" strokeWidth={1.5} dot={false} strokeOpacity={0.8} isAnimationActive={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="bg-[#1a1a1a] border border-gray-800 rounded-md p-6">
-          <h2 className="text-sm font-medium text-gray-300 mb-6">Sentiment Divergence (Fed − BoC)</h2>
-          <div className="h-[480px] w-full">
+        <div className="bg-[#141414] border border-gray-800/80 rounded-lg p-5">
+          <h2 className="text-[13px] font-medium text-gray-300 mb-5">Divergence (Fed − BoC)</h2>
+          <div className="h-[460px] w-full">
             <ResponsiveContainer>
               <BarChart data={filteredData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#222" vertical={false} />
                 <XAxis
                   dataKey="date"
-                  axisLine={{ stroke: '#555' }}
-                  tickLine={{ stroke: '#555' }}
-                  tick={{ fontSize: 11, fill: '#888' }}
-                  minTickGap={20}
+                  axisLine={{ stroke: '#333' }}
+                  tickLine={false}
+                  tick={{ fontSize: 10, fill: '#666' }}
+                  minTickGap={30}
                   tickFormatter={formatDate}
                 />
-                <YAxis domain={[-1, 1]} stroke="#555" tick={{ fontSize: 11, fill: '#888' }} />
+                <YAxis domain={[-1, 1]} axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#666' }} width={35} />
                 <Tooltip content={<DivergenceTooltip />} />
-                <ReferenceLine y={0} stroke="#666" />
-                <Bar dataKey="divergence">
+                <ReferenceLine y={0} stroke="#444" />
+                <Bar dataKey="divergence" radius={[1, 1, 0, 0]} isAnimationActive={false}>
                   {filteredData.map((e, i) => (
-                    <Cell key={i} fill={e.divergence > 0 ? '#10b981' : '#f43f5e'} opacity={0.85} />
+                    <Cell key={i} fill={e.divergence > 0 ? '#34d399' : '#fb7185'} fillOpacity={0.75} />
                   ))}
                 </Bar>
               </BarChart>

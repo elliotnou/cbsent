@@ -55,31 +55,31 @@ const TranscriptsPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#111] text-gray-100 p-6 md:p-14">
-        <div className="p-20 text-center text-gray-500 text-sm">Loading...</div>
+      <div className="min-h-screen bg-[#0c0c0c] text-gray-100 flex items-center justify-center">
+        <div className="text-sm text-gray-500">Loading transcripts...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#111] text-gray-100 p-6 md:p-14">
-      <div className="max-w-7xl mx-auto">
-        <header className="mb-12 border-b border-gray-800 pb-8">
+    <div className="min-h-screen bg-[#0c0c0c] text-gray-100 p-6 md:p-12 lg:px-16">
+      <div className="max-w-[1400px] mx-auto">
+        <header className="mb-10 pb-6 border-b border-gray-800/60">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white">Transcripts</h1>
-              <p className="text-gray-400 mt-2 text-sm">Sentence-level sentiment breakdown</p>
+              <h1 className="text-2xl font-bold text-white tracking-tight">Transcripts</h1>
+              <p className="text-gray-500 mt-1.5 text-[13px]">Sentence-level sentiment analysis</p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               <button
                 onClick={() => setShowHelp(true)}
-                className="px-4 py-1.5 text-xs font-medium border border-gray-700 text-gray-400 rounded hover:border-gray-500 hover:text-gray-200 transition-colors"
+                className="px-3.5 py-1.5 text-xs font-medium text-gray-500 rounded-md hover:text-gray-300 hover:bg-white/5 transition-all duration-150"
               >
                 Help
               </button>
               <Link
                 to="/"
-                className="px-4 py-1.5 text-xs font-medium border border-gray-700 text-gray-400 rounded hover:border-gray-500 hover:text-gray-200 transition-colors"
+                className="px-3.5 py-1.5 text-xs font-medium text-gray-500 rounded-md hover:text-gray-300 hover:bg-white/5 transition-all duration-150"
               >
                 ← Dashboard
               </Link>
@@ -89,137 +89,118 @@ const TranscriptsPage = () => {
 
         <HelpModal showHelp={showHelp} setShowHelp={setShowHelp} />
 
-        {/* bank filter */}
-        <div className="flex gap-2 mb-8 border-b border-gray-800 pb-4">
+        {/* filter */}
+        <div className="flex gap-1.5 mb-6">
           {['all', 'fed', 'boc'].map(bank => (
             <button
               key={bank}
               onClick={() => setFilterBank(bank)}
-              className={`px-3 py-1 text-xs font-medium rounded transition-colors ${filterBank === bank
-                  ? 'bg-white text-black'
-                  : 'border border-gray-800 text-gray-500 hover:border-gray-600 hover:text-gray-300'
+              className={`px-3 py-1 text-xs rounded-md transition-all duration-150 ${filterBank === bank
+                  ? 'bg-white text-gray-900 font-medium shadow-sm'
+                  : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
                 }`}
             >
-              {bank === 'all' ? 'All Banks' : bank === 'fed' ? 'Federal Reserve' : 'Bank of Canada'}
+              {bank === 'all' ? 'All' : bank === 'fed' ? 'Fed' : 'BoC'}
             </button>
           ))}
+          <span className="ml-3 text-[11px] text-gray-600 self-center">{filtered.length} results</span>
         </div>
 
-        <div className="mb-4 text-sm text-gray-500">
-          {filtered.length} transcript{filtered.length !== 1 ? 's' : ''}
-        </div>
-
-        <div className="space-y-4">
+        <div className="space-y-3">
           {filtered.length === 0 ? (
-            <div className="text-center py-16 text-gray-600">
-              <p>No transcripts found</p>
-            </div>
+            <div className="text-center py-16 text-gray-600 text-sm">No transcripts found</div>
           ) : (
             filtered.map((transcript) => (
               <div
                 key={transcript.id}
-                className="bg-[#1a1a1a] border border-gray-800 rounded-md hover:border-gray-700 transition-colors"
+                className="bg-[#141414] border border-gray-800/80 rounded-lg hover:border-gray-700/80 transition-colors"
               >
                 <div
-                  className="p-5 cursor-pointer"
+                  className="p-4 cursor-pointer select-none"
                   onClick={() => handleTranscriptClick(transcript.id)}
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-1.5">
-                        <span className={`px-2 py-0.5 text-xs font-medium rounded ${transcript.bank.toLowerCase().includes('fed')
-                            ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
-                            : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2.5 mb-1">
+                        <span className={`inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium rounded ${transcript.bank.toLowerCase().includes('fed')
+                            ? 'bg-blue-500/10 text-blue-400'
+                            : 'bg-red-500/10 text-red-400'
                           }`}>
                           {transcript.bank}
                         </span>
-                        <span className="text-gray-500 text-xs">
+                        <span className="text-gray-600 text-[11px]">
                           {new Date(transcript.date).toLocaleDateString('en-US', {
-                            year: 'numeric', month: 'long', day: 'numeric'
+                            year: 'numeric', month: 'short', day: 'numeric'
                           })}
                         </span>
                       </div>
                       {transcript.title && (
-                        <h3 className="text-sm font-medium text-gray-200">{transcript.title}</h3>
+                        <h3 className="text-sm text-gray-300 truncate pr-4">{transcript.title}</h3>
                       )}
                     </div>
 
-                    <div className="text-right ml-4">
-                      <div className="text-xs text-gray-500 mb-1">Sentiment</div>
-                      <div className={`text-2xl font-semibold tabular-nums ${transcript.sentiment > 0 ? 'text-green-400'
-                          : transcript.sentiment < 0 ? 'text-red-400'
-                            : 'text-gray-400'
-                        }`}>
-                        {transcript.sentiment > 0 ? '+' : ''}{transcript.sentiment.toFixed(3)}
+                    <div className="flex items-center gap-3 flex-shrink-0">
+                      <div className="text-right">
+                        <div className={`text-lg font-semibold tabular-nums ${transcript.sentiment > 0 ? 'text-emerald-400'
+                            : transcript.sentiment < 0 ? 'text-rose-400'
+                              : 'text-gray-500'
+                          }`}>
+                          {transcript.sentiment > 0 ? '+' : ''}{transcript.sentiment.toFixed(3)}
+                        </div>
+                        <div className="text-[10px] text-gray-600">
+                          {transcript.sentiment > 0.3 ? 'Hawkish' : transcript.sentiment < -0.3 ? 'Dovish' : 'Neutral'}
+                        </div>
                       </div>
-                      <div className="text-xs text-gray-600 mt-0.5">
-                        {transcript.sentiment > 0.3 ? 'Hawkish' : transcript.sentiment < -0.3 ? 'Dovish' : 'Neutral'}
-                      </div>
-                    </div>
-
-                    <div className="ml-3 text-gray-600 text-xl">
-                      {expandedId === transcript.id ? '−' : '+'}
+                      <span className="text-gray-700 text-sm">
+                        {expandedId === transcript.id ? '▾' : '▸'}
+                      </span>
                     </div>
                   </div>
-
-                  {expandedId !== transcript.id && transcript.excerpt && (
-                    <div className="mt-3 p-3 bg-[#151515] border-l-2 border-gray-700 rounded-sm">
-                      <p className="text-sm text-gray-400 leading-relaxed line-clamp-3">
-                        {transcript.excerpt}
-                      </p>
-                    </div>
-                  )}
                 </div>
 
+                {/* expanded sentence detail */}
                 {expandedId === transcript.id && (
-                  <div className="border-t border-gray-800">
+                  <div className="border-t border-gray-800/60">
                     {loadingSentences[transcript.id] ? (
-                      <div className="p-6 text-center text-gray-500 text-sm">Loading sentences...</div>
+                      <div className="p-5 text-center text-gray-500 text-xs">Loading sentences...</div>
                     ) : sentences[transcript.id]?.length > 0 ? (
-                      <div className="p-5 space-y-3 max-h-[600px] overflow-y-auto">
-                        <div className="text-xs text-gray-500 mb-3">
-                          {sentences[transcript.id].length} sentences
-                        </div>
+                      <div className="p-4 space-y-2 max-h-[500px] overflow-y-auto">
+                        <div className="text-[11px] text-gray-600 mb-2">{sentences[transcript.id].length} sentences</div>
                         {sentences[transcript.id].map((sentence, idx) => (
                           <div
                             key={sentence.id}
-                            className="bg-[#151515] border border-gray-800 p-3 rounded hover:border-gray-700 transition-colors"
+                            className="bg-[#0f0f0f] border border-gray-800/50 p-3 rounded-md"
                           >
                             <div className="mb-2">
-                              <span className="text-gray-600 text-xs mr-2">#{idx + 1}</span>
-                              <span className="text-gray-200 text-sm leading-relaxed">{sentence.text}</span>
+                              <span className="text-gray-700 text-[10px] mr-1.5">{idx + 1}.</span>
+                              <span className="text-gray-300 text-[13px] leading-relaxed">{sentence.text}</span>
                             </div>
-                            <div className="flex gap-5 mb-2 text-xs">
-                              <div>
-                                <span className="text-gray-600">Score: </span>
-                                <span className={`font-medium ${sentence.score > 0 ? 'text-green-400'
-                                    : sentence.score < 0 ? 'text-red-400'
-                                      : 'text-gray-400'
+                            <div className="flex items-center gap-4 text-[11px]">
+                              <span>
+                                <span className="text-gray-600">Score </span>
+                                <span className={`font-medium ${sentence.score > 0 ? 'text-emerald-400'
+                                    : sentence.score < 0 ? 'text-rose-400'
+                                      : 'text-gray-500'
                                   }`}>
                                   {sentence.score > 0 ? '+' : ''}{sentence.score.toFixed(3)}
                                 </span>
-                              </div>
-                              <div>
-                                <span className="text-gray-600">Weight: </span>
-                                <span className="text-gray-400">{sentence.impact.toFixed(2)}</span>
-                              </div>
+                              </span>
+                              <span>
+                                <span className="text-gray-600">Weight </span>
+                                <span className="text-gray-400">{sentence.impact.toFixed(1)}</span>
+                              </span>
                               {sentence.topic && (
-                                <div>
-                                  <span className="text-gray-600">Topic: </span>
-                                  <span className="text-gray-300">{sentence.topic}</span>
-                                </div>
+                                <span className="text-gray-500">{sentence.topic}</span>
                               )}
                             </div>
                             {sentence.reasoning && (
-                              <div className="mt-2 p-2 bg-[#111] border-l-2 border-gray-700 rounded-sm">
-                                <p className="text-xs text-gray-500 leading-relaxed">{sentence.reasoning}</p>
-                              </div>
+                              <p className="mt-1.5 text-[11px] text-gray-600 leading-relaxed">{sentence.reasoning}</p>
                             )}
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div className="p-6 text-center text-gray-600 text-sm">No sentence data available</div>
+                      <div className="p-5 text-center text-gray-600 text-xs">No sentence data</div>
                     )}
                   </div>
                 )}
@@ -228,10 +209,8 @@ const TranscriptsPage = () => {
           )}
         </div>
 
-        <footer className="mt-20 pt-8 border-t border-gray-800 text-xs text-gray-500">
-          <p>
-            Data: <span className="text-gray-400">Federal Reserve</span> (federalreserve.gov), <span className="text-gray-400">Bank of Canada</span> (bankofcanada.ca)
-          </p>
+        <footer className="mt-16 pt-6 border-t border-gray-800/40 text-[11px] text-gray-600">
+          Data from federalreserve.gov and bankofcanada.ca · Updated hourly
         </footer>
       </div>
     </div>
