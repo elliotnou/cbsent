@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(git -C /Users/woochachino/finSENT log --oneline --all)",
+      "Bash(ls:*)"
+    ]
+  }
+}

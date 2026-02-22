@@ -5,7 +5,9 @@ pydantic
 python-dotenv
 fastapi
 uvicorn
-openai
 PyPDF2
 yfinance
 pandas
+torch
+transformers
+scikit-learn

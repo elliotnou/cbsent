@@ -1,0 +1,46 @@
+Fetching unscored transcripts...
+Fetched 39 transcripts into memory
+Loading model...
+Model loaded
+  [1/39] ID=161: 946 sentences
+  [2/39] ID=162: 165 sentences
+  [3/39] ID=163: 41 sentences
+  [4/39] ID=164: 43 sentences
+  [5/39] ID=165: 19 sentences
+  [6/39] ID=166: 165 sentences
+  [7/39] ID=167: 43 sentences
+  [8/39] ID=169: 21 sentences
+  [9/39] ID=170: 29 sentences
+  [10/39] ID=171: 25 sentences
+  [11/39] ID=172: 39 sentences
+  [12/39] ID=173: 41 sentences
+  [13/39] ID=174: 31 sentences
+  [14/39] ID=175: 167 sentences
+  [15/39] ID=176: 42 sentences
+  [16/39] ID=177: 42 sentences
+  [17/39] ID=179: 41 sentences
+  [18/39] ID=180: 43 sentences
+  [19/39] ID=181: 165 sentences
+  [20/39] ID=182: 41 sentences
+  [21/39] ID=183: 41 sentences
+  [22/39] ID=184: 13 sentences
+  [23/39] ID=185: 165 sentences
+  [24/39] ID=186: 37 sentences
+  [25/39] ID=187: 25 sentences
+  [26/39] ID=188: 42 sentences
+  [27/39] ID=189: 182 sentences
+  [28/39] ID=190: 169 sentences
+  [29/39] ID=192: 30 sentences
+  [30/39] ID=194: 24 sentences
+  [31/39] ID=195: 52 sentences
+  [32/39] ID=197: 18 sentences
+  [33/39] ID=198: 166 sentences
+  [34/39] ID=199: 47 sentences
+  [35/39] ID=200: 182 sentences
+  [36/39] ID=201: 182 sentences
+  [37/39] ID=202: 31 sentences
+  [38/39] ID=203: 25 sentences
+  [39/39] ID=204: 37 sentences
+
+Inference complete. 39 transcripts to insert
+DONE: inserted 3617 sentences

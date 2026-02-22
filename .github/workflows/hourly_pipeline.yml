@@ -36,7 +36,6 @@ jobs:
       - name: Execute Pipeline
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           python backend/scrapers/boc_scraper.py
           

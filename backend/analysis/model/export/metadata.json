@@ -1,0 +1,15 @@
+{
+  "topic_labels": [
+    "Inflation",
+    "Growth",
+    "Employment",
+    "Guidance",
+    "Boilerplate"
+  ],
+  "max_seq_len": 128,
+  "best_epoch": 7,
+  "best_mae": 0.186,
+  "best_val_loss": 0.6794,
+  "train_samples": 2899,
+  "val_samples": 725
+}
