@@ -1,83 +1,8 @@
-import React, { useEffect, useState, useMemo, Suspense, useRef } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import {
   LineChart, Line, BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid,
   Tooltip, Legend, ResponsiveContainer, ReferenceLine
 } from 'recharts';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, useGLTF } from '@react-three/drei';
-
-
-const Model3D = () => {
-  const { scene } = useGLTF('/cadpenny.glb');
-  const modelRef = useRef();
-
-  // Set metallic material properties after model loads
-  useEffect(() => {
-    scene.traverse((child) => {
-      if (child.isMesh && child.material) {
-        child.material.metalness = 1.0;
-        child.material.roughness = 0.2;
-        child.material.envMapIntensity = 1.5;
-        child.material.needsUpdate = true;
-      }
-    });
-  }, [scene]);
-
-  useFrame(() => {
-    if (modelRef.current) {
-      modelRef.current.rotation.y += 0.005;
-    }
-  });
-
-  return <primitive ref={modelRef} object={scene} scale={1.5} />;
-};
-
-const Fallback3D = () => {
-  return (
-    <div className="w-full h-full flex items-center justify-center text-slate-600 text-xs">
-      <div className="text-center">
-        <div className="mb-1 text-[10px]">3D Model</div>
-        <div className="text-[8px] text-slate-700">model.glb</div>
-      </div>
-    </div>
-  );
-};
-
-const Model3DWrapper = () => {
-  const [modelExists, setModelExists] = useState(null);
-
-  useEffect(() => {
-    fetch('/model.glb', { method:'HEAD'})
-      .then(() => setModelExists(true))
-      .catch(() => setModelExists(false));
-  }, []);
-
-  if (modelExists === null) {
-    return <Fallback3D />;
-  }
-
-  if (modelExists === false) {
-    return <Fallback3D />;
-  }
-
-  return (
-    <Canvas
-      camera={{ position: [0, 0, 38], fov: 50 }}
-      onCreated={({ gl }) => {
-        gl.setClearColor('#050505', 1);
-      }}
-      style={{ background: 'transparent' }}
-    >
-      <ambientLight intensity={1.2} />
-      <directionalLight position={[3, 3, 20]} intensity={2} />
-      <directionalLight position={[-10, -10, -5]} intensity={0.5} />
-      <Suspense fallback={null}>
-        <Model3D />
-      </Suspense>
-      <OrbitControls enableZoom={false} enablePan={false} />
-    </Canvas>
-  );
-};
 
 const DivergenceChart = () => {
   const [data, setData] = useState([]);
@@ -86,58 +11,52 @@ const DivergenceChart = () => {
   const [timeRange, setTimeRange] = useState('all');
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div style={{ backgroundColor: '#181818', border: '2px solid #8d8d8d', padding: '10px', fontSize: '14px', fontWeight: 700 }}>
-          <p style={{ color: '#8d8d8d', marginBottom: '8px' }}>{label}</p>
-          {payload.map((entry, index) => {
-            let color = '#8d8d8d';
-            if (entry.name === 'FED_SENTIMENT') color = '#3b82f6';
-            else if (entry.name === 'BOC_SENTIMENT') color = '#ef4444';
-            else if (entry.name === 'USD_CAD_PRICE') color = '#22c55e';
-
-            return (
-              <p key={index} style={{ color, margin: '4px 0' }}>
-                {entry.name}: {typeof entry.value === 'number' ? entry.value.toFixed(2) : entry.value}
-              </p>
-            );
-          })}
-        </div>
-      );
-    }
-    return null;
+  const SentimentTooltip = ({ active, payload, label }) => {
+    if (!active || !payload?.length) return null;
+    return (
+      <div style={{ backgroundColor: '#1a1a1a', border: '1px solid #444', padding: '10px', fontSize: '13px' }}>
+        <p style={{ color: '#999', marginBottom: '6px' }}>{label}</p>
+        {payload.map((entry, i) => {
+          let color = '#999';
+          if (entry.name === 'Fed Sentiment') color = '#3b82f6';
+          else if (entry.name === 'BoC Sentiment') color = '#ef4444';
+          else if (entry.name === 'USD/CAD') color = '#22c55e';
+          return (
+            <p key={i} style={{ color, margin: '3px 0' }}>
+              {entry.name}: {typeof entry.value === 'number' ? entry.value.toFixed(2) : entry.value}
+            </p>
+          );
+        })}
+      </div>
+    );
   };
 
   const DivergenceTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      const value = payload[0].value;
-      const color = value > 0 ? '#10b981' : '#f43f5e';
-
-      return (
-        <div style={{ backgroundColor: '#181818', border: '2px solid #8d8d8d', padding: '12px', fontSize: '14px', fontWeight: 700, maxWidth: '280px' }}>
-          <p style={{ color: '#8d8d8d', marginBottom: '8px' }}>{label}</p>
-          <p style={{ color, margin: '4px 0', marginBottom: '8px' }}>
-            Divergence: {typeof value === 'number' ? value.toFixed(2) : value}
-          </p>
-          <p style={{ color: '#a0a0a0', fontSize: '11px', lineHeight: '1.4', margin: '0' }}>
-            {value > 0
-              ? 'Positive: Fed is more hawkish than BoC (Fed - BoC > 0)'
-              : value < 0
-              ? 'Negative: BoC is more hawkish than Fed (Fed - BoC < 0)'
-              : 'Zero: Both central banks have equal sentiment'}
-          </p>
-        </div>
-      );
-    }
-    return null;
+    if (!active || !payload?.length) return null;
+    const val = payload[0].value;
+    const color = val > 0 ? '#10b981' : '#f43f5e';
+    return (
+      <div style={{ backgroundColor: '#1a1a1a', border: '1px solid #444', padding: '10px', fontSize: '13px', maxWidth: '260px' }}>
+        <p style={{ color: '#999', marginBottom: '6px' }}>{label}</p>
+        <p style={{ color, margin: '3px 0' }}>
+          Divergence: {typeof val === 'number' ? val.toFixed(2) : val}
+        </p>
+        <p style={{ color: '#888', fontSize: '11px', lineHeight: '1.4', margin: 0 }}>
+          {val > 0
+            ? 'Fed is more hawkish than BoC'
+            : val < 0
+              ? 'BoC is more hawkish than Fed'
+              : 'Equal sentiment'}
+        </p>
+      </div>
+    );
   };
 
   useEffect(() => {
-    const fetchSentiment = fetch(`${API_BASE_URL}/api/divergence`).then(res => res.json());
-    const fetchUSDCAD = fetch(`${API_BASE_URL}/api/usdcad`).then(res => res.json());
+    const fetchSentiment = fetch(`${API_BASE_URL}/api/divergence`).then(r => r.json());
+    const fetchFX = fetch(`${API_BASE_URL}/api/usdcad`).then(r => r.json());
 
-    Promise.all([fetchSentiment, fetchUSDCAD])
+    Promise.all([fetchSentiment, fetchFX])
       .then(([sentimentData, fxData]) => {
         const fedKeys = ['fed', 'federal reserve', 'us federal reserve', 'u.s. federal reserve', 'u.s. reserve', 'federal_reserve'];
         const bocKeys = ['boc', 'bank of canada', 'bank_of_canada', 'bankofcanada'];
@@ -191,209 +110,140 @@ const DivergenceChart = () => {
   }, [filteredData, filteredUSDCAD]);
 
   const stats = useMemo(() => {
-    if (filteredData.length === 0) return { current: 0, avg: 0, volatility: 0, forwardCorrelation: 0, lagDays: 1 };
+    if (filteredData.length === 0) return { current: 0, avg: 0, volatility: 0, correlation: 0, lagDays: 1 };
     const current = filteredData[filteredData.length - 1]?.divergence || 0;
     const avg = filteredData.reduce((sum, d) => sum + d.divergence, 0) / filteredData.length;
     const volatility = Math.sqrt(filteredData.reduce((sum, d) => sum + Math.pow(d.divergence - avg, 2), 0) / filteredData.length);
 
     const lagDays = 1;
-    let forwardCorrelation = 0;
+    let correlation = 0;
     if (mergedData.length > lagDays + 10) {
-      const divs = [], fxPrices = [];
+      const divs = [], prices = [];
       for (let i = 0; i < mergedData.length - lagDays; i++) {
         const d = mergedData[i], fx = mergedData[i + lagDays];
-        if (d.divergence != null && fx.usdcad_price != null) { divs.push(d.divergence); fxPrices.push(fx.usdcad_price); }
+        if (d.divergence != null && fx.usdcad_price != null) { divs.push(d.divergence); prices.push(fx.usdcad_price); }
       }
       if (divs.length > 10) {
-        const mDiv = divs.reduce((a, b) => a + b, 0) / divs.length, mPrice = fxPrices.reduce((a, b) => a + b, 0) / fxPrices.length;
-        const num = divs.reduce((s, div, i) => s + (div - mDiv) * (fxPrices[i] - mPrice), 0);
-        const d1 = Math.sqrt(divs.reduce((s, v) => s + Math.pow(v - mDiv, 2), 0)), d2 = Math.sqrt(fxPrices.reduce((s, v) => s + Math.pow(v - mPrice, 2), 0));
-        forwardCorrelation = num / (d1 * d2);
+        const mDiv = divs.reduce((a, b) => a + b, 0) / divs.length;
+        const mPrice = prices.reduce((a, b) => a + b, 0) / prices.length;
+        const num = divs.reduce((s, div, i) => s + (div - mDiv) * (prices[i] - mPrice), 0);
+        const d1 = Math.sqrt(divs.reduce((s, v) => s + Math.pow(v - mDiv, 2), 0));
+        const d2 = Math.sqrt(prices.reduce((s, v) => s + Math.pow(v - mPrice, 2), 0));
+        correlation = num / (d1 * d2);
       }
     }
-    return { current, avg, volatility, forwardCorrelation, lagDays };
+    return { current, avg, volatility, correlation, lagDays };
   }, [filteredData, mergedData]);
 
-  if (loading) return <div className="p-20 text-center animate-pulse tracking-widest text-slate-500 font-mono text-xl uppercase">INIT_SYSTEM_SEQ...</div>;
+  if (loading) return <div className="p-20 text-center text-gray-500 text-sm">Loading...</div>;
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    return isNaN(d) ? date : `${d.getMonth() + 1}/${d.getFullYear()}`;
+  };
 
   return (
-    <div className="space-y-8 font-mono">
-      <style>{`
-        * {
-          outline: none !important;
-        }
-        *:focus {
-          outline: none !important;
-        }
-      `}</style>
-      <div className="flex items-center gap-8">
-        <div className="flex-1">
-          <div className="relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700 rounded px-4 py-3 hover:border-slate-600 transition-all duration-300 shadow-lg">
-            <div className="text-xs text-slate-400 mb-2 uppercase tracking-wide">Score Guide:</div>
-            <div className="relative h-8 flex items-center">
-              <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-2 bg-gradient-to-r from-red-500/70 via-slate-600 to-green-500/70 rounded-full shadow-inner"></div>
-              <div className="absolute left-0 top-0 bottom-0 w-1/3 group flex items-center">
-                <span className="absolute bottom-full left-0 mb-2 w-64 p-2 bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
-                  Dovish: Favors lower interest rates and accommodative monetary policy to stimulate economic growth and employment
-                </span>
-              </div>
-              <div className="absolute left-1/3 top-0 bottom-0 w-1/3 group flex items-center">
-                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
-                  Neutral: Balanced stance with no clear bias toward raising or lowering interest rates
-                </span>
-              </div>
-              <div className="absolute right-0 top-0 bottom-0 w-1/3 group flex items-center">
-                <span className="absolute bottom-full right-0 mb-2 w-64 p-2 bg-slate-900 border border-slate-700 rounded text-[10px] text-slate-300 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
-                  Hawkish: Favors higher interest rates and restrictive monetary policy to control inflation
-                </span>
-              </div>
-            </div>
-            <div className="flex justify-between text-xs text-slate-400">
-              <span className="text-red-400">-1.0 Dovish</span>
-              <span className="text-slate-300">0 Neutral</span>
-              <span className="text-green-400">1.0 Hawkish</span>
-            </div>
-          </div>
+    <div className="space-y-6">
+      {/* score guide */}
+      <div className="bg-[#1a1a1a] border border-gray-800 rounded-md px-4 py-3">
+        <div className="text-xs text-gray-500 mb-2">Score guide</div>
+        <div className="relative h-6 flex items-center">
+          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-1.5 bg-gradient-to-r from-red-500/60 via-gray-600 to-green-500/60 rounded-full"></div>
         </div>
-
-        <div className="w-40 h-28">
-          <Model3DWrapper />
+        <div className="flex justify-between text-xs text-gray-500">
+          <span className="text-red-400">-1.0 Dovish</span>
+          <span>0 Neutral</span>
+          <span className="text-green-400">+1.0 Hawkish</span>
         </div>
       </div>
 
-      <div className="flex gap-4 border-b border-slate-900 pb-5">
-        {['all','90d','1y','3y'].map(r => (
+      {/* time range buttons */}
+      <div className="flex gap-2 border-b border-gray-800 pb-4">
+        {['all', '90d', '1y', '3y'].map(r => (
           <button
             key={r}
             onClick={() => setTimeRange(r)}
-            className={`px-4 py-1.5 text-[10px] font-bold border transition-all duration-300 uppercase ${timeRange === r ? 'bg-[#fff] text-black border-[#fff] shadow-lg scale-105' : 'border-slate-800 text-slate-500 hover:border-slate-600 hover:text-slate-300 hover:scale-105'}`}
+            className={`px-3 py-1 text-xs font-medium rounded transition-colors ${timeRange === r
+                ? 'bg-white text-black'
+                : 'text-gray-500 hover:text-gray-300 border border-gray-800 hover:border-gray-600'
+              }`}
           >
-            {r}
+            {r === 'all' ? 'All' : r.toUpperCase()}
           </button>
         ))}
       </div>
 
-      <div className="grid grid-cols-4 gap-6">
+      {/* stats cards */}
+      <div className="grid grid-cols-4 gap-4">
         {[
-          {
-            label: 'Current DIvergence',
-            val: stats.current,
-            color: stats.current > 0 ? 'text-green-400' : 'text-red-400',
-            glow: stats.current > 0 ? 'glow-green' : 'glow-red',
-            tooltip: 'The most recent difference between Fed and BoC sentiment scores. Positive means Fed is more hawkish than BoC.'
-          },
-          {
-            label: 'Mean divergence',
-            val: stats.avg,
-            color: 'text-blue-400',
-            glow: 'glow-blue',
-            tooltip: 'Average divergence over the selected time period. Shows the typical policy stance difference between the two central banks.'
-          },
-          {
-            label: 'Volatility',
-            val: stats.volatility,
-            color: 'text-purple-400',
-            glow: '',
-            tooltip: 'Standard deviation of the divergence. Higher values indicate more fluctuation in policy stance differences.'
-          },
-          {
-            label: `Correlation.(${stats.lagDays}d)`,
-            val: stats.forwardCorrelation,
-            color: 'text-yellow-400',
-            glow: '',
-            tooltip: `Correlation between policy divergence and USD/CAD price ${stats.lagDays} day later. Measures predictive relationship between central bank sentiment and currency movement.`
-          }
+          { label: 'Current Divergence', val: stats.current, color: stats.current > 0 ? 'text-green-400' : 'text-red-400' },
+          { label: 'Mean Divergence', val: stats.avg, color: 'text-blue-400' },
+          { label: 'Volatility (σ)', val: stats.volatility, color: 'text-purple-400' },
+          { label: `Correlation (${stats.lagDays}d lag)`, val: stats.correlation, color: 'text-yellow-400' },
         ].map((s, i) => (
-          <div key={i} className="relative border border-slate-900 p-6 bg-gradient-to-br from-[#0d0d0d] to-[#1a1a1a] hover:border-slate-700 hover:card-glow hover:scale-[1.02] transition-all duration-300 group">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-2 w-72 p-3 bg-slate-900 border border-slate-700 rounded text-[11px] text-slate-300 leading-relaxed opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
-              {s.tooltip}
-            </div>
-            <p className="text-[13px] text-slate-400 uppercase font-black mb-3 group-hover:text-white transition-colors">{s.label}</p>
-            <h3 className={`text-3xl font-bold tracking-tighter ${s.color} ${s.glow} ${i === 0 ? 'pulse-glow' : ''}`}>
+          <div key={i} className="border border-gray-800 rounded-md p-4 bg-[#1a1a1a]">
+            <p className="text-xs text-gray-500 mb-2">{s.label}</p>
+            <p className={`text-2xl font-semibold tabular-nums ${s.color}`}>
               {s.val > 0 && i < 2 ? '+' : ''}{Number(s.val).toFixed(3)}
-            </h3>
+            </p>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-10">
-        <div className="bg-gradient-to-br from-[#0d0d0d] to-[#1a1a1a] border border-slate-900 p-8 hover:border-slate-600 hover:shadow-2xl transition-all duration-500 group">
-          <h2 className="text-xs font-black uppercase tracking-[0.3em] text-[#fff] mb-8 border-l-2 border-blue-500 pl-4 group-hover:border-blue-400 transition-colors">Policy_Vs_USDCAD</h2>
-          <div className="h-[500px] w-full">
+      {/* charts */}
+      <div className="grid grid-cols-2 gap-6">
+        <div className="bg-[#1a1a1a] border border-gray-800 rounded-md p-6">
+          <h2 className="text-sm font-medium text-gray-300 mb-6">Policy Sentiment vs USD/CAD</h2>
+          <div className="h-[480px] w-full">
             <ResponsiveContainer>
               <LineChart data={mergedData}>
-                <CartesianGrid strokeDasharray="2 2" stroke="#444" vertical={false} strokeWidth={2} />
-                <XAxis 
+                <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
+                <XAxis
                   dataKey="date"
-                  axisLine={{stroke:'#8d8d8d',strokeWidth:1}}
-                  tickLine={{stroke:'#8d8d8d',strokeWidth:1}}
-                  tick={{ fontSize: 14, fontWeight: 700, fill: '#8d8d8d' }}
+                  axisLine={{ stroke: '#555' }}
+                  tickLine={{ stroke: '#555' }}
+                  tick={{ fontSize: 11, fill: '#888' }}
                   minTickGap={20}
-                  tickFormatter={date => {
-                    const d = new Date(date);
-                    return isNaN(d) ? date : `${d.getMonth()+1}/${d.getFullYear()}`;
-                  }}
+                  tickFormatter={formatDate}
                 />
-                <YAxis yAxisId="left" domain={[-1, 1]} stroke="#8d8d8d" tick={{fontSize: 16, fontWeight: 700, fill: '#8d8d8d'}} />
-                <YAxis yAxisId="right" orientation="right" stroke="#8d8d8d" tick={{fontSize: 16, fontWeight: 700, fill: '#8d8d8d'}} />
-                
-                <Legend 
-                  verticalAlign="top" 
+                <YAxis yAxisId="left" domain={[-1, 1]} stroke="#555" tick={{ fontSize: 11, fill: '#888' }} />
+                <YAxis yAxisId="right" orientation="right" stroke="#555" tick={{ fontSize: 11, fill: '#888' }} />
+                <Legend
+                  verticalAlign="top"
                   align="right"
-                  iconType="rect"
-                  wrapperStyle={{
-                    paddingBottom: '20px',
-                    textTransform: 'uppercase',
-                    fontSize: '12px',
-                    fontWeight: 700
-                  }}
+                  iconType="line"
+                  wrapperStyle={{ paddingBottom: '16px', fontSize: '11px' }}
                 />
-
-                <Tooltip content={<CustomTooltip />} />
-                
-                <ReferenceLine y={0} yAxisId="left" stroke="#8d8d8d" strokeWidth={1} />
-                
-                <Line yAxisId="left" name="FED_SENTIMENT" type="stepAfter" dataKey="fed" stroke="#3b82f6" strokeWidth={2} dot={false} />
-                <Line yAxisId="left" name="BOC_SENTIMENT" type="stepAfter" dataKey="boc" stroke="#ef4444" strokeWidth={2} dot={false} />
-                <Line yAxisId="right" name="USD_CAD_PRICE" type="monotone" dataKey="usdcad_price" stroke="#22c55e" strokeWidth={2} dot={false}  />
+                <Tooltip content={<SentimentTooltip />} />
+                <ReferenceLine y={0} yAxisId="left" stroke="#555" />
+                <Line yAxisId="left" name="Fed Sentiment" type="stepAfter" dataKey="fed" stroke="#3b82f6" strokeWidth={1.5} dot={false} />
+                <Line yAxisId="left" name="BoC Sentiment" type="stepAfter" dataKey="boc" stroke="#ef4444" strokeWidth={1.5} dot={false} />
+                <Line yAxisId="right" name="USD/CAD" type="monotone" dataKey="usdcad_price" stroke="#22c55e" strokeWidth={1.5} dot={false} />
               </LineChart>
             </ResponsiveContainer>
-            
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-[#0d0d0d] to-[#1a1a1a] border border-slate-900 p-8 hover:border-slate-600 hover:shadow-2xl transition-all duration-500 group">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xs font-black uppercase tracking-[0.3em] text-[#fff] border-l-2 border-slate-700 pl-4 group-hover:border-slate-500 transition-colors">Sentiment_Delta</h2>
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-red-400">Live</span>
-            </div>
-          </div>
-          <div className="h-[500px] w-full">
+        <div className="bg-[#1a1a1a] border border-gray-800 rounded-md p-6">
+          <h2 className="text-sm font-medium text-gray-300 mb-6">Sentiment Divergence (Fed − BoC)</h2>
+          <div className="h-[480px] w-full">
             <ResponsiveContainer>
               <BarChart data={filteredData}>
-                <CartesianGrid strokeDasharray="2 2" stroke="#444" vertical={false} strokeWidth={1} />
-                <XAxis 
+                <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
+                <XAxis
                   dataKey="date"
-                  axisLine={{stroke:'#8d8d8d',strokeWidth:1}}
-                  tickLine={{stroke:'#8d8d8d',strokeWidth:1}}
-                  tick={{ fontSize: 14, fontWeight: 700, fill: '#8d8d8d' }}
+                  axisLine={{ stroke: '#555' }}
+                  tickLine={{ stroke: '#555' }}
+                  tick={{ fontSize: 11, fill: '#888' }}
                   minTickGap={20}
-                  tickFormatter={date => {
-                    const d = new Date(date);
-                    return isNaN(d) ? date : `${d.getMonth()+1}/${d.getFullYear()}`;
-                  }}
+                  tickFormatter={formatDate}
                 />
-                <YAxis domain={[-1, 1]} stroke="#8d8d8d" tick={{fontSize: 16, fontWeight: 700, fill: '#8d8d8d'}} />
+                <YAxis domain={[-1, 1]} stroke="#555" tick={{ fontSize: 11, fill: '#888' }} />
                 <Tooltip content={<DivergenceTooltip />} />
-                <ReferenceLine y={0} stroke="#a7a7a7" strokeWidth={1} />
+                <ReferenceLine y={0} stroke="#666" />
                 <Bar dataKey="divergence">
                   {filteredData.map((e, i) => (
-                    <Cell key={i} fill={e.divergence > 0 ? '#10b981' : '#f43f5e'} opacity={0.9} />
+                    <Cell key={i} fill={e.divergence > 0 ? '#10b981' : '#f43f5e'} opacity={0.85} />
                   ))}
                 </Bar>
               </BarChart>
