@@ -148,12 +148,12 @@ const ChatPage = () => {
                   <div
                     className={`max-w-[80%] rounded-xl px-4 py-3 ${
                       msg.role === 'user'
-                        ? 'bg-blue-500/8 text-gray-200'
-                        : 'card text-gray-300'
+                        ? `bg-blue-500/8 ${light ? 'text-gray-800' : 'text-gray-200'}`
+                        : `card ${light ? 'text-gray-800' : 'text-gray-300'}`
                     }`}
                     style={msg.role === 'user' ? { boxShadow: '0 1px 2px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(96,165,250,0.1)' } : undefined}
                   >
-                    <div className="text-[13px] leading-relaxed prose prose-invert prose-sm max-w-none prose-p:my-1 prose-li:my-0.5 prose-ul:my-1 prose-ol:my-1 prose-headings:my-2 prose-strong:text-gray-200">
+                    <div className={`text-[13px] leading-relaxed prose prose-sm max-w-none prose-p:my-1 prose-li:my-0.5 prose-ul:my-1 prose-ol:my-1 prose-headings:my-2 ${light ? 'prose-gray prose-strong:text-black' : 'prose-invert prose-strong:text-gray-200'}`}>
                       <ReactMarkdown>{msg.content}</ReactMarkdown>
                     </div>
                     {msg.toolCalls && msg.toolCalls.length > 0 && (
@@ -173,13 +173,16 @@ const ChatPage = () => {
               ))}
               {loading && (
                 <div className="flex justify-start animate-fade-in">
-                  <div className="card rounded-xl px-4 py-3.5">
-                    <div className="flex items-center gap-3">
-                      <div className="chat-think">
-                        <div className="chat-think-dot" />
-                      </div>
-                      <span className="text-[11px] text-gray-500">Thinking</span>
-                    </div>
+                  <div className="flex items-center gap-3 px-1 py-2">
+                    <svg className="chat-draw" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      {/* outer hexagon */}
+                      <path className="draw-hex" d="M12 2 L21.5 7.5 L21.5 16.5 L12 22 L2.5 16.5 L2.5 7.5 Z" />
+                      {/* inner star */}
+                      <path className="draw-star" d="M12 6 L13.5 10.5 L18 10.5 L14.5 13.5 L15.5 18 L12 15.5 L8.5 18 L9.5 13.5 L6 10.5 L10.5 10.5 Z" />
+                      {/* center dot */}
+                      <circle className="draw-dot" cx="12" cy="12" r="1.5" />
+                    </svg>
+                    <span className="text-[11px] text-gray-500">Thinking</span>
                   </div>
                 </div>
               )}

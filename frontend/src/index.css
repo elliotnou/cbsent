@@ -147,7 +147,8 @@ html.light .text-red-400 { color: #dc2626; }
 
 /* light mode — chat prose text must be readable */
 html.light .prose-invert { --tw-prose-body: #333; --tw-prose-headings: #111; --tw-prose-bold: #111; --tw-prose-links: #2563eb; --tw-prose-code: #333; }
-html.light .bg-blue-500\/8 { background: rgba(37,99,235,0.08); }
+html.light .prose-strong\\:text-gray-200 strong { color: #111 !important; }html.light .prose-strong\:text-black strong { color: #000 !important; }
+html.light .prose-gray { --tw-prose-body: #1a1a1a; --tw-prose-headings: #000; --tw-prose-bold: #000; --tw-prose-links: #2563eb; --tw-prose-code: #1a1a1a; --tw-prose-bullets: #444; --tw-prose-counters: #444; }html.light .bg-blue-500\/8 { background: rgba(37,99,235,0.08); }
 html.light .text-emerald-400\/70 { color: rgba(5,150,105,0.85); }
 *:focus {
   outline: none;
@@ -242,70 +243,64 @@ html.light .text-emerald-400\/70 { color: rgba(5,150,105,0.85); }
   pointer-events: auto;
 }
 
-/* ── chat thinking: orbital spinner ── */
-@keyframes orbit {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+/* ── chat thinking: SVG line-draw animation ── */
+@keyframes drawHex {
+  0%   { stroke-dashoffset: 72; opacity: 0.3; }
+  40%  { stroke-dashoffset: 0;  opacity: 1; }
+  70%  { stroke-dashoffset: 0;  opacity: 1; }
+  100% { stroke-dashoffset: 72; opacity: 0.3; }
 }
-@keyframes pulse-dot {
-  0%, 100% { opacity: 0.4; transform: scale(0.8); }
-  50%      { opacity: 1;   transform: scale(1.2); }
+@keyframes drawStar {
+  0%   { stroke-dashoffset: 52; opacity: 0; }
+  15%  { opacity: 0; }
+  20%  { opacity: 0.4; }
+  50%  { stroke-dashoffset: 0;  opacity: 1; }
+  80%  { stroke-dashoffset: 0;  opacity: 1; }
+  100% { stroke-dashoffset: 52; opacity: 0; }
 }
-
-.chat-think {
-  position: relative;
-  width: 28px;
-  height: 28px;
-}
-
-/* outer rotating ring */
-.chat-think::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  border-top-color: #60a5fa;
-  border-right-color: #818cf8;
-  animation: orbit 1.4s linear infinite;
+@keyframes drawDot {
+  0%, 25% { opacity: 0; transform: scale(0); }
+  45%     { opacity: 1; transform: scale(1.3); }
+  55%     { transform: scale(1); }
+  80%     { opacity: 1; }
+  100%    { opacity: 0; transform: scale(0); }
 }
 
-/* inner counter-rotating ring */
-.chat-think::after {
-  content: '';
-  position: absolute;
-  inset: 5px;
-  border-radius: 50%;
-  border: 1.5px solid transparent;
-  border-bottom-color: #a78bfa;
-  border-left-color: #60a5fa;
-  animation: orbit 0.9s linear infinite reverse;
+.chat-draw {
+  overflow: visible;
 }
 
-/* center dot */
-.chat-think-dot {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 4px;
-  height: 4px;
-  margin: -2px 0 0 -2px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #60a5fa, #a78bfa);
-  animation: pulse-dot 1.4s ease-in-out infinite;
+.draw-hex {
+  stroke: rgba(255,255,255,0.7);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  stroke-dasharray: 72;
+  stroke-dashoffset: 72;
+  animation: drawHex 2.8s ease-in-out infinite;
 }
 
-html.light .chat-think::before {
-  border-top-color: #2563eb;
-  border-right-color: #6366f1;
+.draw-star {
+  stroke: rgba(255,255,255,0.5);
+  stroke-width: 0.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  stroke-dasharray: 52;
+  stroke-dashoffset: 52;
+  animation: drawStar 2.8s ease-in-out infinite;
 }
-html.light .chat-think::after {
-  border-bottom-color: #7c3aed;
-  border-left-color: #2563eb;
+
+.draw-dot {
+  fill: rgba(255,255,255,0.8);
+  transform-origin: 12px 12px;
+  animation: drawDot 2.8s ease-in-out infinite;
 }
-html.light .chat-think-dot {
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
-}
+
+html.light .draw-hex  { stroke: rgba(0,0,0,0.6); }
+html.light .draw-star { stroke: rgba(0,0,0,0.4); }
+html.light .draw-dot  { fill: rgba(0,0,0,0.6); }
 
 /* ── docs page code block ── */
 .docs-code {
