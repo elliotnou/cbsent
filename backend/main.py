@@ -228,8 +228,9 @@ def chat_endpoint(req: ChatRequest):
         result = run_agent(req.message, req.history)
         return result
     except Exception as e:
-        print(f"Chat error: {e}")
-        return {"response": "Sorry, something went wrong. Please try again.", "tool_calls_made": []}
+        import traceback
+        traceback.print_exc()
+        return {"response": f"Error: {str(e)}", "tool_calls_made": []}
 
 
 if __name__ == "__main__":

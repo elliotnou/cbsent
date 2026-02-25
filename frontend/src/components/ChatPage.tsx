@@ -60,21 +60,33 @@ const ChatPage = () => {
     const history = messages.map(m => ({ role: m.role, content: m.content }));
 
     try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 120000);
       const res = await fetch(`${API_BASE_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage, history }),
+        signal: controller.signal,
       });
+      clearTimeout(timeout);
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`${res.status}: ${text}`);
+      }
       const data = await res.json();
       setMessages(prev => [...prev, {
         role: 'assistant',
         content: data.response,
         toolCalls: data.tool_calls_made,
       }]);
-    } catch {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      console.error('Chat error:', msg);
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try again.',
+        content: msg.includes('aborted')
+          ? 'Request timed out — the server may be waking up. Try again in a moment.'
+          : `Something went wrong (${msg}). Please try again.`,
       }]);
     } finally {
       setLoading(false);
