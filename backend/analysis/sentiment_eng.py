@@ -90,7 +90,7 @@ class ToneAnalyzer:
         state_dict = torch.load(
             os.path.join(MODEL_DIR, "model.pt"),
             map_location=self.device,
-            weights_only=True,
+            weights_only=False,
         )
         self.model.load_state_dict(state_dict)
         self.model.to(self.device)
