@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { HelpCircle, MessageSquare, LayoutDashboard, Sun, Moon } from 'lucide-react';
 import HelpModal from './HelpModal';
 
 const TranscriptsPage = () => {
@@ -11,6 +12,10 @@ const TranscriptsPage = () => {
   const [loadingSentences, setLoadingSentences] = useState({});
   const [showHelp, setShowHelp] = useState(false);
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+  const [light, setLight] = useState(() => document.documentElement.classList.contains('light'));
+  const toggleTheme = () => {
+    setLight(p => { document.documentElement.classList.toggle('light', !p); return !p; });
+  };
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/transcripts`)
@@ -55,33 +60,62 @@ const TranscriptsPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0c0c0c] text-gray-100 flex items-center justify-center">
-        <div className="text-sm text-gray-500">Loading transcripts...</div>
+      <div className="min-h-screen theme-bg theme-text p-6 md:p-12 lg:px-16">
+        <div className="max-w-[1400px] mx-auto">
+          <div className="mb-10 pb-6 border-b theme-border">
+            <div className="h-7 w-40 bg-gray-800/50 rounded animate-skeleton" />
+            <div className="h-4 w-64 bg-gray-800/30 rounded mt-2 animate-skeleton" />
+          </div>
+          <div className="space-y-3">
+            {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} className="card p-4 animate-skeleton" style={{ animationDelay: `${i * 0.1}s` }}>
+                <div className="h-4 w-48 bg-gray-800/40 rounded mb-2" />
+                <div className="h-3 w-72 bg-gray-800/30 rounded" />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0c0c0c] text-gray-100 p-6 md:p-12 lg:px-16">
+    <div className="min-h-screen theme-bg theme-text p-6 md:p-12 lg:px-16">
       <div className="max-w-[1400px] mx-auto">
-        <header className="mb-10 pb-6 border-b border-gray-800/60">
+        <header className="mb-10 pb-6 border-b theme-border animate-fade-in">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-white tracking-tight">Transcripts</h1>
-              <p className="text-gray-500 mt-1.5 text-[13px]">Sentence-level sentiment analysis</p>
+              <h1 className="text-2xl font-bold theme-heading tracking-tight">Transcripts</h1>
+              <p className="theme-muted mt-1.5 text-[13px]">Sentence-level sentiment analysis</p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-1">
+              <button
+                onClick={toggleTheme}
+                className="p-2 theme-muted rounded-lg hover:theme-heading hover:bg-white/5 transition-all duration-150"
+                title={light ? 'Dark mode' : 'Light mode'}
+              >
+                {light ? <Moon size={16} /> : <Sun size={16} />}
+              </button>
               <button
                 onClick={() => setShowHelp(true)}
-                className="px-3.5 py-1.5 text-xs font-medium text-gray-500 rounded-md hover:text-gray-300 hover:bg-white/5 transition-all duration-150"
+                className="p-2 theme-muted rounded-lg hover:theme-heading hover:bg-white/5 transition-all duration-150"
+                title="Help"
               >
-                Help
+                <HelpCircle size={16} />
               </button>
               <Link
-                to="/"
-                className="px-3.5 py-1.5 text-xs font-medium text-gray-500 rounded-md hover:text-gray-300 hover:bg-white/5 transition-all duration-150"
+                to="/chat"
+                className="p-2 theme-muted rounded-lg hover:theme-heading hover:bg-white/5 transition-all duration-150"
+                title="Policy Analyst"
               >
-                ← Dashboard
+                <MessageSquare size={16} />
+              </Link>
+              <Link
+                to="/"
+                className="p-2 theme-muted rounded-lg hover:theme-heading hover:bg-white/5 transition-all duration-150"
+                title="Dashboard"
+              >
+                <LayoutDashboard size={16} />
               </Link>
             </div>
           </div>
@@ -90,7 +124,7 @@ const TranscriptsPage = () => {
         <HelpModal showHelp={showHelp} setShowHelp={setShowHelp} />
 
         {/* filter */}
-        <div className="flex gap-1.5 mb-6">
+        <div className="flex gap-1.5 mb-6 animate-fade-in stagger-1">
           {['all', 'fed', 'boc'].map(bank => (
             <button
               key={bank}
@@ -106,14 +140,14 @@ const TranscriptsPage = () => {
           <span className="ml-3 text-[11px] text-gray-600 self-center">{filtered.length} results</span>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 animate-fade-in stagger-2">
           {filtered.length === 0 ? (
             <div className="text-center py-16 text-gray-600 text-sm">No transcripts found</div>
           ) : (
             filtered.map((transcript) => (
               <div
                 key={transcript.id}
-                className="bg-[#141414] border border-gray-800/80 rounded-lg hover:border-gray-700/80 transition-colors"
+                className="card"
               >
                 <div
                   className="p-4 cursor-pointer select-none"
@@ -160,7 +194,7 @@ const TranscriptsPage = () => {
 
                 {/* expanded sentence detail */}
                 {expandedId === transcript.id && (
-                  <div className="border-t border-gray-800/60">
+                  <div className="border-t border-white/5">
                     {loadingSentences[transcript.id] ? (
                       <div className="p-5 text-center text-gray-500 text-xs">Loading sentences...</div>
                     ) : sentences[transcript.id]?.length > 0 ? (
@@ -169,7 +203,7 @@ const TranscriptsPage = () => {
                         {sentences[transcript.id].map((sentence, idx) => (
                           <div
                             key={sentence.id}
-                            className="bg-[#0f0f0f] border border-gray-800/50 p-3 rounded-md"
+                            className="sentence-box rounded-lg p-3"
                           >
                             <div className="mb-2">
                               <span className="text-gray-700 text-[10px] mr-1.5">{idx + 1}.</span>
