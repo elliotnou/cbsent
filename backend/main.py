@@ -12,7 +12,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 from pydantic import BaseModel
-from chat import run_agent
+
+# Import chat agent - handle both direct run and module-style run
+try:
+    from chat import run_agent
+except ImportError:
+    try:
+        from backend.chat import run_agent
+    except ImportError:
+        run_agent = None
 
 # Suppress pandas SQLAlchemy warnings
 warnings.filterwarnings('ignore', message='.*pandas only supports SQLAlchemy.*')
@@ -27,6 +35,10 @@ app.add_middleware(
     allow_headers=["*"],
     allow_credentials=True,
 )
+
+@app.get("/api/health")
+def health():
+    return {"status": "ok", "chat_available": run_agent is not None}
 
 
 def get_db_connection():
@@ -224,6 +236,8 @@ class ChatRequest(BaseModel):
 
 @app.post("/api/chat")
 def chat_endpoint(req: ChatRequest):
+    if run_agent is None:
+        return {"response": "Chat agent failed to load on the server. Check Render logs for import errors.", "tool_calls_made": []}
     try:
         result = run_agent(req.message, req.history)
         return result
