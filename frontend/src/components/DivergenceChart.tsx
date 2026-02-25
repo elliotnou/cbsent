@@ -13,16 +13,12 @@ const STAT_DESCRIPTIONS = {
 
 const ScoreBar = () => {
   return (
-    <div className="card px-5 py-4">
-      <div className="text-[11px] text-gray-500 font-medium uppercase tracking-wide mb-3">Score range</div>
-      <div className="max-w-sm mx-auto">
-        {/* The gradient bar */}
-        <div className="h-2 bg-gradient-to-r from-rose-500/70 via-gray-600/60 to-emerald-500/70 score-bar" />
-
-        {/* Labels row — each side is a wide hover zone */}
-        <div className="flex text-[11px] mt-2.5" style={{ position: 'relative' }}>
-          {/* Left half — Dovish hover zone */}
-          <div className="flex-1 relative hover-zone" style={{ minHeight: 24 }}>
+    <div className="card px-4 py-4 h-full flex flex-col justify-between">
+      <div className="text-[11px] text-gray-500 font-medium uppercase tracking-wide mb-2">Score range</div>
+      <div>
+        <div className="h-1.5 bg-gradient-to-r from-rose-500/70 via-gray-600/60 to-emerald-500/70 score-bar" />
+        <div className="flex text-[10px] mt-1.5" style={{ position: 'relative' }}>
+          <div className="flex-1 relative hover-zone" style={{ minHeight: 20 }}>
             <span className="text-rose-400/80 select-none">−1.0 Dovish</span>
             <div className="hover-tip hover-tip-left">
               <div className="card p-3">
@@ -37,11 +33,8 @@ const ScoreBar = () => {
               </div>
             </div>
           </div>
-
-          <span className="text-gray-600 px-2">0</span>
-
-          {/* Right half — Hawkish hover zone */}
-          <div className="flex-1 relative text-right hover-zone" style={{ minHeight: 24 }}>
+          <span className="text-gray-600 px-1.5">0</span>
+          <div className="flex-1 relative text-right hover-zone" style={{ minHeight: 20 }}>
             <span className="text-emerald-400/80 select-none">+1.0 Hawkish</span>
             <div className="hover-tip hover-tip-right">
               <div className="card p-3">
@@ -58,6 +51,7 @@ const ScoreBar = () => {
           </div>
         </div>
       </div>
+      <p className="text-[10px] text-gray-600 mt-2">Hover each side for details</p>
     </div>
   );
 };
@@ -189,12 +183,49 @@ const DivergenceChart = () => {
     return { current, avg, volatility, correlation, lagDays };
   }, [filteredData, mergedData]);
 
+  // Derived snapshot data for top row cards
+  const snapshots = useMemo(() => {
+    const latest = filteredData.length > 0 ? filteredData[filteredData.length - 1] : null;
+    const prev = filteredData.length > 1 ? filteredData[filteredData.length - 2] : null;
+
+    const fedLabel = (v: number) => v > 0.3 ? 'Hawkish' : v < -0.3 ? 'Dovish' : 'Neutral';
+
+    // USD/CAD snapshot
+    const latestFX = filteredUSDCAD.length > 0 ? filteredUSDCAD[filteredUSDCAD.length - 1] : null;
+    const firstFX = filteredUSDCAD.length > 1 ? filteredUSDCAD[0] : null;
+    const fxChange = latestFX && firstFX ? ((latestFX.price - firstFX.price) / firstFX.price) * 100 : 0;
+
+    // Trend: is divergence widening or narrowing?
+    let trendDir = 'flat';
+    if (filteredData.length >= 3) {
+      const recent3 = filteredData.slice(-3).map(d => Math.abs(d.divergence));
+      const avgRecent = recent3.reduce((a, b) => a + b, 0) / 3;
+      const older3 = filteredData.slice(-6, -3);
+      if (older3.length >= 3) {
+        const avgOlder = older3.map(d => Math.abs(d.divergence)).reduce((a, b) => a + b, 0) / 3;
+        trendDir = avgRecent > avgOlder + 0.02 ? 'widening' : avgRecent < avgOlder - 0.02 ? 'narrowing' : 'stable';
+      }
+    }
+
+    return {
+      fed: latest ? { score: latest.fed, date: latest.date, label: fedLabel(latest.fed), delta: prev ? latest.fed - prev.fed : 0 } : null,
+      boc: latest ? { score: latest.boc, date: latest.date, label: fedLabel(latest.boc), delta: prev ? latest.boc - prev.boc : 0 } : null,
+      fx: latestFX ? { price: latestFX.price, change: fxChange, date: latestFX.date } : null,
+      trend: trendDir,
+      dataPoints: filteredData.length,
+    };
+  }, [filteredData, filteredUSDCAD]);
+
   if (loading) {
     return (
       <div className="space-y-5">
-        <div className="card px-5 py-4 animate-skeleton">
-          <div className="h-3 w-24 bg-gray-800/40 rounded mb-3" />
-          <div className="h-2 max-w-sm mx-auto bg-gray-800/30 rounded-full" />
+        <div className="grid grid-cols-4 gap-3">
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} className="card p-4 animate-skeleton" style={{ animationDelay: `${i * 0.08}s` }}>
+              <div className="h-3 w-20 bg-gray-800/40 rounded mb-3" />
+              <div className="h-5 w-16 bg-gray-800/30 rounded" />
+            </div>
+          ))}
         </div>
         <div className="grid grid-cols-4 gap-3">
           {[1, 2, 3, 4].map(i => (
@@ -227,9 +258,83 @@ const DivergenceChart = () => {
 
   return (
     <div className="space-y-5">
-      {/* score guide */}
-      <div className="animate-fade-in" style={{ position: 'relative', zIndex: 30 }}>
+      {/* top row: score range + snapshot cards */}
+      <div className="grid grid-cols-4 gap-3 animate-fade-in" style={{ position: 'relative', zIndex: 30 }}>
+        {/* Score range — compact */}
         <ScoreBar />
+
+        {/* Latest Fed */}
+        <div className="card px-4 py-4">
+          <div className="text-[11px] text-gray-500 font-medium uppercase tracking-wide mb-2">Latest Fed</div>
+          {snapshots.fed ? (
+            <>
+              <div className="flex items-baseline gap-2">
+                <span className={`text-xl font-semibold tabular-nums tracking-tight ${snapshots.fed.score > 0 ? 'text-emerald-400' : snapshots.fed.score < 0 ? 'text-rose-400' : 'text-gray-400'}`}>
+                  {snapshots.fed.score > 0 ? '+' : ''}{snapshots.fed.score.toFixed(3)}
+                </span>
+                <span className={`text-[10px] font-medium ${snapshots.fed.delta > 0 ? 'text-emerald-400/70' : snapshots.fed.delta < 0 ? 'text-rose-400/70' : 'text-gray-600'}`}>
+                  {snapshots.fed.delta > 0 ? '↑' : snapshots.fed.delta < 0 ? '↓' : '→'}{Math.abs(snapshots.fed.delta).toFixed(3)}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 mt-1.5">
+                <span className={`inline-flex items-center px-1.5 py-0.5 text-[9px] font-medium rounded ${snapshots.fed.label === 'Hawkish' ? 'bg-emerald-500/10 text-emerald-400' : snapshots.fed.label === 'Dovish' ? 'bg-rose-500/10 text-rose-400' : 'bg-gray-500/10 text-gray-400'}`}>
+                  {snapshots.fed.label}
+                </span>
+                <span className="text-[10px] text-gray-600">{new Date(snapshots.fed.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+              </div>
+            </>
+          ) : <span className="text-gray-600 text-xs">No data</span>}
+        </div>
+
+        {/* Latest BoC */}
+        <div className="card px-4 py-4">
+          <div className="text-[11px] text-gray-500 font-medium uppercase tracking-wide mb-2">Latest BoC</div>
+          {snapshots.boc ? (
+            <>
+              <div className="flex items-baseline gap-2">
+                <span className={`text-xl font-semibold tabular-nums tracking-tight ${snapshots.boc.score > 0 ? 'text-emerald-400' : snapshots.boc.score < 0 ? 'text-rose-400' : 'text-gray-400'}`}>
+                  {snapshots.boc.score > 0 ? '+' : ''}{snapshots.boc.score.toFixed(3)}
+                </span>
+                <span className={`text-[10px] font-medium ${snapshots.boc.delta > 0 ? 'text-emerald-400/70' : snapshots.boc.delta < 0 ? 'text-rose-400/70' : 'text-gray-600'}`}>
+                  {snapshots.boc.delta > 0 ? '↑' : snapshots.boc.delta < 0 ? '↓' : '→'}{Math.abs(snapshots.boc.delta).toFixed(3)}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 mt-1.5">
+                <span className={`inline-flex items-center px-1.5 py-0.5 text-[9px] font-medium rounded ${snapshots.boc.label === 'Hawkish' ? 'bg-emerald-500/10 text-emerald-400' : snapshots.boc.label === 'Dovish' ? 'bg-rose-500/10 text-rose-400' : 'bg-gray-500/10 text-gray-400'}`}>
+                  {snapshots.boc.label}
+                </span>
+                <span className="text-[10px] text-gray-600">{new Date(snapshots.boc.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+              </div>
+            </>
+          ) : <span className="text-gray-600 text-xs">No data</span>}
+        </div>
+
+        {/* USD/CAD + Trend */}
+        <div className="card px-4 py-4">
+          <div className="text-[11px] text-gray-500 font-medium uppercase tracking-wide mb-2">USD/CAD</div>
+          {snapshots.fx ? (
+            <>
+              <div className="flex items-baseline gap-2">
+                <span className="text-xl font-semibold tabular-nums tracking-tight text-green-400">
+                  {snapshots.fx.price.toFixed(4)}
+                </span>
+                <span className={`text-[10px] font-medium ${snapshots.fx.change > 0 ? 'text-emerald-400/70' : snapshots.fx.change < 0 ? 'text-rose-400/70' : 'text-gray-600'}`}>
+                  {snapshots.fx.change > 0 ? '+' : ''}{snapshots.fx.change.toFixed(2)}%
+                </span>
+              </div>
+              <div className="flex items-center gap-2 mt-1.5">
+                <span className={`inline-flex items-center px-1.5 py-0.5 text-[9px] font-medium rounded ${
+                  snapshots.trend === 'widening' ? 'bg-amber-500/10 text-amber-400'
+                  : snapshots.trend === 'narrowing' ? 'bg-blue-500/10 text-blue-400'
+                  : 'bg-gray-500/10 text-gray-400'
+                }`}>
+                  {snapshots.trend === 'widening' ? 'Diverging' : snapshots.trend === 'narrowing' ? 'Converging' : 'Stable'}
+                </span>
+                <span className="text-[10px] text-gray-600">{snapshots.dataPoints} data pts</span>
+              </div>
+            </>
+          ) : <span className="text-gray-600 text-xs">No FX data</span>}
+        </div>
       </div>
 
       {/* time range */}

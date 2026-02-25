@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { HelpCircle, MessageSquare, LayoutDashboard, Sun, Moon } from 'lucide-react';
-import HelpModal from './HelpModal';
 
 const TranscriptsPage = () => {
   const [transcripts, setTranscripts] = useState([]);
@@ -10,7 +9,6 @@ const TranscriptsPage = () => {
   const [expandedId, setExpandedId] = useState(null);
   const [sentences, setSentences] = useState({});
   const [loadingSentences, setLoadingSentences] = useState({});
-  const [showHelp, setShowHelp] = useState(false);
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
   const [light, setLight] = useState(() => document.documentElement.classList.contains('light'));
   const toggleTheme = () => {
@@ -96,13 +94,13 @@ const TranscriptsPage = () => {
               >
                 {light ? <Moon size={16} /> : <Sun size={16} />}
               </button>
-              <button
-                onClick={() => setShowHelp(true)}
+              <Link
+                to="/help"
                 className="p-2 theme-muted rounded-lg hover:theme-heading hover:bg-white/5 transition-all duration-150"
                 title="Help"
               >
                 <HelpCircle size={16} />
-              </button>
+              </Link>
               <Link
                 to="/chat"
                 className="p-2 theme-muted rounded-lg hover:theme-heading hover:bg-white/5 transition-all duration-150"
@@ -120,8 +118,6 @@ const TranscriptsPage = () => {
             </div>
           </div>
         </header>
-
-        <HelpModal showHelp={showHelp} setShowHelp={setShowHelp} />
 
         {/* filter */}
         <div className="flex gap-1.5 mb-6 animate-fade-in stagger-1">

@@ -4,7 +4,7 @@ import { HelpCircle, MessageSquare, FileText, Sun, Moon } from 'lucide-react';
 import DivergenceChart from './components/DivergenceChart';
 import TranscriptsPage from './components/TranscriptsPage';
 import ChatPage from './components/ChatPage';
-import HelpModal from './components/HelpModal';
+import DocsPage from './components/DocsPage';
 
 function useTheme() {
   const [light, setLight] = useState(() => document.documentElement.classList.contains('light'));
@@ -15,7 +15,6 @@ function useTheme() {
 }
 
 function Dashboard() {
-  const [showHelp, setShowHelp] = useState(false);
   const [light, toggleTheme] = useTheme();
 
   return (
@@ -25,7 +24,7 @@ function Dashboard() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="text-[22px] font-semibold tracking-tight theme-heading">
-                fin<span className="text-blue-400">SENT</span>
+                Fin<span className="text-blue-400">SENT</span>
               </span>
               <span className="hidden sm:inline text-[11px] theme-muted font-normal tracking-wide">Monetary policy sentiment</span>
             </div>
@@ -37,13 +36,13 @@ function Dashboard() {
               >
                 {light ? <Moon size={16} /> : <Sun size={16} />}
               </button>
-              <button
-                onClick={() => setShowHelp(true)}
+              <Link
+                to="/help"
                 className="p-2 theme-muted rounded-lg hover:theme-heading hover:bg-white/5 transition-all duration-150"
                 title="Help"
               >
                 <HelpCircle size={16} />
-              </button>
+              </Link>
               <Link
                 to="/chat"
                 className="p-2 theme-muted rounded-lg hover:theme-heading hover:bg-white/5 transition-all duration-150"
@@ -61,8 +60,6 @@ function Dashboard() {
             </div>
           </div>
         </header>
-
-        <HelpModal showHelp={showHelp} setShowHelp={setShowHelp} />
 
         <main className="animate-fade-in stagger-1">
           <DivergenceChart />
@@ -83,6 +80,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/transcripts" element={<TranscriptsPage />} />
         <Route path="/chat" element={<ChatPage />} />
+        <Route path="/help" element={<DocsPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -49,24 +49,24 @@ html.light ::-webkit-scrollbar-thumb:hover { background: #aaa; }
 html.light .theme-bg { background-color: #f5f5f5; }
 html.light .theme-text { color: #1a1a1a; }
 html.light .theme-heading { color: #111111; }
-html.light .theme-muted { color: #6b7280; }
-html.light .theme-border { border-color: rgba(0,0,0,0.08); }
+html.light .theme-muted { color: #555; }
+html.light .theme-border { border-color: rgba(0,0,0,0.10); }
 
-/* light mode chart + text tweaks */
-html.light .text-gray-100 { color: #1a1a1a; }
-html.light .text-gray-200 { color: #333; }
-html.light .text-gray-300 { color: #444; }
-html.light .text-gray-400 { color: #666; }
-html.light .text-gray-500 { color: #888; }
-html.light .text-gray-600 { color: #aaa; }
-html.light .text-gray-700 { color: #bbb; }
+/* light mode chart + text tweaks — boosted contrast */
+html.light .text-gray-100 { color: #111; }
+html.light .text-gray-200 { color: #222; }
+html.light .text-gray-300 { color: #333; }
+html.light .text-gray-400 { color: #555; }
+html.light .text-gray-500 { color: #666; }
+html.light .text-gray-600 { color: #777; }
+html.light .text-gray-700 { color: #999; }
 html.light .text-white { color: #111; }
 html.light .bg-\\[\\#0c0c0c\\] { background-color: #f5f5f5; }
 html.light .border-gray-800\\/60 { border-color: rgba(0,0,0,0.08); }
 html.light .border-gray-800\\/30 { border-color: rgba(0,0,0,0.06); }
 html.light .border-gray-800\\/40 { border-color: rgba(0,0,0,0.06); }
 html.light .bg-blue-500\\/8 { background: rgba(59,130,246,0.06); }
-html.light .placeholder-gray-600::placeholder { color: #aaa; }
+html.light .placeholder-gray-600::placeholder { color: #888; }
 html.light .hover\\:bg-white\\/5:hover { background: rgba(0,0,0,0.04); }
 html.light .hover\\:bg-white\\/10:hover { background: rgba(0,0,0,0.06); }
 /* chart tooltip — theme-aware */
@@ -79,8 +79,8 @@ html.light .chart-tooltip {
   border: 1px solid rgba(0,0,0,0.08);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
-html.light .chart-tooltip .text-gray-400 { color: #666; }
-html.light .chart-tooltip .text-gray-500 { color: #888; }
+html.light .chart-tooltip .text-gray-400 { color: #555; }
+html.light .chart-tooltip .text-gray-500 { color: #666; }
 
 /* transcript sentence box */
 .sentence-box { background: #0c0c0c; }
@@ -131,9 +131,24 @@ html.light .sentence-box { background: #f5f5f5; }
 }
 
 /* light mode bg-black overrides */
-html.light .bg-black\/20 { background: rgba(0,0,0,0.04); }
-html.light .bg-black\/30 { background: rgba(0,0,0,0.04); }
-html.light .border-white\/5 { border-color: rgba(0,0,0,0.06); }
+html.light .bg-black\/20 { background: rgba(0,0,0,0.05); }
+html.light .bg-black\/30 { background: rgba(0,0,0,0.06); }
+html.light .border-white\/5 { border-color: rgba(0,0,0,0.08); }
+
+/* light mode — boost Tailwind color classes for better contrast */
+html.light .text-blue-400 { color: #2563eb; }
+html.light .text-rose-400 { color: #e11d48; }
+html.light .text-emerald-400 { color: #059669; }
+html.light .text-amber-400 { color: #d97706; }
+html.light .text-violet-400 { color: #7c3aed; }
+html.light .text-cyan-400 { color: #0891b2; }
+html.light .text-pink-400 { color: #db2777; }
+html.light .text-red-400 { color: #dc2626; }
+
+/* light mode — chat prose text must be readable */
+html.light .prose-invert { --tw-prose-body: #333; --tw-prose-headings: #111; --tw-prose-bold: #111; --tw-prose-links: #2563eb; --tw-prose-code: #333; }
+html.light .bg-blue-500\/8 { background: rgba(37,99,235,0.08); }
+html.light .text-emerald-400\/70 { color: rgba(5,150,105,0.85); }
 *:focus {
   outline: none;
 }
@@ -227,34 +242,86 @@ html.light .border-white\/5 { border-color: rgba(0,0,0,0.06); }
   pointer-events: auto;
 }
 
-/* ── chat thinking wave ── */
-@keyframes chatWave {
-  0%, 60%, 100% { transform: scaleY(0.4); opacity: 0.3; }
-  30% { transform: scaleY(1); opacity: 1; }
+/* ── chat thinking: orbital spinner ── */
+@keyframes orbit {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.4; transform: scale(0.8); }
+  50%      { opacity: 1;   transform: scale(1.2); }
 }
 
-.chat-wave {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  height: 16px;
+.chat-think {
+  position: relative;
+  width: 28px;
+  height: 28px;
 }
 
-.chat-wave span {
-  display: block;
-  width: 2.5px;
-  height: 14px;
-  border-radius: 9999px;
-  background: linear-gradient(180deg, #60a5fa, #818cf8);
-  transform-origin: center;
-  animation: chatWave 1.2s ease-in-out infinite;
+/* outer rotating ring */
+.chat-think::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #60a5fa;
+  border-right-color: #818cf8;
+  animation: orbit 1.4s linear infinite;
 }
-.chat-wave span:nth-child(1) { animation-delay: 0s; }
-.chat-wave span:nth-child(2) { animation-delay: 0.1s; }
-.chat-wave span:nth-child(3) { animation-delay: 0.2s; }
-.chat-wave span:nth-child(4) { animation-delay: 0.3s; }
-.chat-wave span:nth-child(5) { animation-delay: 0.4s; }
 
-html.light .chat-wave span {
-  background: linear-gradient(180deg, #3b82f6, #6366f1);
+/* inner counter-rotating ring */
+.chat-think::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  border-bottom-color: #a78bfa;
+  border-left-color: #60a5fa;
+  animation: orbit 0.9s linear infinite reverse;
 }
+
+/* center dot */
+.chat-think-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  animation: pulse-dot 1.4s ease-in-out infinite;
+}
+
+html.light .chat-think::before {
+  border-top-color: #2563eb;
+  border-right-color: #6366f1;
+}
+html.light .chat-think::after {
+  border-bottom-color: #7c3aed;
+  border-left-color: #2563eb;
+}
+html.light .chat-think-dot {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+}
+
+/* ── docs page code block ── */
+.docs-code {
+  background: #0a0a0a;
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 16px 20px;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  font-size: 12.5px;
+  line-height: 1.7;
+  overflow-x: auto;
+}
+html.light .docs-code {
+  background: #f0f0f0;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+html.light .docs-code .text-gray-500 { color: #777; }
+html.light .docs-code .text-gray-600 { color: #666; }
+html.light .docs-code .text-gray-400 { color: #555; }

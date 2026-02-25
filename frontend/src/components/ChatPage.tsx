@@ -174,11 +174,11 @@ const ChatPage = () => {
               {loading && (
                 <div className="flex justify-start animate-fade-in">
                   <div className="card rounded-xl px-4 py-3.5">
-                    <div className="flex items-center gap-2">
-                      <div className="chat-wave">
-                        <span /><span /><span /><span /><span />
+                    <div className="flex items-center gap-3">
+                      <div className="chat-think">
+                        <div className="chat-think-dot" />
                       </div>
-                      <span className="text-[11px] text-gray-600 ml-1">Thinking</span>
+                      <span className="text-[11px] text-gray-500">Thinking</span>
                     </div>
                   </div>
                 </div>

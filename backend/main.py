@@ -11,6 +11,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
+from pydantic import BaseModel
+from chat import run_agent
 
 # Suppress pandas SQLAlchemy warnings
 warnings.filterwarnings('ignore', message='.*pandas only supports SQLAlchemy.*')
@@ -214,6 +216,20 @@ def get_transcript_sentences(transcript_id: int):
     except Exception as e:
         print(f"Transcript sentences fetch error: {e}")
         return []
+
+
+class ChatRequest(BaseModel):
+    message: str
+    history: list = []
+
+@app.post("/api/chat")
+def chat_endpoint(req: ChatRequest):
+    try:
+        result = run_agent(req.message, req.history)
+        return result
+    except Exception as e:
+        print(f"Chat error: {e}")
+        return {"response": "Sorry, something went wrong. Please try again.", "tool_calls_made": []}
 
 
 if __name__ == "__main__":
