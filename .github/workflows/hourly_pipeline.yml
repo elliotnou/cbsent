@@ -19,17 +19,47 @@ jobs:
           sudo rm -rf "/usr/local/share/boost"
           sudo docker image prune --all --force
 
-      - name: Checkout Code
+      - name: Checkout Code (without LFS)
         uses: actions/checkout@v4
+
+      - name: Cache LFS model file
+        id: cache-model
+        uses: actions/cache@v4
         with:
-          lfs: true
+          path: backend/analysis/model/export/model.pt
+          key: lfs-model-${{ hashFiles('.gitattributes') }}-v1
+
+      - name: Pull LFS model (only on cache miss)
+        if: steps.cache-model.outputs.cache-hit != 'true'
+        run: git lfs pull --include="backend/analysis/model/export/model.pt"
+
+      - name: Verify LFS model file
+        run: |
+          MODEL_FILE="backend/analysis/model/export/model.pt"
+          if head -c 7 "$MODEL_FILE" | grep -q "version"; then
+            echo "ERROR: model.pt is a Git LFS pointer, not the actual model weights."
+            echo "LFS bandwidth may be exhausted. Attempting manual LFS pull..."
+            git lfs pull --include="$MODEL_FILE"
+            if head -c 7 "$MODEL_FILE" | grep -q "version"; then
+              echo "FATAL: LFS pull failed. Model file is still a pointer."
+              echo "Check GitHub LFS bandwidth at: https://github.com/settings/billing"
+              exit 1
+            fi
+          fi
+          FILE_SIZE=$(wc -c < "$MODEL_FILE")
+          echo "model.pt size: $FILE_SIZE bytes"
+          if [ "$FILE_SIZE" -lt 1000000 ]; then
+            echo "FATAL: model.pt is too small ($FILE_SIZE bytes). Expected ~266MB."
+            exit 1
+          fi
+          echo "Model file verified successfully."
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
           cache: 'pip'
-        
+
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
@@ -40,7 +70,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           python backend/scrapers/boc_scraper.py
-          
+
           python backend/scrapers/fed_scraper.py
-          
+
           python backend/analysis/batch_processor.py
