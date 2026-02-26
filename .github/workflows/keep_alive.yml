@@ -11,4 +11,4 @@ jobs:
 
     steps:
       - name: Ping Render Backend
-        run: curl -fsS https://finsent-530o.onrender.com || true
+        run: curl -fsS https://finsent-530o.onrender.com/api/health || true

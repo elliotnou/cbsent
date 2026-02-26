@@ -26,7 +26,7 @@ function Dashboard() {
               <span className="text-[22px] font-semibold tracking-tight theme-heading">
                 Fin<span className="text-blue-400">SENT</span>
               </span>
-              <span className="hidden sm:inline text-[11px] theme-muted font-normal tracking-wide">Monetary policy sentiment</span>
+              <span className="hidden sm:inline text-[11px] theme-muted font-normal tracking-wide">Hawkish–Dovish scoring & Fed/BoC divergence via fine-tuned DistilBERT</span>
             </div>
             <div className="flex gap-1">
               <button

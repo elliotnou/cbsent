@@ -35,7 +35,7 @@ const ChatPage = () => {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+  const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000').replace(/\/+$/, '');
   const [light, setLight] = useState(() => document.documentElement.classList.contains('light'));
   const toggleTheme = () => {
     setLight(p => { document.documentElement.classList.toggle('light', !p); return !p; });
@@ -70,8 +70,8 @@ const ChatPage = () => {
       });
       clearTimeout(timeout);
       if (!res.ok) {
-        const text = await res.text();
-        throw new Error(`${res.status}: ${text}`);
+        const errText = await res.text();
+        throw new Error(`${res.status}: ${errText}`);
       }
       const data = await res.json();
       setMessages(prev => [...prev, {

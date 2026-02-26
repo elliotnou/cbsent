@@ -15,11 +15,15 @@ const ScoreBar = () => {
   return (
     <div className="card px-4 py-4 h-full flex flex-col justify-between">
       <div className="text-[11px] text-gray-500 font-medium uppercase tracking-wide mb-2">Score range</div>
-      <div>
-        <div className="h-1.5 bg-gradient-to-r from-rose-500/70 via-gray-600/60 to-emerald-500/70 score-bar" />
-        <div className="flex text-[10px] mt-1.5" style={{ position: 'relative' }}>
-          <div className="flex-1 relative hover-zone" style={{ minHeight: 20 }}>
-            <span className="text-rose-400/80 select-none">−1.0 Dovish</span>
+      <div style={{ position: 'relative' }}>
+        {/* Two hover zones covering the bar + labels as a single region each */}
+        <div className="flex" style={{ position: 'relative' }}>
+          <div className="flex-1 relative hover-zone" style={{ minHeight: 0 }}>
+            {/* Left half of bar */}
+            <div className="h-1.5 bg-gradient-to-r from-rose-500/70 to-gray-600/60 score-bar" style={{ borderRadius: '9999px 0 0 9999px' }} />
+            <div className="text-[10px] mt-1.5">
+              <span className="text-rose-400/80 select-none">−1.0 Dovish</span>
+            </div>
             <div className="hover-tip hover-tip-left">
               <div className="card p-3">
                 <p className="text-[11px] text-gray-400 leading-relaxed mb-2">
@@ -33,9 +37,16 @@ const ScoreBar = () => {
               </div>
             </div>
           </div>
-          <span className="text-gray-600 px-1.5">0</span>
-          <div className="flex-1 relative text-right hover-zone" style={{ minHeight: 20 }}>
-            <span className="text-emerald-400/80 select-none">+1.0 Hawkish</span>
+          <div className="flex-shrink-0 flex flex-col items-center" style={{ width: 24 }}>
+            <div className="h-1.5 w-full bg-gray-600/60" />
+            <span className="text-[10px] text-gray-600 mt-1.5">0</span>
+          </div>
+          <div className="flex-1 relative text-right hover-zone" style={{ minHeight: 0 }}>
+            {/* Right half of bar */}
+            <div className="h-1.5 bg-gradient-to-r from-gray-600/60 to-emerald-500/70 score-bar" style={{ borderRadius: '0 9999px 9999px 0' }} />
+            <div className="text-[10px] mt-1.5">
+              <span className="text-emerald-400/80 select-none">+1.0 Hawkish</span>
+            </div>
             <div className="hover-tip hover-tip-right">
               <div className="card p-3">
                 <p className="text-[11px] text-gray-400 leading-relaxed mb-2">
@@ -61,7 +72,7 @@ const DivergenceChart = () => {
   const [usdcadData, setUsdcadData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('all');
-  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+  const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000').replace(/\/+$/, '');
 
   const SentimentTooltip = ({ active, payload, label }) => {
     if (!active || !payload?.length) return null;

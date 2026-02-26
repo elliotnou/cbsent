@@ -1,15 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft, Sun, Moon, BookOpen, Workflow, Globe, Brain,
   Calculator, Lightbulb, BarChart3, Wrench, MessageSquare,
 } from 'lucide-react';
 
+/* Hook: observe elements and add .revealed when they enter the viewport */
+function useScrollReveal() {
+  const refs = useRef<(HTMLElement | null)[]>([]);
+  const setRef = useCallback((i: number) => (el: HTMLElement | null) => { refs.current[i] = el; }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); observer.unobserve(e.target); } }),
+      { threshold: 0.12 }
+    );
+    refs.current.forEach(el => { if (el) observer.observe(el); });
+    return () => observer.disconnect();
+  }, []);
+
+  return setRef;
+}
+
 const DocsPage = () => {
   const [light, setLight] = useState(() => document.documentElement.classList.contains('light'));
   const toggleTheme = () => {
     setLight(p => { document.documentElement.classList.toggle('light', !p); return !p; });
   };
+  const setRef = useScrollReveal();
 
   return (
     <div className="min-h-screen theme-bg theme-text">
@@ -33,7 +51,7 @@ const DocsPage = () => {
       <div className="px-6 md:px-12 lg:px-16 pb-24">
         <div className="max-w-[900px] mx-auto">
 
-          {/* Hero */}
+          {/* Hero — always visible immediately */}
           <div className="mb-16 animate-fade-in">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase rounded-md bg-blue-500/10 text-blue-400 mb-5">
               <BookOpen size={12} />
@@ -43,12 +61,30 @@ const DocsPage = () => {
               How FinSENT Works
             </h1>
             <p className="text-[15px] text-gray-400 leading-relaxed max-w-[700px]">
-              FinSENT scores Federal Reserve and Bank of Canada monetary policy sentiment using a fine-tuned DistilBERT model trained on central bank transcripts. Here's exactly how every piece fits together.
+              FinSENT scores Federal Reserve and Bank of Canada transcripts on a{' '}
+              <span className="text-emerald-400 font-medium keyword-hover">
+                Hawkish
+                <span className="keyword-tip">
+                  <span className="card p-2.5 block text-[11px] text-gray-400 leading-relaxed shadow-xl">
+                    <span className="text-emerald-400 font-semibold">Hawkish (+1)</span> — Favors higher interest rates, tighter monetary policy, and prioritizes controlling inflation over stimulating growth.
+                  </span>
+                </span>
+              </span>
+              {' '}to{' '}
+              <span className="text-rose-400 font-medium keyword-hover">
+                Dovish
+                <span className="keyword-tip">
+                  <span className="card p-2.5 block text-[11px] text-gray-400 leading-relaxed shadow-xl">
+                    <span className="text-rose-400 font-semibold">Dovish (−1)</span> — Favors lower interest rates, accommodative policy, and prioritizes employment and economic growth over inflation concerns.
+                  </span>
+                </span>
+              </span>
+              {' '}scale (−1 to +1) using a fine-tuned DistilBERT model, then measures the <span className="text-blue-400 font-medium">policy stance divergence</span> between the two central banks. Here's exactly how every piece fits together.
             </p>
           </div>
 
           {/* Pipeline overview */}
-          <section className="mb-14 animate-fade-in stagger-1">
+          <section ref={setRef(0)} className="mb-14 scroll-reveal">
             <div className="card p-6 md:p-8">
               <div className="flex items-center gap-2.5 mb-4">
                 <Workflow size={18} className="text-blue-400" />
@@ -73,7 +109,7 @@ const DocsPage = () => {
           </section>
 
           {/* Scraping */}
-          <section className="mb-14 animate-fade-in stagger-2">
+          <section ref={setRef(1)} className="mb-14 scroll-reveal">
             <div className="card p-6 md:p-8">
               <div className="flex items-center gap-2.5 mb-4">
                 <Globe size={18} className="text-rose-400" />
@@ -117,7 +153,7 @@ const DocsPage = () => {
           </section>
 
           {/* Model */}
-          <section className="mb-14 animate-fade-in stagger-3">
+          <section ref={setRef(2)} className="mb-14 scroll-reveal">
             <div className="card p-6 md:p-8">
               <div className="flex items-center gap-2.5 mb-4">
                 <Brain size={18} className="text-violet-400" />
@@ -160,12 +196,15 @@ const DocsPage = () => {
           </section>
 
           {/* Scoring formula */}
-          <section className="mb-14 animate-fade-in stagger-4">
+          <section ref={setRef(3)} className="mb-14 scroll-reveal">
             <div className="card p-6 md:p-8">
               <div className="flex items-center gap-2.5 mb-4">
                 <Calculator size={18} className="text-amber-400" />
-                <h2 className="text-lg font-semibold text-amber-400">The Scoring</h2>
+                <h2 className="text-lg font-semibold text-amber-400">Hawkish–Dovish Scoring</h2>
               </div>
+              <p className="text-[13px] text-gray-400 leading-relaxed mb-5">
+                Every sentence is scored on a <span className="text-emerald-400 font-medium">Hawkish (+1)</span> to <span className="text-rose-400 font-medium">Dovish (−1)</span> scale. Hawkish language signals rate hikes and tightening; dovish language signals rate cuts and stimulus. Sentences near zero are neutral. Scores are then aggregated by topic-based impact weights to produce a single transcript score.
+              </p>
 
               <div className="docs-code mb-5">
                 <span className="text-gray-500">// Per-sentence output</span><br/>
@@ -201,7 +240,7 @@ const DocsPage = () => {
           </section>
 
           {/* Worked example */}
-          <section className="mb-14 animate-fade-in">
+          <section ref={setRef(4)} className="mb-14 scroll-reveal">
             <div className="card p-6 md:p-8">
               <div className="flex items-center gap-2.5 mb-4">
                 <Lightbulb size={18} className="text-emerald-400" />
@@ -245,7 +284,7 @@ const DocsPage = () => {
           </section>
 
           {/* Divergence */}
-          <section className="mb-14 animate-fade-in">
+          <section ref={setRef(5)} className="mb-14 scroll-reveal">
             <div className="card p-6 md:p-8">
               <div className="flex items-center gap-2.5 mb-4">
                 <BarChart3 size={18} className="text-cyan-400" />
@@ -283,7 +322,7 @@ const DocsPage = () => {
           </section>
 
           {/* Chatbot / Policy Analyst */}
-          <section className="mb-14 animate-fade-in">
+          <section ref={setRef(6)} className="mb-14 scroll-reveal">
             <div className="card p-6 md:p-8">
               <div className="flex items-center gap-2.5 mb-4">
                 <MessageSquare size={18} className="text-blue-400" />
@@ -327,7 +366,7 @@ const DocsPage = () => {
           </section>
 
           {/* Tech stack */}
-          <section className="mb-14 animate-fade-in">
+          <section ref={setRef(7)} className="mb-14 scroll-reveal">
             <div className="card p-6 md:p-8">
               <div className="flex items-center gap-2.5 mb-4">
                 <Wrench size={18} className="text-gray-300" />
@@ -354,7 +393,7 @@ const DocsPage = () => {
           </section>
 
           {/* Footer */}
-          <div className="text-center text-[11px] text-gray-600 pt-4 animate-fade-in">
+          <div ref={setRef(8)} className="text-center text-[11px] text-gray-600 pt-4 scroll-reveal">
             Data from federalreserve.gov and bankofcanada.ca · Model distilled from GPT-4o-mini labels · Updated hourly
           </div>
 

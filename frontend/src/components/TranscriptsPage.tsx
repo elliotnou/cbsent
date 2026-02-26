@@ -9,7 +9,7 @@ const TranscriptsPage = () => {
   const [expandedId, setExpandedId] = useState(null);
   const [sentences, setSentences] = useState({});
   const [loadingSentences, setLoadingSentences] = useState({});
-  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+  const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000').replace(/\/+$/, '');
   const [light, setLight] = useState(() => document.documentElement.classList.contains('light'));
   const toggleTheme = () => {
     setLight(p => { document.documentElement.classList.toggle('light', !p); return !p; });

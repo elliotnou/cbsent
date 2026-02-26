@@ -95,39 +95,95 @@ html.light .sentence-box { background: #f5f5f5; }
 .hover-zone .hover-tip {
   position: absolute;
   top: 100%;
-  padding-top: 4px;
+  padding-top: 6px;
   width: 288px;
   z-index: 99999;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
 }
 .hover-zone:hover .hover-tip {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
+  transform: translateY(0);
 }
 .hover-tip-left { left: 0; }
 .hover-tip-right { right: 0; }
 
-/* stat card hover tooltip — pure CSS */
-.stat-card { z-index: 1; }
-.stat-card:hover { z-index: 100; }
+/* stat card hover tooltip — pure CSS with smooth entrance */
+.stat-card {
+  z-index: 1;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.stat-card:hover {
+  z-index: 100;
+  transform: translateY(-2px);
+}
 .stat-tip {
   position: absolute;
   left: 0;
   right: 0;
   top: 100%;
-  padding-top: 4px;
+  padding-top: 6px;
   z-index: 9999;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
 }
 .stat-card:hover .stat-tip {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* ── inline keyword hover tooltip ── */
+.keyword-hover {
+  position: relative;
+  cursor: default;
+}
+.keyword-hover .keyword-tip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding-bottom: 6px;
+  width: 240px;
+  z-index: 99999;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+.keyword-hover:hover .keyword-tip {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── scroll-triggered reveal animation ── */
+@keyframes scrollReveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+}
+.scroll-reveal.revealed {
+  animation: scrollReveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 /* light mode bg-black overrides */
