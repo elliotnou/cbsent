@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "CPI inflation remains above 3 percent as expected, boosted by base-year effects, gasoline prices, and pandemic-related supply bottlenecks.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

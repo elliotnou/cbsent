@@ -1,1 +1,0 @@
-{"model": "gpt-5", "sentence": "The unemployment rate has moved up since March, hitting 7.1% in August, and wage growth has continued to ease.", "label": {"stance": "dovish", "topic": "employment"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"employment\"}"}

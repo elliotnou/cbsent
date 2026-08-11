@@ -39,9 +39,23 @@ carried on both tables so point-in-time queries need no join.
 Written by `scripts/event_study.py`: the index level, its change since
 the previous decision, and the USD/CAD move after each release.
 
-## raw/, fx_cache/, llm_cache/
+## llm_labels.csv
+
+Every label either LLM produced, one row per (model, sentence), with the
+token usage that was billed for it. Written by
+`scripts/export_llm_labels.py` from the request cache.
+
+This file is what makes the evaluation table verifiable without an
+OpenAI account: `scripts/eval.py` primes from it before making any
+request, so running `make eval` with no API key still reproduces the
+zero-shot baseline row exactly. Deleting it is safe but then reproducing
+that row costs API calls.
+
+## raw/, fx_cache/, llm_cache/, score_cache.json
 
 Fetch caches, not committed. `raw/` holds scraped pages and the BoC
 announcement-date probe index, `fx_cache/` Dukascopy ticks and Valet
-daily rates, `llm_cache/` one JSON file per LLM label keyed by model and
-sentence so no sentence is ever billed twice.
+daily rates, `llm_cache/` one JSON file per LLM request keyed by model and
+prompt so no sentence is ever billed twice, and `score_cache.json` the
+model's own sentence scores so the event study can be re-run without
+rescoring the corpus.

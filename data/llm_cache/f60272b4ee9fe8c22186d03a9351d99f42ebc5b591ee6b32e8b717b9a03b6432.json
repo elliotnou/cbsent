@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The Bank will publish its next full outlook for the economy and inflation, including risks to the projection, in the Monetary Policy Report at the same time.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

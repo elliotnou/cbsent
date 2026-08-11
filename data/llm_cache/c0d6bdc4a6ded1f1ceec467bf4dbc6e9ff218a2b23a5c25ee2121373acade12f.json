@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The Canadian dollar has depreciated materially against the US dollar, largely reflecting trade uncertainty and broader strength in the US currency.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

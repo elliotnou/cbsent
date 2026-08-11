@@ -1,1 +1,0 @@
-{"model": "gpt-5", "sentence": "CPI inflation was 2.4% in September, slightly higher than the Bank had anticipated.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

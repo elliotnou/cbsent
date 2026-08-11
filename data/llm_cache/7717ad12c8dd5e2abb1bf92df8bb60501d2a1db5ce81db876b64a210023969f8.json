@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "In the last three months, CPI inflation has declined from 8.1% to 6.9%, primarily due to a fall in gasoline prices.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

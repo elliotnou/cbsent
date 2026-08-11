@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Excluding taxes, inflation rose 2.3% in April, slightly stronger than the Bank had expected.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

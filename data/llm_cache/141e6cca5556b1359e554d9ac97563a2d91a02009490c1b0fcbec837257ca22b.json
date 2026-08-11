@@ -1,1 +1,0 @@
-{"model": "gpt-5", "sentence": "Staff Review of the Economic Situation The information available at the time of the meeting indicated that real GDP expanded at a tepid pace in the first half of the year.", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"growth\"}"}

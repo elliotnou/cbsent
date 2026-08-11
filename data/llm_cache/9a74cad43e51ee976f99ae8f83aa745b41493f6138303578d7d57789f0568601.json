@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "December 13, 2023 Recent indicators suggest that growth of economic activity has slowed from its strong pace in the third quarter.", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\": \"dovish\", \"topic\": \"growth\"}"}

@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The Governing Council is resolute in its commitment to price stability and will continue to take action as required to achieve the 2% inflation target.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

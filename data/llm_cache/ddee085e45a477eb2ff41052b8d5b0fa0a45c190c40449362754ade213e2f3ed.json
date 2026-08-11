@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Oil prices are about $10-per-barrel lower than was assumed in the October Monetary Policy Report (MPR).", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

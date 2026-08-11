@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Canada\u2019s GDP data over the past year was choppy and growth stalled as the economy adjusted to new tariffs, high uncertainty and slower population growth.", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\":\"dovish\", \"topic\":\"growth\"}"}

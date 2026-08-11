@@ -33,6 +33,7 @@ from cbsent.ingest import db
 from cbsent.model import Scorer
 
 CACHE_DIR = "data/llm_cache"
+LLM_LABELS_CSV = "data/llm_labels.csv"
 
 
 def load_eval_rows(conn, cut_date: str, eval_end: str, allow_bootstrap: bool):
@@ -96,6 +97,11 @@ def main():
     systems["dictionary"] = [dictionary.classify(t) for t in texts]
 
     if not args.skip_gpt5:
+        # Committed labels are consulted first, so the baseline row is
+        # reproducible without an API key.
+        primed = llm_label.prime_from_csv(LLM_LABELS_CSV)
+        if primed:
+            print(f"primed {primed} labels from {LLM_LABELS_CSV}")
         print(f"labelling {len(texts)} sentences with {args.gpt5_model}...")
         labels = llm_label.label_many(texts, args.gpt5_model, CACHE_DIR,
                                       workers=args.workers)

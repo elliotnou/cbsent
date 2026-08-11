@@ -1,1 +1,0 @@
-{"model": "gpt-5", "sentence": "Canada\u2019s exchange rate has been stable relative to the US dollar.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

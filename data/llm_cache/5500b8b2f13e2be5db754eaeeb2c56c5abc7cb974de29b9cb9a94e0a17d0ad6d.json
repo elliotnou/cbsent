@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The Bank expects CPI inflation to be close to 3% during the first half of this year, move below 2\u00bd% in the second half, and reach the 2% inflation target in 2025.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

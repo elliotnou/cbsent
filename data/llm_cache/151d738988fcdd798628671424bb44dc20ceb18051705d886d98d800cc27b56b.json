@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "In the United States, domestic demand remains very strong and the US Federal Reserve has clearly indicated its resolve to use its monetary policy tools to control inflation.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\", \"topic\":\"inflation\"}"}

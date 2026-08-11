@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Across the yield curve, rates on nominal Treasury securities ended the period significantly higher, primarily reflecting the revision in the outlook for monetary policy and the associated rise in real yields.", "label": {"stance": "hawkish", "topic": "guidance"}, "raw": "{\"stance\":\"hawkish\", \"topic\":\"guidance\"}"}

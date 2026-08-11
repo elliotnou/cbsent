@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Over the intermeeting period, investor perceptions of an improved economic outlook in China and Europe contributed to increases in foreign risky asset prices and weighed on the exchange value of the dollar.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"financial_stability\"}"}

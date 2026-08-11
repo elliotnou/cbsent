@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "While the Bank expects consumer spending to slow in response to the cumulative increase in interest rates, recent retail trade and other data suggest more persistent excess demand in the economy.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\", \"topic\":\"inflation\"}"}

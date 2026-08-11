@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Year-over-year measures of core inflation are still around 5%, but 3-month measures of core inflation have come down, suggesting that core inflation has peaked.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The drop in global oil prices has led to lower gasoline prices.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

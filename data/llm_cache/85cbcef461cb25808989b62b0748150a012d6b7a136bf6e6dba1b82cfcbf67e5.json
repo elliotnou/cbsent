@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Banks in the January SLOOS reported stronger loan demand by small firms over the fourth quarter, though loan demand remained weak overall.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

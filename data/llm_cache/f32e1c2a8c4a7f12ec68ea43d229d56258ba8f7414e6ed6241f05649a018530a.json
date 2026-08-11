@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The higher inflation in the last couple of months reflects some rebound in goods price inflation and the end of the temporary suspension of the GST/HST.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Credit quality in the CRE market deteriorated further, with the average delinquency rate for loans in CMBS and the share of nonperforming CRE loans at banks both rising further.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

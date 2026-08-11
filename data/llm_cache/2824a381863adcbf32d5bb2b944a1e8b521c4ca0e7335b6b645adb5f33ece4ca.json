@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "US CPI inflation ticked up in June with some evidence that tariffs are starting to be passed on to consumer prices.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

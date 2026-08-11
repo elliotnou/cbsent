@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The Bank forecasts CPI inflation will be around the 2% target over the next two years.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

@@ -50,6 +50,28 @@ def _cache_key(model: str, sentence: str) -> str:
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
+# Labels loaded from the committed export, consulted before any API call so
+# reported numbers can be reproduced without a key.
+_PRIMED: dict = {}
+
+
+def prime_from_csv(path: str) -> int:
+    """Load exported labels so they are used instead of calling the API."""
+    import csv
+
+    if not os.path.exists(path):
+        return 0
+    loaded = 0
+    with open(path, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            stance, topic = row.get("stance"), row.get("topic")
+            if stance not in STANCES or topic not in TOPICS:
+                continue
+            _PRIMED[(row["model"], row["sentence"])] = {"stance": stance, "topic": topic}
+            loaded += 1
+    return loaded
+
+
 def label_many(sentences, model: str, cache_dir: str, workers: int = 32,
                progress_every: int = 200):
     """Label a list of sentences in parallel, returning one dict or None each.
@@ -81,6 +103,10 @@ def label_many(sentences, model: str, cache_dir: str, workers: int = 32,
 def label_sentence(sentence: str, model: str, cache_dir: str,
                    client=None) -> Optional[dict]:
     """Return {"stance": ..., "topic": ...} for one sentence, cached."""
+    primed = _PRIMED.get((model, sentence))
+    if primed is not None:
+        return primed
+
     key = _cache_key(model, sentence)
     path = os.path.join(cache_dir, key + ".json")
     if os.path.exists(path):

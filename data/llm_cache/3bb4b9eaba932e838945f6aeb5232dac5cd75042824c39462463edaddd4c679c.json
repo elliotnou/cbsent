@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Global financial conditions have eased since July, in part because of market expectations of lower policy interest rates.", "label": {"stance": "dovish", "topic": "guidance"}, "raw": "{\"stance\": \"dovish\", \"topic\": \"guidance\"}"}

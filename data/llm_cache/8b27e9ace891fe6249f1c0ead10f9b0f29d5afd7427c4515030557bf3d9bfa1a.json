@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Global economic data has come in broadly in line with projections in the Bank\u2019s January Monetary Policy Report (MPR).", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"growth\"}"}

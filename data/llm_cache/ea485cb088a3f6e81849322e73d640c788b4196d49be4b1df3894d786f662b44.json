@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Total PCE price inflation was 5.7 percent over the 12 months ending in November, and core PCE price inflation, which excludes changes in consumer energy prices and many consumer food prices, was 4.7 percent over the same period.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

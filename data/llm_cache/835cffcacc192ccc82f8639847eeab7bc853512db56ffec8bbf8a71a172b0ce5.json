@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Broad equity indexes declined modestly, on net, amid significant fluctuations.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"financial_stability\"}"}

@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Following the Russian invasion of Ukraine and the subsequent imposition of an array of sanctions, the ruble depreciated roughly 40 percent against the dollar.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Bond yields have increased since January while corporate credit spreads have narrowed.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "On net, nominal Treasury yields declined, equities appreciated, credit spreads tightened, and the trade-weighted value of the dollar depreciated.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

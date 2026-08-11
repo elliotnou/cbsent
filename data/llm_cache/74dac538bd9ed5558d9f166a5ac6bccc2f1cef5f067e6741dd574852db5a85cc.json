@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The unemployment rate rose to 6.8% in November as employment continued to grow more slowly than the labour force.", "label": {"stance": "dovish", "topic": "employment"}, "raw": "{\"stance\":\"dovish\", \"topic\":\"employment\"}"}

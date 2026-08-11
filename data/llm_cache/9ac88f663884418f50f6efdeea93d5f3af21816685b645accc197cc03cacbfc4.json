@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Inflation has declined from 8.1% in June to 6.3% in December, reflecting lower gasoline prices and, more recently, moderating prices for durable goods.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

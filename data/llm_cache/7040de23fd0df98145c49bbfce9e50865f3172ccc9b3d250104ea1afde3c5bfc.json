@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "With continued evidence that underlying inflation is easing, Governing Council agreed that monetary policy no longer needs to be as restrictive and reduced the policy interest rate by 25 basis points.", "label": {"stance": "dovish", "topic": "guidance"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"guidance\"}"}

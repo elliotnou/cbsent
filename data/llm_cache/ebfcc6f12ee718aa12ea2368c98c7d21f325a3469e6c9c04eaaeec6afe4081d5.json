@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "While inflation is still above central bank targets in most advanced economies, it is forecast to ease gradually.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

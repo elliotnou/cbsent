@@ -1,1 +1,0 @@
-{"model": "gpt-5", "sentence": "Bond yields are modestly higher since January while equity markets, which weakened sharply at the outset of the war, have recovered.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

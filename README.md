@@ -13,8 +13,12 @@ scripts that reproduce every number reported in
 ## Install
 
 ```bash
-pip install -e .
+pip install -e ".[model]"     # scoring
+pip install -e ".[research]"  # scoring plus everything RESULTS.md needs
 ```
+
+Bare `pip install -e .` installs only the ingest and segmentation layer,
+which is deliberately free of PyTorch.
 
 ## Use
 
@@ -23,7 +27,13 @@ from cbsent import score
 
 result = score("Inflation remains elevated, and it is not yet appropriate to lower the target range.")
 print(result["score"], result["stance"])
+# 0.9996 hawkish
 ```
+
+The negated cut in that sentence is read as hawkish, not dovish. Weights
+are found at `export/cbsent`, or set `CBSENT_HUB_REPO` to pull them from
+the Hugging Face Hub; the `distilbert-base-uncased` backbone is fetched
+from the Hub the first time a model loads.
 
 From the shell:
 

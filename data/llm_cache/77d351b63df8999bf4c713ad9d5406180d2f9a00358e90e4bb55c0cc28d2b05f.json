@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The manager noted that, these developments notwithstanding, the level of reserves in the system appeared to remain within a range consistent with an ample supply.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

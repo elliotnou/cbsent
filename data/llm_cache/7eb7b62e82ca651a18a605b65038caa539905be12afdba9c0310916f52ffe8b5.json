@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Financial markets have been roiled by serial tariff announcements, postponements and continued threats of escalation.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

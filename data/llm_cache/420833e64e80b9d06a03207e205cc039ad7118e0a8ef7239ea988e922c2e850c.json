@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Many central banks are tightening monetary policy to combat inflation, and the resulting tighter financial conditions are moderating economic growth.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

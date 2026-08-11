@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The Canadian dollar is broadly unchanged against the US dollar but weaker against other currencies.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

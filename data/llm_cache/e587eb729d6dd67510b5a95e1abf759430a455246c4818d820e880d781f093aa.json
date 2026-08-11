@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The effects of recent policy rate increases by the Bank are becoming evident in interest-sensitive areas of the economy: housing activity has retreated sharply, and spending by households and businesses is softening.", "label": {"stance": "hawkish", "topic": "growth"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"growth\"}"}

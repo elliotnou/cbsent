@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "US bond yields have risen, supported by strong growth and more persistent inflation.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

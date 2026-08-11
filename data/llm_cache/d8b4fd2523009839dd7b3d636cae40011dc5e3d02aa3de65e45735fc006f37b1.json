@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "3 The overall level of bank lending standards aggregated across all loan categories was estimated to be around the median level observed since 2011.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

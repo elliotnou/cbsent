@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Inflation remains elevated, reflecting supply and demand imbalances related to the pandemic, higher energy prices, and broader price pressures.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\", \"topic\":\"inflation\"}"}

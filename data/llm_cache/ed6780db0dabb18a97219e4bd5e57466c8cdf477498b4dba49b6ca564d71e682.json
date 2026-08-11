@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "CPI inflation remains well above the target range and core measures of inflation have edged up since October.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\", \"topic\":\"inflation\"}"}

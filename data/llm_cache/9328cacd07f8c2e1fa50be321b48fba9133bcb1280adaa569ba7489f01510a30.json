@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "CPI inflation is currently at 5.1%, as expected in January, and remains well above the Bank\u2019s target range.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\", \"topic\":\"inflation\"}"}

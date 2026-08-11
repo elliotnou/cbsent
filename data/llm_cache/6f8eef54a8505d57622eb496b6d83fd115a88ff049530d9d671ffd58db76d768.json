@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "CPI inflation eased to 1.7% in April, as the elimination of the federal consumer carbon tax reduced inflation by 0.6 percentage points.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"inflation\"}"}

@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Regarding household credit quality, the delinquency rate on Federal Housing Administration mortgages edged up in November and remained elevated relative to the past few years.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"financial_stability\"}"}

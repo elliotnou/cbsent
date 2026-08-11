@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The Bank expects inflationary pressures to ease in the months ahead and CPI inflation to remain near 2% over the projection horizon.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\", \"topic\":\"inflation\"}"}

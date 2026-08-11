@@ -1,1 +1,0 @@
-{"model": "gpt-5", "sentence": "Inflation was 2.1% in 2025 and the Bank expects inflation to stay close to the 2% target over the projection period, with trade-related cost pressures offset by excess supply.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

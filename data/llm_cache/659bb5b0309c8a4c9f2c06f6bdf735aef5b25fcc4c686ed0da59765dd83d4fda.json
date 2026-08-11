@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Oil prices have declined substantially since January, mainly reflecting weaker prospects for global growth.", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"growth\"}"}

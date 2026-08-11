@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Financial conditions have tightened since January, and the US dollar has strengthened.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"financial_stability\"}"}

@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The Bank expects CPI inflation to ease as higher interest rates help rebalance demand and supply, price pressures from global supply disruptions fade, and the past effects of higher commodity prices dissipate.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\": \"dovish\", \"topic\": \"inflation\"}"}

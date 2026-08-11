@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Given both the CPI and producer price index data, the staff estimated that total PCE price inflation would be reported as 2.5 percent over the 12 months ending in November and that core PCE price inflation would be 2.8 percent.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"inflation\"}"}

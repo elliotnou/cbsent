@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The Bank expects inflation to remain close to the target over the projection horizon, with the upward and downward pressures on inflation roughly balancing out.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"inflation\"}"}

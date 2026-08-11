@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The Canadian dollar has weakened against the US dollar and other currencies.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

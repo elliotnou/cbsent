@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "U.S. equity prices decreased notably, on net, over the intermeeting period, with particularly pronounced declines in the technology and cyclical sectors.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

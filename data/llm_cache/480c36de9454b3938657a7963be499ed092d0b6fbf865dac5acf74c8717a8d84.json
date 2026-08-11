@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Broad stock price indexes increased substantially, on net, amid a positive investor outlook on corporate profits and economic activity.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

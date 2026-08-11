@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Real yields increased more than their nominal counterparts, while inflation compensation implied by Treasury Inflation-Protected Securities declined.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"inflation\"}"}

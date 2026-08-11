@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Excluding taxes, inflation rose to 2.5% in June, up from around 2% in the second half of last year.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"inflation\"}"}

@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Recent data has increased our confidence that inflation will continue to move towards the 2% target.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

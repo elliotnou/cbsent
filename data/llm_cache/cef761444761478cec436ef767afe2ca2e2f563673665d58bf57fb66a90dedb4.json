@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Participants judged that the current stance of monetary policy was restrictive and was putting downward pressure on economic activity and inflation.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

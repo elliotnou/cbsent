@@ -1,1 +1,0 @@
-{"model": "gpt-5", "sentence": "The one-month option-implied volatility on the S&P 500 index ended the period roughly unchanged at a moderate level by historical standards.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

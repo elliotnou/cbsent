@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Data from the Federal Reserve's Small Business Lending Survey showed that originations had been roughly flat since mid-2022 before ticking down in the third quarter.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

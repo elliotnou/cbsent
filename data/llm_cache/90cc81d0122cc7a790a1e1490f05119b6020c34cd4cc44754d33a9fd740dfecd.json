@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "CPI inflation has been about 2% since the summer, and is expected to average close to the 2% target over the next couple of years.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"inflation\"}"}

@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "House prices increased to the upper end of their historical range, relative to rents and Treasury yields, though underwriting standards remained restrictive.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

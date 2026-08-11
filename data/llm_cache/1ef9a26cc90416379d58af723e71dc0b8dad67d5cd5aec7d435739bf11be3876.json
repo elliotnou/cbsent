@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "CPI inflation remains close to 2%, with some volatility due to the temporary suspension of the GST/HST on some consumer products.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

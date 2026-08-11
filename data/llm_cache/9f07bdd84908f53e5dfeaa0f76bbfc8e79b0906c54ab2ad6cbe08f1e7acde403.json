@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Global oil prices are about $10 lower than assumed in the July Monetary Policy Report (MPR).", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\", \"topic\":\"inflation\"}"}

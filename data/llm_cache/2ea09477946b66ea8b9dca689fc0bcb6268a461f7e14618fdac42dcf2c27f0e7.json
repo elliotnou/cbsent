@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "CPI inflation eased to 2.9% in January, as goods price inflation moderated further.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"inflation\"}"}

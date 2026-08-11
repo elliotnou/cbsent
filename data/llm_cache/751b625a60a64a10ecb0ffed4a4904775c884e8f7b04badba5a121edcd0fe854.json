@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "As expected, CPI inflation rose in April, reaching 2.8%.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"inflation\"}"}

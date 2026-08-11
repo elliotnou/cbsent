@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The staff noted that increased uncertainty and ongoing volatility had reduced risk appetite in financial markets and eased price pressures, although valuations of many assets remained elevated.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\": \"dovish\", \"topic\": \"inflation\"}"}

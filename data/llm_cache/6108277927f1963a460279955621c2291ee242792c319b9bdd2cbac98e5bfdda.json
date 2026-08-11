@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Global inflation is higher, reflecting the impact of the Russian invasion of Ukraine, ongoing supply constraints, and strong demand.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

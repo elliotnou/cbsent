@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Financial conditions eased, driven by a decline in interest rates, an increase in equity prices, and a depreciation in the dollar.", "label": {"stance": "dovish", "topic": "financial_stability"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"financial_stability\"}"}

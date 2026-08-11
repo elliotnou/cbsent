@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The Bank estimates that GDP grew by about 4% in the second quarter.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"growth\"}"}

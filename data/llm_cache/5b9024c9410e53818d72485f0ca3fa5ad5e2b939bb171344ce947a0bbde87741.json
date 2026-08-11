@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The Bank expects CPI inflation to fall quickly to around 3% in the middle of this year and then decline more gradually to the 2% target by the end of 2024.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

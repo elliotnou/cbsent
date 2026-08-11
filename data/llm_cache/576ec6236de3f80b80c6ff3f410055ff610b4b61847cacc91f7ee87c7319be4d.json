@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Staff Economic Outlook The projection for U.S. economic activity prepared by the staff for the November FOMC meeting was weaker than the September forecast.", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"growth\"}"}

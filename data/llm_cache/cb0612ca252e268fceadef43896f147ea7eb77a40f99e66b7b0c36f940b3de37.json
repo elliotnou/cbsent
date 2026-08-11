@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The unemployment rate had declined from 5.9 percent in June to 5.2 percent in August", "label": {"stance": "neutral", "topic": "employment"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"employment\"}"}

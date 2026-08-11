@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "A number of economic indicators suggest excess supply in the economy has increased since January.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

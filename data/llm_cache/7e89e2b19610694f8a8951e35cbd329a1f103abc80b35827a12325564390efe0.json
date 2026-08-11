@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "Inflation has been easing in most economies, as supply bottlenecks resolve and weaker demand relieves price pressures.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\", \"topic\":\"inflation\"}"}

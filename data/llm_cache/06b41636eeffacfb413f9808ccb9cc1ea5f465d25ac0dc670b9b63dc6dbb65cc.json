@@ -1,1 +1,0 @@
-{"model": "gpt-5-mini", "sentence": "The increase in global inflation is occurring as the global economy slows.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}
