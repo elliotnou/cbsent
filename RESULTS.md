@@ -323,3 +323,22 @@ cbsent (fine-tuned) answered `hawkish` for every one of the 10 negated items. It
 | cbsent (fine-tuned) | 0.6804 | 0.5429 | 0.6114 | 0.8868 |
 
 PROVISIONAL. 595 of 595 reference labels come from the gpt-5-mini bootstrap pass rather than a human. Two of the three systems are therefore partly measured against themselves: the zero-shot baseline shares a model family and prompt with the labeller, and the fine-tuned model was trained on those labels. Read the zero-shot row as an upper bound inflated by that overlap, not as accuracy. The headline comparison is the margin over the dictionary baseline, which shares nothing with the labeller. This table becomes a headline result only when the held-out labels are human-verified.
+
+## Repository hygiene note: a weights blob is in history (2026-08-11)
+
+- git commit: `d780135`
+
+The 254 MB `export/cbsent/model.pt` was tracked by accident between
+commits `ea1f2b5` and `52516cb` before `.gitignore` covered
+`export/`, and was re-committed several times, so the object store holds
+several copies and `.git` is about 1.6 GB. It is untracked from this
+commit on, and `export/` is ignored.
+
+The blob is still reachable from those earlier commits. Purging it needs a
+history rewrite, which would change every commit hash this file cites and
+so break the audit trail that is the point of this file. That trade is the
+repository owner's to make, not something to do silently; the numbers above
+remain checkable against the hashes as recorded.
+
+Weights are distributed through the Hugging Face Hub, per
+`scripts/publish_hub.py`, and are not intended to live in git.
