@@ -80,16 +80,27 @@ the held-out window and every bootstrap disagreement.
 
 ## Reproducibility
 
+One command per reported number, each appending to RESULTS.md with the
+command, the git commit, and the date:
+
 ```bash
 make ingest        # scrape and load documents and sentences
 make bootstrap     # dictionary + LLM first-pass labels
-make review        # human review queue
-make train         # fine-tune, chronological split
-make ablate        # negation/hedge ablation
+make review        # human review queue (make review-html for the browser)
+make train         # fine-tune, chronological split, trains on Apple MPS
+make ablate        # negation/hedge ablation across seeds
 make eval          # the three-way macro-F1 table
 make event-study   # decisions, FX alignment, and the chart
+make cost          # inference cost and speed against the LLM baseline
 make test          # unit tests
 ```
+
+Every script that reports a number scores on CPU by default. This is
+deliberate: MPS inference on this model is not deterministic, and the
+same evaluation swung by about two macro-F1 points between repeats on
+MPS while CPU repeats were exact. The measurement is in RESULTS.md.
+Training still runs on MPS, where nondeterminism only perturbs the
+optimisation path and the resulting weights are kept as an artefact.
 
 Requires PostgreSQL (`DATABASE_URL`) and, for the LLM passes,
 `OPENAI_API_KEY`. Pinned dependencies are in

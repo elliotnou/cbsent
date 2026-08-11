@@ -64,6 +64,7 @@ class Scorer:
     """Inference wrapper: text in, stance/topic out."""
 
     def __init__(self, model_dir: str, device: Optional[str] = None):
+        self.model_dir = model_dir
         with open(os.path.join(model_dir, "config.json"), encoding="utf-8") as f:
             self.config = json.load(f)
         self.use_negation_markers = self.config["use_negation_markers"]
@@ -82,6 +83,16 @@ class Scorer:
         self.model.load_state_dict(state)
         self.model.to(self.device)
         self.model.eval()
+
+    def fingerprint(self) -> str:
+        """Identify these weights on this device, for caching scores."""
+        import hashlib
+
+        h = hashlib.sha256()
+        with open(os.path.join(self.model_dir, "model.pt"), "rb") as f:
+            while chunk := f.read(1 << 20):
+                h.update(chunk)
+        return f"{h.hexdigest()[:16]}:{self.device}"
 
     @torch.no_grad()
     def score_sentences(self, sentences: List[str], batch_size: int = 64) -> List[dict]:

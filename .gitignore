@@ -11,5 +11,6 @@ __pycache__/
 data/raw/
 data/fx_cache/
 data/llm_cache/
+data/score_cache.json
 export/
 labeling/review.html

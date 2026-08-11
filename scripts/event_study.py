@@ -23,6 +23,7 @@ Usage:
 import argparse
 import csv
 import datetime
+import json
 import os
 import subprocess
 import sys
@@ -38,9 +39,17 @@ from cbsent.model import Scorer
 UTC = datetime.timezone.utc
 FX_CACHE = "data/fx_cache"
 DECISIONS_CSV = "data/decisions.csv"
+SCORE_CACHE = "data/score_cache.json"
 
 
-def load_scored_sentences(conn, scorer: Scorer, upto: datetime.datetime) -> List[ScoredSentence]:
+def load_scored_sentences(conn, scorer: Scorer, upto: datetime.datetime,
+                          cache_path: Optional[str] = None) -> List[ScoredSentence]:
+    """Score every sentence published before `upto`.
+
+    Scoring the whole corpus takes minutes on CPU, so results are cached
+    per (model directory, device). The cache is keyed by sentence text and
+    is only read when the model fingerprint matches.
+    """
     with conn.cursor() as cur:
         cur.execute(
             """
@@ -54,11 +63,30 @@ def load_scored_sentences(conn, scorer: Scorer, upto: datetime.datetime) -> List
         rows = cur.fetchall()
 
     texts = [r[0] for r in rows]
-    scored = scorer.score_sentences(texts)
+    fingerprint = scorer.fingerprint()
+    cached = {}
+    if cache_path and os.path.exists(cache_path):
+        with open(cache_path, encoding="utf-8") as f:
+            blob = json.load(f)
+        if blob.get("fingerprint") == fingerprint:
+            cached = blob.get("scores", {})
+
+    missing = [t for t in texts if t not in cached]
+    if missing:
+        print(f"scoring {len(missing)} sentences ({len(cached)} from cache)")
+        for text, out in zip(missing, scorer.score_sentences(missing)):
+            cached[text] = [out["score"], out["topic"]]
+        if cache_path:
+            os.makedirs(os.path.dirname(cache_path) or ".", exist_ok=True)
+            with open(cache_path, "w", encoding="utf-8") as f:
+                json.dump({"fingerprint": fingerprint, "scores": cached}, f)
+    else:
+        print(f"scoring skipped, all {len(texts)} sentences cached")
+
     return [
-        ScoredSentence(published_at=rows[i][1], bank=rows[i][2],
-                       score=scored[i]["score"], topic=scored[i]["topic"])
-        for i in range(len(rows))
+        ScoredSentence(published_at=row[1], bank=row[2],
+                       score=cached[row[0]][0], topic=cached[row[0]][1])
+        for row in rows
     ]
 
 
@@ -170,7 +198,7 @@ def render_chart(div_series: Dict[datetime.date, float], daily: Dict[datetime.da
     ax1.set_title("Fed minus BoC policy divergence and USD/CAD, held-out period\n"
                   + subtitle)
     ax1.set_xlabel("Date")
-    ax1.legend(handles=handles, loc="upper left", fontsize=9, framealpha=0.9)
+    ax1.legend(handles=handles, loc="lower left", fontsize=9, framealpha=0.95)
     fig.autofmt_xdate()
     fig.tight_layout()
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
@@ -186,6 +214,7 @@ def main():
     parser.add_argument("--horizon-minutes", type=int, default=60)
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--chart", default="docs/divergence.png")
+    parser.add_argument("--score-cache", default=SCORE_CACHE)
     parser.add_argument("--no-results-append", action="store_true")
     args = parser.parse_args()
 
@@ -197,7 +226,8 @@ def main():
     scorer = Scorer(args.model_dir, device=args.device)
     horizon_end = datetime.datetime.combine(end, datetime.time(), tzinfo=UTC)
     with db.connect() as conn:
-        sentences = load_scored_sentences(conn, scorer, horizon_end)
+        sentences = load_scored_sentences(conn, scorer, horizon_end,
+                                          cache_path=args.score_cache)
     print(f"scored sentences available: {len(sentences)}")
 
     daily = fx.fetch_daily_rates(FX_CACHE, start - datetime.timedelta(days=10), end)
