@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The Committee expects to maintain an accommodative stance of monetary policy until these outcomes are achieved.", "label": {"stance": "dovish", "topic": "guidance"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"guidance\"}"}

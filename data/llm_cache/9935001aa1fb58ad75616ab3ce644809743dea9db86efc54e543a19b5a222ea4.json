@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "December 15, 2021 The Federal Reserve is committed to using its full range of tools to support the U.S. economy in this challenging time, thereby promoting its maximum employment and price stability goals.", "label": {"stance": "dovish", "topic": "guidance"}, "raw": "{\"stance\": \"dovish\", \"topic\": \"guidance\"}"}

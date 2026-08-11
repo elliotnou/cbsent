@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Inflation is elevated, largely reflecting transitory factors.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

@@ -14,10 +14,12 @@ import argparse
 import os
 import random
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from dotenv import load_dotenv
+from psycopg2.extras import execute_values
 
 from cbsent import dictionary, llm_label
 from cbsent.ingest import db
@@ -60,15 +62,20 @@ def select_sentences(conn, target: int):
     return core + sampled[:remaining]
 
 
-def upsert_label(cur, sentence_id: int, source: str, stance: str, topic):
-    cur.execute(
+def upsert_labels(cur, rows):
+    """Batch upsert of (sentence_id, source, stance, topic) tuples."""
+    if not rows:
+        return
+    execute_values(
+        cur,
         """
         INSERT INTO labels (sentence_id, source, stance, topic)
-        VALUES (%s, %s, %s, %s)
+        VALUES %s
         ON CONFLICT (sentence_id, source)
         DO UPDATE SET stance = EXCLUDED.stance, topic = EXCLUDED.topic
         """,
-        (sentence_id, source, stance, topic),
+        rows,
+        page_size=500,
     )
 
 
@@ -76,6 +83,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--target", type=int, default=3000)
     parser.add_argument("--llm-model", default="gpt-5-mini")
+    parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--dry-run", action="store_true",
                         help="select and dictionary-label only, no LLM calls")
     args = parser.parse_args()
@@ -88,28 +96,48 @@ def main():
         print(f"selected {len(selection)} sentences")
 
         with conn.cursor() as cur:
-            for sid, text in selection:
-                upsert_label(cur, sid, "dictionary", dictionary.classify(text), None)
+            upsert_labels(cur, [
+                (sid, "dictionary", dictionary.classify(text), None)
+                for sid, text in selection
+            ])
         conn.commit()
         print("dictionary labels written")
 
         if args.dry_run:
             return
 
-        labelled = failed = 0
-        with conn.cursor() as cur:
-            for sid, text in selection:
-                label = llm_label.label_sentence(text, args.llm_model, CACHE_DIR)
+        # LLM labelling is network-bound, so requests are issued in
+        # parallel and written to the database in batches.
+        pending, failed = [], 0
+        done = 0
+        with ThreadPoolExecutor(max_workers=args.workers) as pool:
+            futures = {
+                pool.submit(llm_label.label_sentence, text, args.llm_model, CACHE_DIR): sid
+                for sid, text in selection
+            }
+            for future in as_completed(futures):
+                sid = futures[future]
+                try:
+                    label = future.result()
+                except Exception as exc:
+                    print(f"  sentence {sid} failed: {str(exc)[:100]}")
+                    failed += 1
+                    continue
                 if label is None:
                     failed += 1
                     continue
-                upsert_label(cur, sid, "llm", label["stance"], label["topic"])
-                labelled += 1
-                if labelled % 200 == 0:
+                pending.append((sid, "llm", label["stance"], label["topic"]))
+                done += 1
+                if len(pending) >= 500:
+                    with conn.cursor() as cur:
+                        upsert_labels(cur, pending)
                     conn.commit()
-                    print(f"  {labelled} LLM labels...")
+                    pending = []
+                    print(f"  {done} LLM labels...")
+        with conn.cursor() as cur:
+            upsert_labels(cur, pending)
         conn.commit()
-        print(f"llm labels written: {labelled} ({failed} failed)")
+        print(f"llm labels written: {done} ({failed} failed)")
 
         with conn.cursor() as cur:
             cur.execute(
