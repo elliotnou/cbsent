@@ -5,7 +5,7 @@ EVAL_END := 2026-08-01
 EPOCHS := 14
 
 .PHONY: test ingest snapshot bootstrap export-labels review review-html train \
-	ablate ablate-single eval event-study cost all
+	ablate ablate-single eval event-study probe cost all
 
 test:
 	$(PY) -m pytest tests/ -q
@@ -46,6 +46,9 @@ eval:
 
 event-study:
 	$(PY) scripts/event_study.py --eval-start $(CUT) --eval-end $(EVAL_END)
+
+probe:
+	$(PY) scripts/negation_probe.py
 
 cost:
 	$(PY) scripts/cost_compare.py --input-price 1.25 --output-price 10.00 \

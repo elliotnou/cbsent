@@ -25,15 +25,14 @@ which is deliberately free of PyTorch.
 ```python
 from cbsent import score
 
-result = score("Inflation remains elevated, and it is not yet appropriate to lower the target range.")
+result = score("Economic activity has weakened and the unemployment rate has risen substantially.")
 print(result["score"], result["stance"])
-# 0.9996 hawkish
+# -0.951 dovish
 ```
 
-The negated cut in that sentence is read as hawkish, not dovish. Weights
-are found at `export/cbsent`, or set `CBSENT_HUB_REPO` to pull them from
-the Hugging Face Hub; the `distilbert-base-uncased` backbone is fetched
-from the Hub the first time a model loads.
+Weights are found at `export/cbsent`, or set `CBSENT_HUB_REPO` to pull
+them from the Hugging Face Hub; the `distilbert-base-uncased` backbone is
+fetched from the Hub the first time a model loads.
 
 From the shell:
 
@@ -63,10 +62,28 @@ Sentence segmentation is tuned to central bank prose: decimal rates,
 dotted abbreviations, enumerated clauses in minutes, and long
 semicolon-chained sentences that each carry their own stance.
 
-Negation and hedge cues are marked inline before encoding, so
-"it is not yet appropriate to raise rates" is not read as hawkish. The
-effect of that transform is measured, not asserted; the ablation is in
-RESULTS.md.
+Negation and hedge cues are marked inline before encoding, the intent
+being that "it is not yet appropriate to raise rates" is not read as
+hawkish. **On the current model that intent is not met.** A probe of 24
+hand-written minimal pairs, each flipping only the negation while holding
+the policy vocabulary fixed, is in
+[data/negation_probe.csv](data/negation_probe.csv):
+
+| system | all 24 items | 10 negated items | distinct labels used on negated items |
+|---|---|---|---|
+| dictionary | 0.58 | 0.20 | 3 |
+| zero-shot GPT-5 | 1.00 | 1.00 | 2 |
+| cbsent (fine-tuned) | 0.67 | 0.60 | 1 |
+
+cbsent answers "hawkish" for every negated item, so its 0.60 there is the
+label mix of the subset and no evidence of negation sensitivity. The
+dictionary, which is negation-blind by design, scores 0.20. GPT-5 gets all
+ten right. Reading negation is currently the clearest thing the LLM does
+that this model does not, and the most likely cause is the training
+signal: the labels are an LLM's aggregate opinions over ordinary corpus
+sentences, in which negated policy constructions are rare. Fixing it
+plausibly needs negated cases deliberately over-sampled into the human
+review queue, not a different input transform.
 
 ## Evaluation
 

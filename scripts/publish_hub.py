@@ -47,8 +47,11 @@ Two heads over a shared `[CLS]` representation:
 - topic: {topic_labels}
 
 Negation and hedge cues are marked inline before encoding
-({negation_note}), so negated policy language such as "not yet
-appropriate to raise the target range" is not read as hawkish.
+({negation_note}). The intent is that negated policy language such as
+"not yet appropriate to raise the target range" is not read as hawkish.
+Measured on a 24-item minimal-pair probe, this model does not achieve
+that: it answers hawkish for every negated item in the probe. See the
+limitations below.
 
 ## Training data
 
@@ -98,6 +101,12 @@ publication timestamp of every input is known.
   twice on MPS disagreed on up to 79 of 595 sentences, while CPU
   inference was exact across repeats. Score on CPU when a number has to
   be reproducible.
+- **Negation is not handled reliably.** On a 24-item minimal-pair probe
+  the model answered hawkish for all 10 negated items, including "it is
+  not yet appropriate to raise the target range" and "inflation is no
+  longer broad-based". Do not use it on text where negated policy
+  constructions carry the signal. A zero-shot frontier LLM answered all
+  ten correctly.
 
 ## Reproducing
 

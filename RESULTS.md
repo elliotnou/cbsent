@@ -202,3 +202,18 @@ Effect of cue marking: +0.0522 macro-F1 overall, +0.0163 on cue sentences.
 |---|---|---|---|
 | cbsent (fine-tuned, local) | 122.0 sentences/s on cpu | n/a | $0.00 |
 | zero-shot gpt-5 | 1.8 sentences/s at 8 workers | 367 in + 200 out | $2.46 |
+
+## Negation probe (2026-08-11)
+
+- command: `python scripts/negation_probe.py`
+- git commit: `330d6eb`
+- probe: 24 hand-written minimal pairs in `data/negation_probe.csv`, labelled by the codebook rules cited per row, 10 of them carrying a negation cue
+- inference device: cpu
+
+| system | all items | negated items | non-negated items | distinct labels used on negated items |
+|---|---|---|---|---|
+| dictionary | 0.58 (14/24) | 0.20 (2/10) | 0.86 (12/14) | 3 (dovish, hawkish, neutral) |
+| zero-shot gpt-5 | 1.00 (24/24) | 1.00 (10/10) | 1.00 (14/14) | 2 (dovish, hawkish) |
+| cbsent (fine-tuned) | 0.67 (16/24) | 0.60 (6/10) | 0.71 (10/14) | 1 (hawkish) |
+
+cbsent (fine-tuned) answered `hawkish` for every one of the 10 negated items. Its score on that subset is therefore the label mix of the subset and carries no evidence of negation sensitivity.

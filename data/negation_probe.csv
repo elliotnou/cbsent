@@ -1,0 +1,25 @@
+id,pair,text,stance,rule
+1,hike,The Committee decided to raise the target range for the federal funds rate by 25 basis points.,hawkish,4
+2,hike,It is not yet appropriate to raise the target range for the federal funds rate.,dovish,1
+3,cut,The Committee decided to lower the target range for the federal funds rate by 25 basis points.,dovish,4
+4,cut,The Committee does not anticipate lowering the target range for the federal funds rate this year.,hawkish,1
+5,firming,Some further policy firming may be appropriate to return inflation to two percent.,hawkish,2
+6,firming,The Committee no longer judges that further policy firming will be appropriate.,dovish,1
+7,inflation_level,Inflation remains elevated and broad-based across categories of goods and services.,hawkish,5
+8,inflation_level,Inflation is no longer broad-based across categories of goods and services.,dovish,1
+9,inflation_path,Inflation has eased substantially over the past year toward the two percent objective.,dovish,5
+10,inflation_path,Inflation has not eased over the past year and remains well above the two percent objective.,hawkish,1
+11,labour,The labour market remains very tight and wage growth is adding to price pressure.,hawkish,3
+12,labour,The labour market is not overheated and wage growth has moderated.,dovish,1
+13,cut_timing,The Committee does not anticipate reducing the policy rate until it has greater confidence inflation is moving sustainably to two percent.,hawkish,1
+14,cut_timing,The Committee anticipates reducing the policy rate as inflation moves sustainably to two percent.,dovish,7
+15,restraint,It will likely be appropriate to begin dialing back policy restraint this year.,dovish,7
+16,restraint,It will not be appropriate to begin dialing back policy restraint this year.,hawkish,1
+17,accommodation,The Bank is maintaining its policy of quantitative easing to provide monetary stimulus.,dovish,4
+18,accommodation,The Bank is no longer purchasing assets and has begun reducing its holdings.,hawkish,1
+19,demand,Demand has softened and slack has emerged in the labour market.,dovish,3
+20,demand,Demand has not softened and no slack has emerged in the labour market.,hawkish,1
+21,optionality,The Committee will continue to monitor the implications of incoming information for the economic outlook.,neutral,2
+22,optionality,The Committee is prepared to adjust the stance of monetary policy as appropriate if risks emerge.,neutral,2
+23,hold,The Committee decided to maintain the target range for the federal funds rate at its current level.,neutral,4
+24,hold,The Bank maintained its target for the overnight rate at two and a quarter percent.,neutral,4
