@@ -5,5 +5,11 @@ __pycache__/
 *.pyc
 .pytest_cache/
 *.egg-info/
-data/raw/
 .DS_Store
+
+# fetch caches and model weights: reproducible from scripts, too large to track
+data/raw/
+data/fx_cache/
+data/llm_cache/
+export/
+labeling/review.html

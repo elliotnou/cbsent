@@ -4,7 +4,8 @@ For each scheduled decision in the held-out window:
   1. Score every sentence published strictly before the release timestamp
      with the fine-tuned model.
   2. Compute the Fed-minus-BoC divergence index as of that instant, and
-     the change in the index since the previous decision of the same bank.
+     its change since the previous scheduled decision by either bank, so
+     the change captures only text published between the two releases.
   3. Measure the USD/CAD move from the release timestamp to a fixed
      horizon after it, intraday when tick data exists, else the change to
      the next daily rate.

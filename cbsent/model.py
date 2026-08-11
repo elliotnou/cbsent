@@ -84,29 +84,33 @@ class Scorer:
         self.model.eval()
 
     @torch.no_grad()
-    def score_sentences(self, sentences: List[str]) -> List[dict]:
+    def score_sentences(self, sentences: List[str], batch_size: int = 64) -> List[dict]:
         if not sentences:
             return []
-        texts = [mark_cues(s) for s in sentences] if self.use_negation_markers else sentences
-        enc = self.tokenizer(
-            texts, max_length=MAX_SEQ_LEN, padding=True, truncation=True,
-            return_tensors="pt",
-        ).to(self.device)
-        stance_logits, topic_logits = self.model(enc["input_ids"], enc["attention_mask"])
-        stance_probs = stance_logits.softmax(dim=-1).cpu()
-        topic_idx = topic_logits.argmax(dim=-1).cpu()
 
+        hawk_i = STANCE_LABELS.index("hawkish")
+        dove_i = STANCE_LABELS.index("dovish")
         results = []
-        for i, sentence in enumerate(sentences):
-            probs = stance_probs[i]
-            stance = STANCE_LABELS[int(probs.argmax())]
-            # Signed scalar in [-1, 1]: P(hawkish) - P(dovish).
-            hawk = float(probs[STANCE_LABELS.index("hawkish")])
-            dove = float(probs[STANCE_LABELS.index("dovish")])
-            results.append({
-                "text": sentence,
-                "stance": stance,
-                "score": round(hawk - dove, 4),
-                "topic": TOPIC_LABELS[int(topic_idx[i])],
-            })
+
+        for start in range(0, len(sentences), batch_size):
+            batch = sentences[start:start + batch_size]
+            texts = [mark_cues(s) for s in batch] if self.use_negation_markers else batch
+            enc = self.tokenizer(
+                texts, max_length=MAX_SEQ_LEN, padding=True, truncation=True,
+                return_tensors="pt",
+            ).to(self.device)
+            stance_logits, topic_logits = self.model(enc["input_ids"],
+                                                    enc["attention_mask"])
+            stance_probs = stance_logits.softmax(dim=-1).cpu()
+            topic_idx = topic_logits.argmax(dim=-1).cpu()
+
+            for i, sentence in enumerate(batch):
+                probs = stance_probs[i]
+                results.append({
+                    "text": sentence,
+                    "stance": STANCE_LABELS[int(probs.argmax())],
+                    # Signed scalar in [-1, 1]: P(hawkish) - P(dovish).
+                    "score": round(float(probs[hawk_i]) - float(probs[dove_i]), 4),
+                    "topic": TOPIC_LABELS[int(topic_idx[i])],
+                })
         return results
