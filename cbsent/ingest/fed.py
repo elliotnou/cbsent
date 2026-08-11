@@ -43,7 +43,13 @@ def list_releases(cache_dir: str, earliest: datetime.date) -> List[FedRelease]:
     soup = BeautifulSoup(html, "lxml")
     releases: List[FedRelease] = []
 
+    # Policy statements are the "HTML" link under a "Statement:" label. Other
+    # documents reachable from the calendar (implementation notes, notation
+    # votes such as the Statement on Longer-Run Goals) are linked by title
+    # and are not policy decisions, so anchor text is the filter.
     for a in soup.find_all("a", href=_STATEMENT_RE):
+        if a.get_text(strip=True) != "HTML":
+            continue
         meeting = _parse_date(_STATEMENT_RE.search(a["href"]).group(1))
         if meeting < earliest:
             continue

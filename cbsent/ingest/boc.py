@@ -1,28 +1,37 @@
 """Bank of Canada ingestion: fixed announcement date (FAD) press releases.
 
-Rate decisions live at a stable URL pattern
-(/YYYY/MM/fad-press-release-YYYY-MM-DD/), discovered by walking the press
-release listing pages backwards. Announcements are stamped 10:00 a.m. ET
-before 2024-01-24 and 9:45 a.m. ET from that date on.
+Rate decisions live at a date-determined URL
+(/YYYY/MM/fad-press-release-YYYY-MM-DD/). The site's press release listing
+paginates over all release types and stops surfacing older rate
+announcements, so discovery enumerates candidate dates instead: fixed
+announcement dates always fall midweek, so every Tuesday, Wednesday and
+Thursday in the window is probed and the URLs that resolve are the real
+announcements. Discovery is therefore deterministic and independent of site
+navigation changes. The probe result for each date is cached.
+
+Announcements are stamped 10:00 a.m. ET before 2024-01-24 and 9:45 a.m. ET
+from that date on.
 """
 
 import datetime
-import re
+import json
+import os
+import time
 from dataclasses import dataclass
 from typing import List, Optional
 
+import requests
 from bs4 import BeautifulSoup
 
 from cbsent.ingest import fetch
 from cbsent.ingest.times import boc_release_ts
 
-LISTING_URL = "https://www.bankofcanada.ca/press/press-releases/page/{page}/"
+URL_TEMPLATE = "https://www.bankofcanada.ca/{d:%Y}/{d:%m}/fad-press-release-{d:%Y-%m-%d}/"
 
-_FAD_RE = re.compile(
-    r"https://www\.bankofcanada\.ca/\d{4}/\d{2}/fad-press-release-(\d{4}-\d{2}-\d{2})/"
-)
+# Announcement weekdays to probe (Monday is 0).
+CANDIDATE_WEEKDAYS = (1, 2, 3)
 
-MAX_PAGES = 80
+_INDEX_NAME = "boc_fad_index.json"
 
 
 @dataclass
@@ -31,30 +40,52 @@ class BocRelease:
     release_date: datetime.date
 
 
-def list_releases(cache_dir: str, earliest: datetime.date) -> List[BocRelease]:
-    """Walk the press release listing until we are past the earliest date."""
-    seen = {}
-    for page in range(1, MAX_PAGES + 1):
+def _candidate_dates(earliest: datetime.date, latest: datetime.date):
+    day = earliest
+    while day <= latest:
+        if day.weekday() in CANDIDATE_WEEKDAYS:
+            yield day
+        day += datetime.timedelta(days=1)
+
+
+def list_releases(cache_dir: str, earliest: datetime.date,
+                  latest: Optional[datetime.date] = None) -> List[BocRelease]:
+    """Probe candidate announcement dates and return the ones that exist."""
+    latest = latest or datetime.date.today()
+    index_path = os.path.join(cache_dir, _INDEX_NAME)
+    index = {}
+    if os.path.exists(index_path):
+        with open(index_path, encoding="utf-8") as f:
+            index = json.load(f)
+
+    session = requests.Session()
+    session.headers["User-Agent"] = fetch.USER_AGENT
+
+    probed = 0
+    for day in _candidate_dates(earliest, latest):
+        key = day.isoformat()
+        if key in index:
+            continue
+        url = URL_TEMPLATE.format(d=day)
         try:
-            html = fetch.get(LISTING_URL.format(page=page), cache_dir)
+            resp = session.head(url, timeout=20, allow_redirects=False)
+            index[key] = resp.status_code == 200
         except Exception:
-            break
-        for m in re.finditer(_FAD_RE, html):
-            seen[m.group(0)] = datetime.date.fromisoformat(m.group(1))
-        # The listing is reverse-chronological and mixes all press release
-        # types, so a page may hold no FAD links; use every dated article
-        # URL on the page to decide when we have walked past the window.
-        page_dates = [
-            datetime.date(int(y), int(mo), 1)
-            for y, mo in re.findall(r"bankofcanada\.ca/(\d{4})/(\d{2})/", html)
-        ]
-        if page_dates and max(page_dates) < earliest.replace(day=1):
-            break
+            index[key] = False
+        time.sleep(fetch.DELAY_SECONDS)
+        probed += 1
+        if probed % 25 == 0:
+            print(f"  probed {probed} candidate dates...")
+
+    os.makedirs(cache_dir, exist_ok=True)
+    with open(index_path, "w", encoding="utf-8") as f:
+        json.dump(index, f, indent=0, sort_keys=True)
 
     releases = [
-        BocRelease(url, date)
-        for url, date in seen.items()
-        if date >= earliest
+        BocRelease(URL_TEMPLATE.format(d=datetime.date.fromisoformat(k)),
+                   datetime.date.fromisoformat(k))
+        for k, exists in index.items()
+        if exists and earliest <= datetime.date.fromisoformat(k) <= latest
     ]
     releases.sort(key=lambda r: r.release_date)
     return releases
