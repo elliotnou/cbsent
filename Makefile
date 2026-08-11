@@ -54,4 +54,4 @@ cost:
 	$(PY) scripts/cost_compare.py --input-price 1.25 --output-price 10.00 \
 		--price-source https://developers.openai.com/api/docs/pricing
 
-all: train eval event-study cost
+all: train eval probe event-study cost
