@@ -1,8 +1,8 @@
 PY := .venv/bin/python
 CUT := 2025-08-01
 EVAL_END := 2026-08-01
-# Validation macro-F1 peaks here and declines after; see RESULTS.md.
-EPOCHS := 6
+# Best-by-validation checkpoint is kept within the run; see RESULTS.md.
+EPOCHS := 14
 
 .PHONY: test ingest snapshot bootstrap review review-html train ablate eval \
 	event-study cost all

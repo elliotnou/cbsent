@@ -35,8 +35,20 @@ from cbsent.model import Scorer
 CACHE_DIR = "data/llm_cache"
 
 
-def load_eval_rows(conn, cut_date: str, eval_end: str, allow_bootstrap: bool):
+def load_eval_rows(conn, cut_date: str, eval_end: str, allow_bootstrap: bool,
+                   consensus_only: bool = False):
+    """Held-out sentences with a resolved reference label.
+
+    With consensus_only, bootstrap labels count only where the dictionary
+    and the LLM independently agree. That subset is a stricter proxy for
+    truth than either labeller alone, because it excludes the sentences
+    where the LLM's idiosyncratic calls are the only evidence.
+    """
     source_expr = "coalesce(h.stance, l.stance)" if allow_bootstrap else "h.stance"
+    consensus_clause = (
+        "AND (h.sentence_id IS NOT NULL OR d.stance = l.stance)"
+        if consensus_only else ""
+    )
     with conn.cursor() as cur:
         cur.execute(
             f"""
@@ -45,8 +57,10 @@ def load_eval_rows(conn, cut_date: str, eval_end: str, allow_bootstrap: bool):
             FROM sentences s
             LEFT JOIN labels h ON h.sentence_id = s.id AND h.source = 'human'
             LEFT JOIN labels l ON l.sentence_id = s.id AND l.source = 'llm'
+            LEFT JOIN labels d ON d.sentence_id = s.id AND d.source = 'dictionary'
             WHERE s.published_at >= %s AND s.published_at < %s
               AND {source_expr} IS NOT NULL
+              {consensus_clause}
             ORDER BY s.id
             """,
             (cut_date, eval_end),
@@ -61,6 +75,8 @@ def main():
     parser.add_argument("--model-dir", default="export/cbsent")
     parser.add_argument("--gpt5-model", default="gpt-5")
     parser.add_argument("--allow-bootstrap", action="store_true")
+    parser.add_argument("--consensus-only", action="store_true",
+                        help="keep bootstrap labels only where dictionary and LLM agree")
     parser.add_argument("--skip-gpt5", action="store_true")
     parser.add_argument("--workers", type=int, default=32)
     parser.add_argument("--no-results-append", action="store_true")
@@ -69,7 +85,8 @@ def main():
     load_dotenv()
 
     with db.connect() as conn:
-        rows = load_eval_rows(conn, args.cut_date, args.eval_end, args.allow_bootstrap)
+        rows = load_eval_rows(conn, args.cut_date, args.eval_end,
+                              args.allow_bootstrap, args.consensus_only)
     if not rows:
         raise SystemExit("no labelled sentences in the evaluation window")
 
@@ -118,18 +135,38 @@ def main():
     if not args.no_results_append:
         commit = subprocess.run(["git", "rev-parse", "--short", "HEAD"],
                                 capture_output=True, text=True).stdout.strip()
+        bootstrap_share = len(rows) - n_human
+        caveat = ""
+        if bootstrap_share:
+            caveat = (
+                f"\nPROVISIONAL. {bootstrap_share} of {len(rows)} reference labels "
+                f"come from the gpt-5-mini bootstrap pass rather than a human. "
+                f"Two of the three systems are therefore partly measured against "
+                f"themselves: the zero-shot baseline shares a model family and "
+                f"prompt with the labeller, and the fine-tuned model was trained "
+                f"on those labels. Read the zero-shot row as an upper bound "
+                f"inflated by that overlap, not as accuracy. The headline "
+                f"comparison is the margin over the dictionary baseline, which "
+                f"shares nothing with the labeller. This table becomes a headline "
+                f"result only when the held-out labels are human-verified.\n"
+            )
+        title = "Stance macro-F1"
+        if args.consensus_only:
+            title += ", dictionary and LLM agreement subset"
         entry = (
-            f"\n## Stance macro-F1, held-out {args.cut_date} to {args.eval_end}"
+            f"\n## {title}, held-out {args.cut_date} to {args.eval_end}"
             f" ({date.today().isoformat()})\n\n"
             f"- command: `python scripts/eval.py --cut-date {args.cut_date}"
             f" --eval-end {args.eval_end}"
             f"{' --allow-bootstrap' if args.allow_bootstrap else ''}"
+            f"{' --consensus-only' if args.consensus_only else ''}"
             f"{' --skip-gpt5' if args.skip_gpt5 else ''}`\n"
             f"- git commit: `{commit}`\n"
             f"- eval sentences: {len(rows)} ({provenance})\n"
             f"- label provenance: "
-            f"{'human-only' if not args.allow_bootstrap else 'PROVISIONAL, includes bootstrap labels'}\n\n"
+            f"{'human-verified only' if not bootstrap_share else 'includes bootstrap labels'}\n\n"
             f"{table}\n"
+            f"{caveat}"
         )
         with open("RESULTS.md", "a", encoding="utf-8") as f:
             f.write(entry)
