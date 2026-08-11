@@ -108,8 +108,16 @@ def label_sentence(sentence: str, model: str, cache_dir: str,
         return None
 
     label = {"stance": stance, "topic": topic}
+    # Usage is recorded because reasoning tokens are billed but never
+    # appear in the response text, so cost cannot be reconstructed later.
+    usage = {}
+    if getattr(resp, "usage", None) is not None:
+        usage = {
+            "prompt_tokens": resp.usage.prompt_tokens,
+            "completion_tokens": resp.usage.completion_tokens,
+        }
     os.makedirs(cache_dir, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump({"model": model, "sentence": sentence, "label": label,
-                   "raw": raw}, f)
+                   "raw": raw, "usage": usage}, f)
     return label
