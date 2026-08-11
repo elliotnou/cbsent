@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Similarly, the private-sector job openings rate, as measured by the Job Openings and Labor Turnover Survey, fell in May to its lowest level since March 2021 but remained well above pre-pandemic levels.", "label": {"stance": "neutral", "topic": "employment"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"employment\"}"}

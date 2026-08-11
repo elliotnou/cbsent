@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "A few participants particularly stressed the high uncertainty associated with the expected future path of the unemployment rate and commented that the unemployment rate could rise by considerably more than in the staff forecast.", "label": {"stance": "dovish", "topic": "employment"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"employment\"}"}

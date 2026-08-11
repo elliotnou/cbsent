@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Labour market conditions have weakened in sectors affected by trade, but employment has held up in other parts of the economy.", "label": {"stance": "neutral", "topic": "employment"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"employment\"}"}

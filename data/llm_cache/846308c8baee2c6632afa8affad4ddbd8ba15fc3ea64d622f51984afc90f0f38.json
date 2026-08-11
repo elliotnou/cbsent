@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The cumulative reduction in the policy rate since last June is substantial.", "label": {"stance": "dovish", "topic": "guidance"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"guidance\"}"}

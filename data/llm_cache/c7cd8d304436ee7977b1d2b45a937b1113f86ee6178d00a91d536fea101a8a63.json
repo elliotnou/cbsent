@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Recent survey measures of consumers' inflation expectations at both shorter- and longer-term horizons were broadly in line with the levels seen in the decade before the pandemic.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

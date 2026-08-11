@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "In the nonbank sector, leverage at hedge funds remained high, partly on account of the prevalence of the Treasury cash\u00e2\u0080\u0093futures basis trade.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

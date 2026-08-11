@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "A broad range of indicators, including surveys of inflation expectations and the distribution of price changes among components of the CPI, suggests that underlying inflation is close to 2%.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

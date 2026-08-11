@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "By contrast, core inflation had yet to materially decline from its recent highs in many economies.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

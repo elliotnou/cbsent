@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "In the current tariff scenario , total inflation stays close to 2% over the scenario horizon as the upward and downward pressures on inflation roughly offset.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

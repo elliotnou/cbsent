@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Over the intermeeting period, U.S. equity indexes rose and the one-month option-implied volatility on the S&P 500\u00e2\u0080\u0094the VIX\u00e2\u0080\u0094fell to post-pandemic lows.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"financial_stability\"}"}

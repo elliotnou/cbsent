@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The Bank of Canada today maintained its target for the overnight rate at 2.75%, with the Bank Rate at 3% and the deposit rate at 2.70%.", "label": {"stance": "neutral", "topic": "guidance"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"guidance\"}"}

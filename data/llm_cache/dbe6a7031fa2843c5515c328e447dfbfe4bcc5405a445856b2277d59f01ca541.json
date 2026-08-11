@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "With the effects of US trade actions on economic growth and inflation somewhat clearer, the Bank has returned to its usual practice of providing a projection for the global and Canadian economies in this Monetary Policy Report (MPR).", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"growth\"}"}

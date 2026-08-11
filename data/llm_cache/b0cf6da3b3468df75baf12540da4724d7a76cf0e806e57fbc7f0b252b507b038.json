@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "US inflation has ticked down but remains above 2%, with the price effects of tariffs still to come.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "CPI inflation excluding changes in indirect taxes as well as core inflation measures have also come down and are all close to 2%.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

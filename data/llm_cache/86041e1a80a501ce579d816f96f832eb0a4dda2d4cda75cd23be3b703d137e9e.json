@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Over the intermeeting period, government money market funds (MMFs) continued to increase allocations to Treasury bills and private repo in light of the generally favorable rates on these instruments", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

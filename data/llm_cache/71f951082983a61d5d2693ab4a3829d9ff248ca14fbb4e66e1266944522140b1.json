@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Interest rates on new credit card offers increased slightly, while rates on new auto loans were little changed.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

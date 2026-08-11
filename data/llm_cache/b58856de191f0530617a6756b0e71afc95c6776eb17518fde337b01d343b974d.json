@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Past cuts to interest rates have boosted economic activity, particularly consumption and housing.", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\":\"dovish\", \"topic\":\"growth\"}"}

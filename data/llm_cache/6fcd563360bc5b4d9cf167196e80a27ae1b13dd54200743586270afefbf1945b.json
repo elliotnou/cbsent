@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "While past interest rate cuts have boosted demand for labour in recent months, there are warning signs that heightened trade tensions could disrupt the recovery in the jobs market.", "label": {"stance": "dovish", "topic": "employment"}, "raw": "{\"stance\": \"dovish\", \"topic\": \"employment\"}"}

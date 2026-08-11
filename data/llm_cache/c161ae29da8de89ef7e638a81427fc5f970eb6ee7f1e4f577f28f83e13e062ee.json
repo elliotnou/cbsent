@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "CPI inflation has been close to the 2% target for more than a year, while measures of core inflation remain in the range of 2\u00bd% to 3%.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"inflation\"}"}

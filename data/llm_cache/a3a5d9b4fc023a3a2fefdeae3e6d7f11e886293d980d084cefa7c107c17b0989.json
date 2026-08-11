@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Finally, the manager observed that the Desk began conducting securities lending operations on FedTrade Plus on April 22, as part of the transition to this new trading platform.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"financial_stability\"}"}

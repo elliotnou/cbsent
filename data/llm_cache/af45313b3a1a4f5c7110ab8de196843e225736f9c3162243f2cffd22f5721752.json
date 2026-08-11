@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Both credit card and auto loan interest rates stood at, or near, their highest levels since the Global Financial Crisis.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

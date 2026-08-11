@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "A few participants remarked that recent failures of companies involved in crypto finance have had a limited effect on the broader financial system.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Inflation was 2.3% in March, lower than in February but still higher than 1.8% at the time of the January MPR.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

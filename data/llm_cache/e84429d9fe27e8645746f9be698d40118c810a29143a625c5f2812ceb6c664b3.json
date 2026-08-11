@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Inflation is expected to increase to about 2\u00bd% in March with the end of the tax break.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "After expanding by 2.4% in the third quarter of last year, GDP in Canada contracted 0.6% in the fourth quarter.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"growth\"}"}

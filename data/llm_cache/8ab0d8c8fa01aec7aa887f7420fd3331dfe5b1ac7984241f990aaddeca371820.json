@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "CPI inflation picked up in December to 2.4%, boosted by base-year effects linked to last winter\u2019s GST/HST holiday.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

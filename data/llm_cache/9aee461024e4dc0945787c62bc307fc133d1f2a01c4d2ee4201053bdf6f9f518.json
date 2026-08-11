@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Inflation remains close to the 2% target.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"inflation\"}"}

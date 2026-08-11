@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "This extreme market volatility is adding to uncertainty.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

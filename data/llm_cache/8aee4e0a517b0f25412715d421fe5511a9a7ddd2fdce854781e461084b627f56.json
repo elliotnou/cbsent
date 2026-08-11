@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Global economic growth was solid in late 2024 and inflation has been easing towards central bank targets.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

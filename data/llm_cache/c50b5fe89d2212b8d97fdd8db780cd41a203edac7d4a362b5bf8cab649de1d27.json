@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The labor force participation rate increased in March, as did the employment-to-population ratio.", "label": {"stance": "neutral", "topic": "employment"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"employment\"}"}

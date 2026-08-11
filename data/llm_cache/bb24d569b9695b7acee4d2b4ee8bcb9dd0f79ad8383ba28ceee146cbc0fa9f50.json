@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "however, banks continued to hold large quantities of long-duration assets, leaving them more exposed than usual to an unexpected rise in longer-term interest rates.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"financial_stability\"}"}

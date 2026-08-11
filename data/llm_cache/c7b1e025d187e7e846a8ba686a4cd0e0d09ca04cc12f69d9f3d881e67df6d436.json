@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Looking through this choppiness, the Bank expects ongoing economic slack to roughly offset cost pressures associated with the reconfiguration of trade, keeping CPI inflation close to the 2% target.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The Bank of Canada today reduced its target for the overnight rate by 25 basis points to 2.5%, with the Bank Rate at 2.75% and the deposit rate at 2.45%.", "label": {"stance": "dovish", "topic": "guidance"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"guidance\"}"}

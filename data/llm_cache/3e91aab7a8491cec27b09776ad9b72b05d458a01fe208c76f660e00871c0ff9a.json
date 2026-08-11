@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Since the financial market turmoil in April, risk assets have largely recovered and volatility has diminished, although markets remain sensitive to US policy announcements.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

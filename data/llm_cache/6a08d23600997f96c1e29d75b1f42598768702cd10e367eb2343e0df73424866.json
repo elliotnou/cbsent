@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "With inflation around 2% and the economy in excess supply, Governing Council decided to reduce the policy rate a further 25 basis points to 3%.", "label": {"stance": "dovish", "topic": "guidance"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"guidance\"}"}

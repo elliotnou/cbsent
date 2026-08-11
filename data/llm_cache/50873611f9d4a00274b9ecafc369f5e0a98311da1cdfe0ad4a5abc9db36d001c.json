@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The Treasury yield curve steepened materially, as short-term Treasury yields declined about 20 basis points over the intermeeting period while longer-term yields increased on net.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Since October, the upward pressure on inflation from shelter and the downward pressure from goods prices have both moderated as expected.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"inflation\"}"}

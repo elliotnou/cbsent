@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Global financial conditions have eased further since July and oil prices have been fairly stable.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}
