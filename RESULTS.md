@@ -292,3 +292,34 @@ So the defensible position is a cheap, local, reproducible scorer that
 clearly beats the literature's dictionary method and clearly loses to a
 frontier LLM, and that does not yet read negation. It is not a
 state-of-the-art claim and this file should not be read as making one.
+
+## Negation probe (2026-08-11)
+
+- command: `python scripts/negation_probe.py`
+- git commit: `c74ccd4`
+- probe: 24 hand-written minimal pairs in `data/negation_probe.csv`, labelled by the codebook rules cited per row, 10 of them carrying a negation cue
+- inference device: cpu
+
+| system | all items | negated items | non-negated items | distinct labels used on negated items |
+|---|---|---|---|---|
+| dictionary | 0.58 (14/24) | 0.20 (2/10) | 0.86 (12/14) | 3 (dovish, hawkish, neutral) |
+| zero-shot gpt-5 | 1.00 (24/24) | 1.00 (10/10) | 1.00 (14/14) | 2 (dovish, hawkish) |
+| cbsent (fine-tuned) | 0.67 (16/24) | 0.60 (6/10) | 0.71 (10/14) | 1 (hawkish) |
+
+cbsent (fine-tuned) answered `hawkish` for every one of the 10 negated items. Its score on that subset is therefore the label mix of the subset and carries no evidence of negation sensitivity.
+
+## Stance macro-F1, held-out 2025-08-01 to 2026-08-01 (2026-08-11)
+
+- command: `python scripts/eval.py --cut-date 2025-08-01 --eval-end 2026-08-01 --allow-bootstrap`
+- git commit: `c74ccd4`
+- eval sentences: 595 (0/595 human-verified)
+- inference device: cpu
+- label provenance: includes bootstrap labels
+
+| system | macro-F1 | hawkish F1 | dovish F1 | neutral F1 |
+|---|---|---|---|---|
+| dictionary | 0.5794 | 0.4903 | 0.4217 | 0.8262 |
+| zero-shot gpt-5 | 0.8208 | 0.7863 | 0.7615 | 0.9146 |
+| cbsent (fine-tuned) | 0.6804 | 0.5429 | 0.6114 | 0.8868 |
+
+PROVISIONAL. 595 of 595 reference labels come from the gpt-5-mini bootstrap pass rather than a human. Two of the three systems are therefore partly measured against themselves: the zero-shot baseline shares a model family and prompt with the labeller, and the fine-tuned model was trained on those labels. Read the zero-shot row as an upper bound inflated by that overlap, not as accuracy. The headline comparison is the margin over the dictionary baseline, which shares nothing with the labeller. This table becomes a headline result only when the held-out labels are human-verified.

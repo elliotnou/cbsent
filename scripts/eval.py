@@ -83,7 +83,21 @@ def main():
         rows = load_eval_rows(conn, args.cut_date, args.eval_end,
                               args.allow_bootstrap)
     if not rows:
-        raise SystemExit("no labelled sentences in the evaluation window")
+        if not args.allow_bootstrap:
+            raise SystemExit(
+                "no human-verified labels in the evaluation window "
+                f"({args.cut_date} to {args.eval_end}).\n"
+                "This is the strict default: the headline table requires human "
+                "labels, because the bootstrap labels come from an LLM that "
+                "shares a family and a prompt with one of the baselines.\n"
+                "Either work through the review queue (see labeling/README.md, "
+                "or run: make review-html), or reproduce the provisional table "
+                "with: make eval-provisional"
+            )
+        raise SystemExit(
+            f"no labelled sentences at all in {args.cut_date} to {args.eval_end}; "
+            "run make ingest and make bootstrap first"
+        )
 
     texts = [r[1] for r in rows]
     y_true = [r[2] for r in rows]

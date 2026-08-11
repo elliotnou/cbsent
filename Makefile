@@ -5,7 +5,7 @@ EVAL_END := 2026-08-01
 EPOCHS := 14
 
 .PHONY: test ingest snapshot bootstrap export-labels review review-html train \
-	ablate ablate-single eval event-study probe cost all
+	ablate ablate-single eval eval-provisional event-study probe cost all
 
 test:
 	$(PY) -m pytest tests/ -q
@@ -41,8 +41,13 @@ ablate-single:
 		--no-negation-markers --export-dir export/cbsent-no-negation
 	$(PY) scripts/ablation.py --cut-date $(CUT) --eval-end $(EVAL_END)
 
+# Strict by default: refuses to score against bootstrap labels.
 eval:
 	$(PY) scripts/eval.py --cut-date $(CUT) --eval-end $(EVAL_END)
+
+# Reproduces the provisional table currently recorded in RESULTS.md.
+eval-provisional:
+	$(PY) scripts/eval.py --cut-date $(CUT) --eval-end $(EVAL_END) --allow-bootstrap
 
 event-study:
 	$(PY) scripts/event_study.py --eval-start $(CUT) --eval-end $(EVAL_END)
@@ -54,4 +59,4 @@ cost:
 	$(PY) scripts/cost_compare.py --input-price 1.25 --output-price 10.00 \
 		--price-source https://developers.openai.com/api/docs/pricing
 
-all: train eval probe event-study cost
+all: train eval-provisional probe event-study cost

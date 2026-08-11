@@ -158,16 +158,27 @@ One command per reported number, each appending to RESULTS.md with the
 command, the git commit, and the date:
 
 ```bash
-make ingest        # scrape and load documents and sentences
-make bootstrap     # dictionary + LLM first-pass labels
-make review        # human review queue (make review-html for the browser)
-make train         # fine-tune, chronological split, trains on Apple MPS
-make ablate        # negation/hedge ablation across seeds
-make eval          # the three-way macro-F1 table
-make event-study   # decisions, FX alignment, and the chart
-make cost          # inference cost and speed against the LLM baseline
-make test          # unit tests
+make ingest             # scrape and load documents and sentences
+make bootstrap          # dictionary + LLM first-pass labels
+make review             # human review queue (review-html for the browser)
+make train              # fine-tune, chronological split, on Apple MPS
+make ablate             # negation/hedge ablation across seeds
+make eval-provisional   # the three-way macro-F1 table recorded today
+make eval               # the same table, human labels only
+make probe              # negation minimal-pair probe
+make event-study        # decisions, FX alignment, and the chart
+make cost               # inference cost and speed against the LLM baseline
+make test               # unit tests
 ```
+
+`make eval` deliberately fails until human-verified held-out labels
+exist, and says so; `make eval-provisional` is the command that produced
+the table above. Everything except `make ingest`, `make bootstrap` and
+`make cost` runs without network access or an API key: the LLM labels
+behind the reported rows are committed in
+[data/llm_labels.csv](data/llm_labels.csv) and consulted before any
+request, so `make eval-provisional` and `make probe` reproduce their
+numbers offline at zero cost.
 
 Every script that reports a number scores on CPU by default. This is
 deliberate: MPS inference on this model is not deterministic, and the
