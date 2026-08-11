@@ -1,0 +1,1 @@
+{"model": "gpt-5", "sentence": "Prior to the war, the global economy was on pace to grow at around 3%, as expected in the January Monetary Policy Report (MPR).", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"growth\"}"}

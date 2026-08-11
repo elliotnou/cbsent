@@ -1,0 +1,1 @@
+{"model": "gpt-5", "sentence": "Bank lending continued to expand, and issuance of corporate bonds remained solid, partly driven by the financing needs of AI-related investments.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

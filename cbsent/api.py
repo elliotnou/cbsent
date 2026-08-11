@@ -44,15 +44,11 @@ def score_sentences(sentences: List[str], model_dir: Optional[str] = None) -> Li
     return _scorer(model_dir).score_sentences(sentences)
 
 
-def score(text: str, model_dir: Optional[str] = None) -> dict:
-    """Score a document or passage.
+NEUTRAL_BAND = 0.05
 
-    Returns the topic-weighted document score in [-1, 1], the stance
-    implied by its sign, and the per-sentence detail.
-    """
-    sentences = segment_sentences(text)
-    results = score_sentences(sentences, model_dir)
 
+def aggregate(results: List[dict]) -> dict:
+    """Combine scored sentences into a topic-weighted document score."""
     numerator = denominator = 0.0
     for r in results:
         w = TOPIC_WEIGHTS.get(r["topic"], DEFAULT_TOPIC_WEIGHT)
@@ -60,9 +56,9 @@ def score(text: str, model_dir: Optional[str] = None) -> dict:
         denominator += w
     doc_score = numerator / denominator if denominator else 0.0
 
-    if doc_score > 0.05:
+    if doc_score > NEUTRAL_BAND:
         stance = "hawkish"
-    elif doc_score < -0.05:
+    elif doc_score < -NEUTRAL_BAND:
         stance = "dovish"
     else:
         stance = "neutral"
@@ -73,3 +69,13 @@ def score(text: str, model_dir: Optional[str] = None) -> dict:
         "n_sentences": len(results),
         "sentences": results,
     }
+
+
+def score(text: str, model_dir: Optional[str] = None) -> dict:
+    """Score a document or passage.
+
+    Returns the topic-weighted document score in [-1, 1], the stance
+    implied by its sign, and the per-sentence detail.
+    """
+    sentences = segment_sentences(text)
+    return aggregate(score_sentences(sentences, model_dir))

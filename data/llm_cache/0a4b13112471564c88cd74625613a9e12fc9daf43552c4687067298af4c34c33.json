@@ -1,0 +1,1 @@
+{"model": "gpt-5", "sentence": "Job losses have largely been concentrated in trade-sensitive sectors, while employment growth in the rest of the economy has slowed, reflecting weak hiring intentions.", "label": {"stance": "dovish", "topic": "employment"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"employment\"}"}

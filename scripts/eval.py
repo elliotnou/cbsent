@@ -62,6 +62,7 @@ def main():
     parser.add_argument("--gpt5-model", default="gpt-5")
     parser.add_argument("--allow-bootstrap", action="store_true")
     parser.add_argument("--skip-gpt5", action="store_true")
+    parser.add_argument("--workers", type=int, default=32)
     parser.add_argument("--no-results-append", action="store_true")
     args = parser.parse_args()
 
@@ -84,16 +85,15 @@ def main():
     systems["dictionary"] = [dictionary.classify(t) for t in texts]
 
     if not args.skip_gpt5:
-        preds, missing = [], 0
-        for t in texts:
-            label = llm_label.label_sentence(t, args.gpt5_model, CACHE_DIR)
-            if label is None:
-                preds.append("neutral")
-                missing += 1
-            else:
-                preds.append(label["stance"])
+        print(f"labelling {len(texts)} sentences with {args.gpt5_model}...")
+        labels = llm_label.label_many(texts, args.gpt5_model, CACHE_DIR,
+                                      workers=args.workers)
+        missing = sum(1 for l in labels if l is None)
+        # An unusable response is scored as the majority class rather than
+        # dropped, so all systems are compared on identical sentences.
+        preds = [l["stance"] if l else "neutral" for l in labels]
         if missing:
-            print(f"warning: {missing} GPT-5 responses invalid, scored neutral")
+            print(f"warning: {missing} {args.gpt5_model} responses invalid, scored neutral")
         systems[f"zero-shot {args.gpt5_model}"] = preds
 
     scorer = Scorer(args.model_dir)

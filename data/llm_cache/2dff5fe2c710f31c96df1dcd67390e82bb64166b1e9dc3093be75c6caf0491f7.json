@@ -1,0 +1,1 @@
+{"model": "gpt-5", "sentence": "CPI inflation rose further to 3.2% in May, mainly because of higher gasoline prices linked to the war in the Middle East.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

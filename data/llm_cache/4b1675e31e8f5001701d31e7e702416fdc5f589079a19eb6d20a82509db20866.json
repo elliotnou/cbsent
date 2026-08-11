@@ -1,0 +1,1 @@
+{"model": "gpt-5", "sentence": "In the residential mortgage market, credit remained easily available for high-credit-score borrowers who met standard conforming loan criteria but generally tight for low-credit-score borrowers.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

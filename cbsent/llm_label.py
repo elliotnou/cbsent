@@ -50,6 +50,34 @@ def _cache_key(model: str, sentence: str) -> str:
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
+def label_many(sentences, model: str, cache_dir: str, workers: int = 32,
+               progress_every: int = 200):
+    """Label a list of sentences in parallel, returning one dict or None each.
+
+    Order matches the input. Cached sentences cost nothing, so re-running
+    is cheap and the same call can be used to top up a partial cache.
+    """
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    results = [None] * len(sentences)
+    done = 0
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futures = {
+            pool.submit(label_sentence, s, model, cache_dir): i
+            for i, s in enumerate(sentences)
+        }
+        for future in as_completed(futures):
+            i = futures[future]
+            try:
+                results[i] = future.result()
+            except Exception as exc:
+                print(f"  sentence {i} failed: {str(exc)[:100]}")
+            done += 1
+            if progress_every and done % progress_every == 0:
+                print(f"  {done}/{len(sentences)} labelled...")
+    return results
+
+
 def label_sentence(sentence: str, model: str, cache_dir: str,
                    client=None) -> Optional[dict]:
     """Return {"stance": ..., "topic": ...} for one sentence, cached."""

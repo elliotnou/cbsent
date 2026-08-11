@@ -1,0 +1,1 @@
+{"model": "gpt-5", "sentence": "CPI inflation slowed to 2.2% in October, as gasoline prices fell and food prices rose more slowly.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

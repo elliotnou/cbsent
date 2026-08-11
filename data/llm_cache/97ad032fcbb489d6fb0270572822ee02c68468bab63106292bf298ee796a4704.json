@@ -1,0 +1,1 @@
+{"model": "gpt-5", "sentence": "The staff's inflation projection was slightly lower than the one prepared for the June meeting, reflecting the downward revision to the assumed effects of tariffs on imported goods prices.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

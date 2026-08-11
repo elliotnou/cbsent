@@ -1,0 +1,1 @@
+{"model": "gpt-5", "sentence": "With ongoing weakness in the economy and inflation expected to remain close to the 2% target, Governing Council decided to cut the policy rate by 25 basis points.", "label": {"stance": "dovish", "topic": "guidance"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"guidance\"}"}

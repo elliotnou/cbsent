@@ -1,0 +1,1 @@
+{"model": "gpt-5", "sentence": "The presentation noted that the current share of Treasury bills in the SOMA portfolio was smaller than the bill share of total Treasury securities outstanding.", "label": {"stance": "neutral", "topic": "guidance"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"guidance\"}"}

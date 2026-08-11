@@ -1,0 +1,1 @@
+{"model": "gpt-5", "sentence": "CPI inflation was 1.9% in August, the same as at the time of the July MPR.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

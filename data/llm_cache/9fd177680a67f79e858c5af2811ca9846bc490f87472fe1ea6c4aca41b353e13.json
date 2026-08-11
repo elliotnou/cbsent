@@ -1,0 +1,1 @@
+{"model": "gpt-5", "sentence": "Canada\u2019s GDP declined by about 1\u00bd% in the second quarter, as expected, with tariffs and trade uncertainty weighing heavily on economic activity.", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"growth\"}"}

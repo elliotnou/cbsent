@@ -1,0 +1,1 @@
+{"model": "gpt-5", "sentence": "Broad equity prices fell about 5 percent over the period.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

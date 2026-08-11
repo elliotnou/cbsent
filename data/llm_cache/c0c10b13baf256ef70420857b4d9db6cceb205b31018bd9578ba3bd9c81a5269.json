@@ -1,0 +1,1 @@
+{"model": "gpt-5", "sentence": "Excluding the effect of changes in taxes, inflation has been slowing since September.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

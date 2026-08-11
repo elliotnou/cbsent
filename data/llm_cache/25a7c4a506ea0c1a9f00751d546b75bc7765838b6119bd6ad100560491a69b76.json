@@ -1,0 +1,1 @@
+{"model": "gpt-5", "sentence": "Financial conditions have eased further, with higher equity prices and lower bond yields.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}
