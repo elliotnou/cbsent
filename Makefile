@@ -4,8 +4,8 @@ EVAL_END := 2026-08-01
 # Best-by-validation checkpoint is kept within the run; see RESULTS.md.
 EPOCHS := 14
 
-.PHONY: test ingest snapshot bootstrap review review-html train ablate ablate-single eval \
-	event-study cost all
+.PHONY: test ingest snapshot bootstrap export-labels review review-html train \
+	ablate ablate-single eval event-study cost all
 
 test:
 	$(PY) -m pytest tests/ -q
@@ -18,6 +18,10 @@ snapshot:
 
 bootstrap:
 	$(PY) scripts/bootstrap_labels.py
+	$(PY) scripts/export_llm_labels.py
+
+export-labels:
+	$(PY) scripts/export_llm_labels.py
 
 review:
 	$(PY) labeling/review.py --eval-start $(CUT)
