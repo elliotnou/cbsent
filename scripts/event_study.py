@@ -152,6 +152,7 @@ def main():
     parser.add_argument("--eval-end", default="2026-08-01")
     parser.add_argument("--model-dir", default="export/cbsent")
     parser.add_argument("--horizon-minutes", type=int, default=60)
+    parser.add_argument("--device", default="cpu")
     parser.add_argument("--chart", default="docs/divergence.png")
     parser.add_argument("--no-results-append", action="store_true")
     args = parser.parse_args()
@@ -161,7 +162,7 @@ def main():
     decisions = load_decisions(DECISIONS_CSV, start, end)
     print(f"decisions in window: {len(decisions)}")
 
-    scorer = Scorer(args.model_dir)
+    scorer = Scorer(args.model_dir, device=args.device)
     horizon_end = datetime.datetime.combine(end, datetime.time(), tzinfo=UTC)
     with db.connect() as conn:
         sentences = load_scored_sentences(conn, scorer, horizon_end)
@@ -241,6 +242,7 @@ def main():
             f" --eval-end {args.eval_end} --horizon-minutes {args.horizon_minutes}`\n"
             f"- git commit: `{commit}`\n"
             f"- scheduled decisions in window: {len(decisions)}\n"
+            f"- inference device: {args.device}\n"
             f"- decisions with index and FX data: {m_a}\n"
             f"- consensus surprises: {m_s}\n"
             f"- FX alignment basis: {', '.join(bases) if bases else 'none'}\n"

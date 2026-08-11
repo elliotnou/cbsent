@@ -41,6 +41,7 @@ def main():
     parser.add_argument("--cut-date", default="2025-08-01")
     parser.add_argument("--eval-end", default="2026-08-01")
     parser.add_argument("--allow-bootstrap", action="store_true")
+    parser.add_argument("--device", default="cpu")
     parser.add_argument("--no-results-append", action="store_true")
     args = parser.parse_args()
 
@@ -73,7 +74,8 @@ def main():
     for name, model_dir in VARIANTS.items():
         if not os.path.exists(os.path.join(model_dir, "model.pt")):
             raise SystemExit(f"{model_dir} has no trained model; run make ablate")
-        preds = [r["stance"] for r in Scorer(model_dir).score_sentences(texts)]
+        preds = [r["stance"] for r in
+                 Scorer(model_dir, device=args.device).score_sentences(texts)]
         macro_all = f1_score(y_true, preds, average="macro")
         macro_cue = (
             f1_score([y_true[i] for i in cue_idx], [preds[i] for i in cue_idx],
@@ -102,7 +104,8 @@ def main():
             f" --eval-end {args.eval_end}"
             f"{' --allow-bootstrap' if args.allow_bootstrap else ''}`\n"
             f"- git commit: `{commit}`\n"
-            f"- eval sentences: {len(rows)}, of which {len(cue_idx)} contain a cue\n\n"
+            f"- eval sentences: {len(rows)}, of which {len(cue_idx)} contain a cue\n"
+            f"- inference device: {args.device}\n\n"
             f"{table}\n\n"
             f"Effect of cue marking: {delta_all:+.4f} macro-F1 overall, "
             f"{delta_cue:+.4f} on cue sentences.\n"

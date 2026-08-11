@@ -64,3 +64,91 @@ Review queue built by `python labeling/review_html.py`: 1,757 sentences
 in priority order, being all 595 held-out-window sentences, then 792
 dictionary/LLM disagreements in the training window, then a 370-sentence
 stratified sample of agreements (15 per bank x year x stance cell).
+
+## Stance macro-F1, held-out 2025-08-01 to 2026-08-01 (2026-08-11)
+
+- command: `python scripts/eval.py --cut-date 2025-08-01 --eval-end 2026-08-01 --allow-bootstrap`
+- git commit: `52516cb`
+- eval sentences: 595 (0/595 human-verified)
+- label provenance: includes bootstrap labels
+
+| system | macro-F1 | hawkish F1 | dovish F1 | neutral F1 |
+|---|---|---|---|---|
+| dictionary | 0.5794 | 0.4903 | 0.4217 | 0.8262 |
+| zero-shot gpt-5 | 0.8208 | 0.7863 | 0.7615 | 0.9146 |
+| cbsent (fine-tuned) | 0.6804 | 0.5429 | 0.6114 | 0.8868 |
+
+PROVISIONAL. 595 of 595 reference labels come from the gpt-5-mini bootstrap pass rather than a human. Two of the three systems are therefore partly measured against themselves: the zero-shot baseline shares a model family and prompt with the labeller, and the fine-tuned model was trained on those labels. Read the zero-shot row as an upper bound inflated by that overlap, not as accuracy. The headline comparison is the margin over the dictionary baseline, which shares nothing with the labeller. This table becomes a headline result only when the held-out labels are human-verified.
+
+## Stance macro-F1, dictionary and LLM agreement subset, held-out 2025-08-01 to 2026-08-01 (2026-08-11)
+
+- command: `python scripts/eval.py --cut-date 2025-08-01 --eval-end 2026-08-01 --allow-bootstrap --consensus-only`
+- git commit: `52516cb`
+- eval sentences: 432 (0/432 human-verified)
+- label provenance: includes bootstrap labels
+
+| system | macro-F1 | hawkish F1 | dovish F1 | neutral F1 |
+|---|---|---|---|---|
+| dictionary | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| zero-shot gpt-5 | 0.8598 | 0.9091 | 0.7143 | 0.9559 |
+| cbsent (fine-tuned) | 0.6839 | 0.5977 | 0.5432 | 0.9109 |
+
+PROVISIONAL. 432 of 432 reference labels come from the gpt-5-mini bootstrap pass rather than a human. Two of the three systems are therefore partly measured against themselves: the zero-shot baseline shares a model family and prompt with the labeller, and the fine-tuned model was trained on those labels. Read the zero-shot row as an upper bound inflated by that overlap, not as accuracy. The headline comparison is the margin over the dictionary baseline, which shares nothing with the labeller. This table becomes a headline result only when the held-out labels are human-verified.
+
+## Correction: the agreement-subset table above is invalid (2026-08-11)
+
+- git commit: `52516cb`
+
+The "dictionary and LLM agreement subset" table immediately above must not
+be used. Restricting to sentences where the dictionary and the LLM agree
+makes the reference label identical to the dictionary's own prediction on
+every row in the subset, so the dictionary scores 1.0000 by construction
+and the other two systems are measured against a baseline that cannot
+lose. The subset is circular, not stricter.
+
+The `--consensus-only` option that produced it has been removed from
+`scripts/eval.py` so the table cannot be regenerated. The entry is left
+in place because this file is append-only. The valid provisional table is
+the one before it, and the only fix for its label provenance is
+human review, not a cleverer subset.
+
+## Reproducibility finding: MPS inference is not deterministic (2026-08-11)
+
+- git commit: `52516cb`
+- command: scoring the 595 held-out sentences three times with one loaded
+  model, first on `mps` and then on `cpu`, comparing predicted stance
+  label counts across repeats
+
+Scoring identical input with identical weights on Apple MPS returned
+different predictions between repeats: 79 of 595 sentences changed label
+between run 1 and run 2, and 23 of 595 between run 1 and run 3. On CPU the
+same comparison gave 0 of 595 both times. Batch size was not the cause;
+scoring at batch 64 and batch 16 agreed exactly on both devices.
+
+Effect on reported numbers: the same evaluation could swing by roughly two
+macro-F1 points between runs on MPS (0.6559 to 0.6804 observed). Every
+script that reports a number therefore takes `--device` and defaults to
+`cpu`; three consecutive CPU runs of `scripts/eval.py` return
+0.6804 macro-F1 exactly. Training still runs on MPS, where the
+nondeterminism only perturbs the optimisation path and the resulting
+weights are committed as an artefact.
+
+The provisional table above was produced before this default changed. Its
+cbsent row happens to equal the deterministic CPU value, and the entry
+below re-runs it CPU-pinned so a reproducible entry exists.
+
+## Stance macro-F1, held-out 2025-08-01 to 2026-08-01 (2026-08-11)
+
+- command: `python scripts/eval.py --cut-date 2025-08-01 --eval-end 2026-08-01 --allow-bootstrap`
+- git commit: `52516cb`
+- eval sentences: 595 (0/595 human-verified)
+- inference device: cpu
+- label provenance: includes bootstrap labels
+
+| system | macro-F1 | hawkish F1 | dovish F1 | neutral F1 |
+|---|---|---|---|---|
+| dictionary | 0.5794 | 0.4903 | 0.4217 | 0.8262 |
+| zero-shot gpt-5 | 0.8208 | 0.7863 | 0.7615 | 0.9146 |
+| cbsent (fine-tuned) | 0.6804 | 0.5429 | 0.6114 | 0.8868 |
+
+PROVISIONAL. 595 of 595 reference labels come from the gpt-5-mini bootstrap pass rather than a human. Two of the three systems are therefore partly measured against themselves: the zero-shot baseline shares a model family and prompt with the labeller, and the fine-tuned model was trained on those labels. Read the zero-shot row as an upper bound inflated by that overlap, not as accuracy. The headline comparison is the margin over the dictionary baseline, which shares nothing with the labeller. This table becomes a headline result only when the held-out labels are human-verified.

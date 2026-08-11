@@ -35,20 +35,15 @@ from cbsent.model import Scorer
 CACHE_DIR = "data/llm_cache"
 
 
-def load_eval_rows(conn, cut_date: str, eval_end: str, allow_bootstrap: bool,
-                   consensus_only: bool = False):
+def load_eval_rows(conn, cut_date: str, eval_end: str, allow_bootstrap: bool):
     """Held-out sentences with a resolved reference label.
 
-    With consensus_only, bootstrap labels count only where the dictionary
-    and the LLM independently agree. That subset is a stricter proxy for
-    truth than either labeller alone, because it excludes the sentences
-    where the LLM's idiosyncratic calls are the only evidence.
+    Human labels win where they exist. Restricting to sentences where the
+    two bootstrap labellers agree was tried and rejected: it makes the
+    reference identical to the dictionary's own output on every surviving
+    row, so the dictionary cannot lose. See the correction in RESULTS.md.
     """
     source_expr = "coalesce(h.stance, l.stance)" if allow_bootstrap else "h.stance"
-    consensus_clause = (
-        "AND (h.sentence_id IS NOT NULL OR d.stance = l.stance)"
-        if consensus_only else ""
-    )
     with conn.cursor() as cur:
         cur.execute(
             f"""
@@ -57,10 +52,8 @@ def load_eval_rows(conn, cut_date: str, eval_end: str, allow_bootstrap: bool,
             FROM sentences s
             LEFT JOIN labels h ON h.sentence_id = s.id AND h.source = 'human'
             LEFT JOIN labels l ON l.sentence_id = s.id AND l.source = 'llm'
-            LEFT JOIN labels d ON d.sentence_id = s.id AND d.source = 'dictionary'
             WHERE s.published_at >= %s AND s.published_at < %s
               AND {source_expr} IS NOT NULL
-              {consensus_clause}
             ORDER BY s.id
             """,
             (cut_date, eval_end),
@@ -75,10 +68,11 @@ def main():
     parser.add_argument("--model-dir", default="export/cbsent")
     parser.add_argument("--gpt5-model", default="gpt-5")
     parser.add_argument("--allow-bootstrap", action="store_true")
-    parser.add_argument("--consensus-only", action="store_true",
-                        help="keep bootstrap labels only where dictionary and LLM agree")
     parser.add_argument("--skip-gpt5", action="store_true")
     parser.add_argument("--workers", type=int, default=32)
+    parser.add_argument("--device", default="cpu",
+                        help="inference device; cpu is the default because MPS "
+                             "inference is not reproducible (see RESULTS.md)")
     parser.add_argument("--no-results-append", action="store_true")
     args = parser.parse_args()
 
@@ -86,7 +80,7 @@ def main():
 
     with db.connect() as conn:
         rows = load_eval_rows(conn, args.cut_date, args.eval_end,
-                              args.allow_bootstrap, args.consensus_only)
+                              args.allow_bootstrap)
     if not rows:
         raise SystemExit("no labelled sentences in the evaluation window")
 
@@ -113,7 +107,7 @@ def main():
             print(f"warning: {missing} {args.gpt5_model} responses invalid, scored neutral")
         systems[f"zero-shot {args.gpt5_model}"] = preds
 
-    scorer = Scorer(args.model_dir)
+    scorer = Scorer(args.model_dir, device=args.device)
     model_out = scorer.score_sentences(texts)
     systems["cbsent (fine-tuned)"] = [r["stance"] for r in model_out]
 
@@ -151,18 +145,16 @@ def main():
                 f"result only when the held-out labels are human-verified.\n"
             )
         title = "Stance macro-F1"
-        if args.consensus_only:
-            title += ", dictionary and LLM agreement subset"
         entry = (
             f"\n## {title}, held-out {args.cut_date} to {args.eval_end}"
             f" ({date.today().isoformat()})\n\n"
             f"- command: `python scripts/eval.py --cut-date {args.cut_date}"
             f" --eval-end {args.eval_end}"
             f"{' --allow-bootstrap' if args.allow_bootstrap else ''}"
-            f"{' --consensus-only' if args.consensus_only else ''}"
             f"{' --skip-gpt5' if args.skip_gpt5 else ''}`\n"
             f"- git commit: `{commit}`\n"
             f"- eval sentences: {len(rows)} ({provenance})\n"
+            f"- inference device: {args.device}\n"
             f"- label provenance: "
             f"{'human-verified only' if not bootstrap_share else 'includes bootstrap labels'}\n\n"
             f"{table}\n"

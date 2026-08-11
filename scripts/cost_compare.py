@@ -31,8 +31,9 @@ from cbsent.model import Scorer
 CACHE_DIR = "data/llm_cache"
 
 
-def local_throughput(model_dir: str, sentences, repeats: int = 3) -> tuple:
-    scorer = Scorer(model_dir)
+def local_throughput(model_dir: str, sentences, device: str,
+                     repeats: int = 3) -> tuple:
+    scorer = Scorer(model_dir, device=device)
     scorer.score_sentences(sentences[:8])  # warm the graph
     best = None
     for _ in range(repeats):
@@ -73,6 +74,9 @@ def main():
                         help="uncached sentences to send to the API for usage measurement")
     parser.add_argument("--local-sentences", type=int, default=512)
     parser.add_argument("--workers", type=int, default=8)
+    parser.add_argument("--device", default=None,
+                        help="inference device for the throughput measurement; "
+                             "defaults to the fastest available")
     parser.add_argument("--input-price", type=float, required=True,
                         help="USD per million input tokens")
     parser.add_argument("--output-price", type=float, required=True,
@@ -104,7 +108,7 @@ def main():
         )
         sample = [r[0] for r in cur.fetchall()]
 
-    rate, device = local_throughput(args.model_dir, local_sentences)
+    rate, device = local_throughput(args.model_dir, local_sentences, args.device)
     print(f"local: {rate:.1f} sentences/second on {device} "
           f"({len(local_sentences)} sentences)")
 
