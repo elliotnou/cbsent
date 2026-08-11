@@ -80,7 +80,6 @@ def main():
                         help="select and dictionary-label only, no LLM calls")
     args = parser.parse_args()
 
-    load_dotenv("backend/.env")
     load_dotenv()
 
     with db.connect() as conn:

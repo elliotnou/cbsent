@@ -10,10 +10,13 @@ import os
 import datetime
 from contextlib import contextmanager
 from dataclasses import dataclass
+from pathlib import Path
 from typing import List, Optional
 
 import psycopg2
 from dotenv import load_dotenv
+
+_REPO_ROOT = Path(__file__).resolve().parents[2]
 
 SCHEMA_SQL = """
 CREATE TABLE IF NOT EXISTS documents (
@@ -66,7 +69,7 @@ class Document:
 
 
 def _database_url() -> str:
-    load_dotenv(os.path.join(os.path.dirname(__file__), "..", "..", "backend", ".env"))
+    load_dotenv(_REPO_ROOT / ".env")
     load_dotenv()
     url = os.getenv("DATABASE_URL")
     if not url:

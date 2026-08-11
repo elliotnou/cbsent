@@ -196,17 +196,29 @@ def main():
               f"{'' if r['consensus_bps'] is None else r['consensus_bps']:>6}"
               f"{r['is_surprise']:>6}{r['divergence']:>9.4f}{dc:>9}{fm:>8}  {r['fx_basis']}")
 
-    # Directional agreement on surprises only: a wider Fed-BoC gap ahead of
-    # the decision should coincide with USD strength against CAD.
-    scored = [r for r in rows
-              if r["is_surprise"] == "yes" and r["divergence_change"] is not None
-              and r["fx_move_pct"] is not None]
-    hits = [r for r in scored
-            if (r["divergence_change"] > 0) == (r["fx_move_pct"] > 0)]
-    n, m = len(hits), len(scored)
-    bases = sorted({r["fx_basis"] for r in scored})
-    summary = (f"index moved directionally ahead of the pair on {n} of {m} surprises"
-               if m else "no surprises with both index and FX data in the window")
+    # Directional agreement: a widening Fed-BoC gap ahead of the decision
+    # should coincide with USD strength against CAD after the release.
+    def agreement(subset):
+        hits = [r for r in subset
+                if (r["divergence_change"] > 0) == (r["fx_move_pct"] > 0)]
+        return len(hits), len(subset)
+
+    usable = [r for r in rows
+              if r["divergence_change"] is not None and r["fx_move_pct"] is not None]
+    surprises = [r for r in usable if r["is_surprise"] == "yes"]
+    n_s, m_s = agreement(surprises)
+    n_a, m_a = agreement(usable)
+    bases = sorted({r["fx_basis"] for r in usable})
+
+    if m_s:
+        summary = f"index moved directionally ahead of the pair on {n_s} of {m_s} surprises"
+    else:
+        summary = (
+            f"no consensus surprises occurred in this window: every scheduled "
+            f"decision matched the economist consensus recorded in "
+            f"{DECISIONS_CSV}. Across all {m_a} scheduled decisions, the index "
+            f"moved directionally ahead of the pair on {n_a} of {m_a}."
+        )
     print(f"\n{summary}")
 
     os.makedirs("data", exist_ok=True)
@@ -228,7 +240,8 @@ def main():
             f" --eval-end {args.eval_end} --horizon-minutes {args.horizon_minutes}`\n"
             f"- git commit: `{commit}`\n"
             f"- scheduled decisions in window: {len(decisions)}\n"
-            f"- surprises with index and FX data: {m}\n"
+            f"- decisions with index and FX data: {m_a}\n"
+            f"- consensus surprises: {m_s}\n"
             f"- FX alignment basis: {', '.join(bases) if bases else 'none'}\n"
             f"- horizon after release: {args.horizon_minutes} minutes (intraday) "
             f"or next available daily rate\n"

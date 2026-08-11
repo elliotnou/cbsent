@@ -12,7 +12,7 @@ accordingly (numbers produced that way are provisional, not headline).
 Appends the table to RESULTS.md with the command, git commit, and date.
 
 Usage:
-    python scripts/eval.py [--cut-date 2025-01-01] [--eval-end 2026-01-01]
+    python scripts/eval.py [--cut-date 2025-08-01] [--eval-end 2026-08-01]
                            [--model-dir export/cbsent] [--gpt5-model gpt-5]
                            [--allow-bootstrap] [--no-results-append]
 """
@@ -56,8 +56,8 @@ def load_eval_rows(conn, cut_date: str, eval_end: str, allow_bootstrap: bool):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--cut-date", default="2025-01-01")
-    parser.add_argument("--eval-end", default="2026-01-01")
+    parser.add_argument("--cut-date", default="2025-08-01")
+    parser.add_argument("--eval-end", default="2026-08-01")
     parser.add_argument("--model-dir", default="export/cbsent")
     parser.add_argument("--gpt5-model", default="gpt-5")
     parser.add_argument("--allow-bootstrap", action="store_true")
@@ -65,7 +65,6 @@ def main():
     parser.add_argument("--no-results-append", action="store_true")
     args = parser.parse_args()
 
-    load_dotenv("backend/.env")
     load_dotenv()
 
     with db.connect() as conn:

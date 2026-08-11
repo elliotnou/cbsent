@@ -10,7 +10,7 @@ Decisions are written as source='human' labels. Progress is resumable;
 quit any time with q.
 
 Usage:
-    python labeling/review.py [--eval-start 2025-04-01] [--limit N]
+    python labeling/review.py [--eval-start 2025-08-01] [--limit N]
 """
 
 import argparse
@@ -70,7 +70,7 @@ def build_queue(conn, eval_start: str, sample_per_cell: int):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--eval-start", default="2025-04-01")
+    parser.add_argument("--eval-start", default="2025-08-01")
     parser.add_argument("--sample-per-cell", type=int, default=15)
     parser.add_argument("--limit", type=int, default=0)
     args = parser.parse_args()

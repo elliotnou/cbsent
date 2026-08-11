@@ -9,7 +9,7 @@ Labels resolve as human first, LLM bootstrap otherwise; provenance counts
 are stored in the exported config.
 
 Usage:
-    python scripts/train.py [--cut-date 2025-01-01] [--no-negation-markers]
+    python scripts/train.py [--cut-date 2025-08-01] [--no-negation-markers]
                             [--epochs 8] [--export-dir export/cbsent]
 """
 
@@ -106,7 +106,7 @@ def evaluate(model, loader, device):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--cut-date", default="2025-01-01")
+    parser.add_argument("--cut-date", default="2025-08-01")
     parser.add_argument("--val-months", type=int, default=6)
     parser.add_argument("--epochs", type=int, default=8)
     parser.add_argument("--batch-size", type=int, default=32)
