@@ -78,12 +78,21 @@ the policy vocabulary fixed, is in
 cbsent answers "hawkish" for every negated item, so its 0.60 there is the
 label mix of the subset and no evidence of negation sensitivity. The
 dictionary, which is negation-blind by design, scores 0.20. GPT-5 gets all
-ten right. Reading negation is currently the clearest thing the LLM does
-that this model does not, and the most likely cause is the training
-signal: the labels are an LLM's aggregate opinions over ordinary corpus
-sentences, in which negated policy constructions are rare. Fixing it
-plausibly needs negated cases deliberately over-sampled into the human
-review queue, not a different input transform.
+ten right.
+
+The ablation agrees. Training both variants at three seeds each, cue
+marking is worth -0.0020 macro-F1 overall against a between-seed spread of
+0.0033 to 0.0184: no measurable effect. A single run per variant had
+suggested +0.0522, which turned out to be training noise, and RESULTS.md
+records both along with the correction.
+
+Reading negation is the clearest thing the frontier LLM does that this
+model does not. The bottleneck looks like the training signal rather than
+the encoding: the labels are an LLM's opinions over ordinary corpus
+sentences, in which negated policy constructions are rare, so an input
+transform that merely exposes negation scope has nothing to learn from.
+The cheapest available fix is over-sampling negated cases into the human
+review queue.
 
 ## Evaluation
 
