@@ -152,3 +152,17 @@ below re-runs it CPU-pinned so a reproducible entry exists.
 | cbsent (fine-tuned) | 0.6804 | 0.5429 | 0.6114 | 0.8868 |
 
 PROVISIONAL. 595 of 595 reference labels come from the gpt-5-mini bootstrap pass rather than a human. Two of the three systems are therefore partly measured against themselves: the zero-shot baseline shares a model family and prompt with the labeller, and the fine-tuned model was trained on those labels. Read the zero-shot row as an upper bound inflated by that overlap, not as accuracy. The headline comparison is the margin over the dictionary baseline, which shares nothing with the labeller. This table becomes a headline result only when the held-out labels are human-verified.
+
+## Negation/hedge ablation, held-out 2025-08-01 to 2026-08-01 (2026-08-11)
+
+- command: `python scripts/ablation.py --cut-date 2025-08-01 --eval-end 2026-08-01 --allow-bootstrap`
+- git commit: `1093f25`
+- eval sentences: 595, of which 168 contain a cue
+- inference device: cpu
+
+| variant | macro-F1 (all) | macro-F1 (cue sentences) |
+|---|---|---|
+| with negation markers | 0.6804 | 0.7257 |
+| without negation markers | 0.6281 | 0.7093 |
+
+Effect of cue marking: +0.0522 macro-F1 overall, +0.0163 on cue sentences.

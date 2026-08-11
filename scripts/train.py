@@ -37,13 +37,13 @@ from cbsent.model import (
 )
 from cbsent.negation import mark_cues
 
-SEED = 20250811
+DEFAULT_SEED = 20250811
 
 
-def set_seeds():
-    random.seed(SEED)
-    np.random.seed(SEED)
-    torch.manual_seed(SEED)
+def set_seeds(seed: int):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
 
 
 def load_labelled(conn, cut_date: str):
@@ -112,10 +112,11 @@ def main():
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--lr", type=float, default=2e-5)
     parser.add_argument("--no-negation-markers", action="store_true")
+    parser.add_argument("--seed", type=int, default=DEFAULT_SEED)
     parser.add_argument("--export-dir", default="export/cbsent")
     args = parser.parse_args()
 
-    set_seeds()
+    set_seeds(args.seed)
     use_markers = not args.no_negation_markers
     device = pick_device()
     print(f"device: {device}, negation markers: {use_markers}")
@@ -140,7 +141,7 @@ def main():
     train_ds = LabelledDataset(train_rows, tokenizer, use_markers)
     val_ds = LabelledDataset(val_rows, tokenizer, use_markers)
 
-    g = torch.Generator().manual_seed(SEED)
+    g = torch.Generator().manual_seed(args.seed)
     train_dl = DataLoader(train_ds, batch_size=args.batch_size, shuffle=True, generator=g)
     val_dl = DataLoader(val_ds, batch_size=args.batch_size)
 
@@ -190,7 +191,7 @@ def main():
     commit = subprocess.run(["git", "rev-parse", "--short", "HEAD"],
                             capture_output=True, text=True).stdout.strip()
     config = {
-        "seed": SEED,
+        "seed": args.seed,
         "cut_date": args.cut_date,
         "val_start": val_start.strftime("%Y-%m-%d"),
         "use_negation_markers": use_markers,
