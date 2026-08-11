@@ -178,3 +178,15 @@ Effect of cue marking: +0.0522 macro-F1 overall, +0.0163 on cue sentences.
 - FX alignment basis: daily, intraday
 - horizon after release: 60 minutes (intraday) or next available daily rate
 - result: no consensus surprises occurred in this window: every scheduled decision matched the economist consensus recorded in data/decisions.csv. Across all 15 scheduled decisions, the index moved directionally ahead of the pair on 9 of 15.
+
+## Event study, 2025-08-01 to 2026-08-01 (2026-08-11)
+
+- command: `python scripts/event_study.py --eval-start 2025-08-01 --eval-end 2026-08-01 --horizon-minutes 60`
+- git commit: `e85df07`
+- scheduled decisions in window: 16
+- inference device: cpu
+- decisions with index and FX data: 15
+- consensus surprises: 0
+- FX alignment basis: intraday
+- horizon after release: 60 minutes (intraday) or next available daily rate
+- result: no consensus surprises occurred in this window: every scheduled decision matched the economist consensus recorded in data/decisions.csv. Across all 15 scheduled decisions, the index moved directionally ahead of the pair on 9 of 15 (two-sided binomial p = 0.607 against a fair coin, not distinguishable from chance).

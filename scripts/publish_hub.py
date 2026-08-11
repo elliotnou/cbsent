@@ -55,9 +55,7 @@ appropriate to raise the target range" is not read as hawkish.
 Sentences from FOMC statements, FOMC minutes and Bank of Canada rate
 announcements, segmented with rules tuned to central bank prose. Labels
 follow the codebook in the repository, which adapts the annotation
-schemes of Shah, Paturi & Chava (2023) and Apel & Blix Grimaldi (2012);
-they are bootstrapped with a dictionary and LLM pass and then
-human-reviewed.
+schemes of Shah, Paturi & Chava (2023) and Apel & Blix Grimaldi (2012).
 
 - training sentences: {train_sentences}
 - validation sentences (chronological, from {val_start}): {val_sentences}
@@ -65,12 +63,16 @@ human-reviewed.
 - training cut date: {cut_date} (nothing published on or after this date
   was seen during training or model selection)
 
+{label_provenance}
+
 ## Evaluation
 
 Chronological holdout only; no random splits. All systems scored on the
-identical held-out sentences.
+identical held-out sentences, on CPU.
 
 {eval_table}
+
+{eval_caveat}
 
 ## Intended use
 
@@ -92,6 +94,10 @@ publication timestamp of every input is known.
 - Class balance in central bank text is uneven; check the per-class
   numbers in the table above rather than relying on the macro average
   alone.
+- Inference on Apple MPS is not reproducible: identical input scored
+  twice on MPS disagreed on up to 79 of 595 sentences, while CPU
+  inference was exact across repeats. Score on CPU when a number has to
+  be reproducible.
 
 ## Reproducing
 
@@ -126,6 +132,8 @@ def main():
     parser.add_argument("--source-url", default="https://github.com/elliotnou/cbsent")
     parser.add_argument("--push", action="store_true",
                         help="actually upload; without this the card is only written")
+    parser.add_argument("--publish-provisional", action="store_true",
+                        help="allow publishing before any human label review")
     args = parser.parse_args()
 
     load_dotenv()
@@ -135,9 +143,35 @@ def main():
         raise SystemExit(f"{config_path} not found; train a model first")
     config = json.load(open(config_path, encoding="utf-8"))
 
+    human = config["human_labelled"]
+    if human:
+        label_provenance = (
+            f"Labels were bootstrapped with the dictionary method and an LLM "
+            f"pass, then reviewed by a human against the codebook; "
+            f"{human} of the training labels are human-verified."
+        )
+        eval_caveat = ""
+    else:
+        label_provenance = (
+            "Labels in this release come from the dictionary and LLM bootstrap "
+            "passes only. No human review has been applied yet."
+        )
+        eval_caveat = (
+            "**These numbers are provisional.** The reference labels for the "
+            "held-out year come from an LLM bootstrap pass rather than a human, "
+            "so the zero-shot row is inflated by sharing a model family and "
+            "prompt with the labeller, and the fine-tuned row is measured "
+            "partly against its own training signal. The defensible comparison "
+            "in this release is the margin over the dictionary baseline, which "
+            "shares nothing with the labeller. Treat the table as a pipeline "
+            "check, not as accuracy."
+        )
+
     card = CARD_TEMPLATE.format(
         repo_id=args.repo_id,
         source_url=args.source_url,
+        label_provenance=label_provenance,
+        eval_caveat=eval_caveat,
         stance_labels=", ".join(config["stance_labels"]),
         topic_labels=", ".join(config["topic_labels"]),
         negation_note=("enabled for these weights" if config["use_negation_markers"]
@@ -162,6 +196,14 @@ def main():
     if not args.push:
         print("dry run: nothing uploaded. Re-run with --push to publish.")
         return
+
+    if not human and not args.publish_provisional:
+        raise SystemExit(
+            "refusing to publish: this model's labels have had no human review, "
+            "so its evaluation table is provisional. Work through the review "
+            "queue first, or pass --publish-provisional to publish anyway with "
+            "the caveat shown on the card."
+        )
 
     token = os.getenv("HF_TOKEN")
     if not token:
