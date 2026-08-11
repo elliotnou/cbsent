@@ -105,6 +105,22 @@ def fx_move(release_ts: datetime.datetime, horizon_minutes: int,
     return None, "unavailable"
 
 
+def coin_flip_note(hits: int, total: int) -> str:
+    """Describe a hit count against a fair-coin null, two-sided."""
+    if total == 0:
+        return "no observations"
+    from math import comb
+
+    def tail(k):
+        return sum(comb(total, i) for i in range(k, total + 1)) / 2 ** total
+
+    lower = min(hits, total - hits)
+    p = 2 * tail(total - lower)
+    p = min(1.0, p)
+    verdict = "not distinguishable from chance" if p > 0.10 else "unlikely under a fair coin"
+    return f"two-sided binomial p = {p:.3f} against a fair coin, {verdict}"
+
+
 def render_chart(div_series: Dict[datetime.date, float], daily: Dict[datetime.date, float],
                  decisions: List[dict], path: str) -> None:
     import matplotlib
@@ -118,27 +134,43 @@ def render_chart(div_series: Dict[datetime.date, float], daily: Dict[datetime.da
     fx_days = [d for d in days if d in daily]
 
     fig, ax1 = plt.subplots(figsize=(11, 5.5))
-    ax1.plot(days, [div_series[d] for d in days], color="#1f4e79", linewidth=1.6,
-             label="Fed minus BoC divergence")
+    # The index is piecewise constant: it only moves when a document is
+    # published, so a step plot is the honest shape for it.
+    div_line, = ax1.step(days, [div_series[d] for d in days], where="post",
+                         color="#1f4e79", linewidth=1.6,
+                         label="Fed minus BoC divergence index (left)")
     ax1.set_ylabel("Divergence index (hawkishness)", color="#1f4e79")
     ax1.tick_params(axis="y", labelcolor="#1f4e79")
     ax1.axhline(0.0, color="#999999", linewidth=0.8, linestyle=":")
 
     ax2 = ax1.twinx()
-    ax2.plot(fx_days, [daily[d] for d in fx_days], color="#a63603", linewidth=1.4,
-             label="USD/CAD")
+    fx_line, = ax2.plot(fx_days, [daily[d] for d in fx_days], color="#a63603",
+                        linewidth=1.4, label="USD/CAD daily rate (right)")
     ax2.set_ylabel("USD/CAD", color="#a63603")
     ax2.tick_params(axis="y", labelcolor="#a63603")
 
-    for dec in decisions:
-        ax1.axvline(dec["decision_date"], color="#bbbbbb", linewidth=0.7, alpha=0.8)
+    handles = [div_line, fx_line]
+    for i, dec in enumerate(decisions):
+        line = ax1.axvline(dec["decision_date"], color="#bbbbbb", linewidth=0.7,
+                           alpha=0.8,
+                           label="scheduled rate decision" if i == 0 else None)
+        if i == 0:
+            handles.append(line)
     surprises = [d for d in decisions if d.get("is_surprise") == "yes"]
-    for dec in surprises:
-        ax1.axvline(dec["decision_date"], color="#c00000", linewidth=1.1, alpha=0.9)
+    for i, dec in enumerate(surprises):
+        line = ax1.axvline(dec["decision_date"], color="#c00000", linewidth=1.1,
+                           alpha=0.9,
+                           label="consensus surprise" if i == 0 else None)
+        if i == 0:
+            handles.append(line)
 
-    ax1.set_title("Fed-BoC policy divergence and USD/CAD, held-out period\n"
-                  "grey lines: scheduled decisions, red: consensus surprises")
+    subtitle = (f"{len(surprises)} of {len(decisions)} decisions differed from consensus"
+                if surprises else
+                "every decision in this window matched the economist consensus")
+    ax1.set_title("Fed minus BoC policy divergence and USD/CAD, held-out period\n"
+                  + subtitle)
     ax1.set_xlabel("Date")
+    ax1.legend(handles=handles, loc="upper left", fontsize=9, framealpha=0.9)
     fig.autofmt_xdate()
     fig.tight_layout()
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
@@ -213,13 +245,15 @@ def main():
     bases = sorted({r["fx_basis"] for r in usable})
 
     if m_s:
-        summary = f"index moved directionally ahead of the pair on {n_s} of {m_s} surprises"
+        summary = (f"index moved directionally ahead of the pair on {n_s} of "
+                   f"{m_s} surprises ({coin_flip_note(n_s, m_s)})")
     else:
         summary = (
             f"no consensus surprises occurred in this window: every scheduled "
             f"decision matched the economist consensus recorded in "
             f"{DECISIONS_CSV}. Across all {m_a} scheduled decisions, the index "
-            f"moved directionally ahead of the pair on {n_a} of {m_a}."
+            f"moved directionally ahead of the pair on {n_a} of {m_a} "
+            f"({coin_flip_note(n_a, m_a)})."
         )
     print(f"\n{summary}")
 

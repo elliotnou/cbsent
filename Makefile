@@ -4,7 +4,7 @@ EVAL_END := 2026-08-01
 # Best-by-validation checkpoint is kept within the run; see RESULTS.md.
 EPOCHS := 14
 
-.PHONY: test ingest snapshot bootstrap review review-html train ablate eval \
+.PHONY: test ingest snapshot bootstrap review review-html train ablate ablate-single eval \
 	event-study cost all
 
 test:
@@ -30,6 +30,9 @@ train:
 		--export-dir export/cbsent
 
 ablate:
+	$(PY) scripts/ablation_sweep.py --allow-bootstrap
+
+ablate-single:
 	$(PY) scripts/train.py --cut-date $(CUT) --epochs $(EPOCHS) \
 		--no-negation-markers --export-dir export/cbsent-no-negation
 	$(PY) scripts/ablation.py --cut-date $(CUT) --eval-end $(EVAL_END)
