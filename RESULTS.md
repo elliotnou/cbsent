@@ -231,3 +231,24 @@ cbsent (fine-tuned) answered `hawkish` for every one of the 10 negated items. It
 | without negation markers | 0.6274 | 0.0184 | 0.7238 | 0.0145 |
 
 Effect of cue marking: -0.0020 macro-F1 overall and -0.0224 on cue sentences. The effect is smaller than the between-seed spread, so this corpus cannot distinguish the transform's effect from training noise.
+
+## The multi-seed ablation supersedes the single-run ablation (2026-08-11)
+
+- git commit: `93e1b41`
+
+The single-run entry earlier in this file reported cue marking worth
++0.0522 macro-F1. That number came from one training run per variant and
+does not survive repetition. Across three seeds per variant the effect is
+-0.0020 macro-F1 overall and -0.0224 on cue sentences, with a
+between-seed spread of 0.0033 to 0.0184, so the transform provides no
+measurable benefit on this corpus and the earlier figure was training
+noise read as signal.
+
+Use the multi-seed table. The single-run entry is retained because this
+file is append-only, and `make ablate` now runs the seed sweep;
+`make ablate-single` reproduces the superseded one-run version.
+
+This is consistent with the negation probe result recorded above: the
+model does not read negation scope, so an input transform whose only
+purpose is to expose that scope has nothing to contribute. The bottleneck
+is the training signal, not the encoding.
