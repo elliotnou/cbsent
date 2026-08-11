@@ -14,12 +14,24 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-train = [
+# Everything needed to score text with the model.
+model = [
     "torch>=2.4",
     "transformers>=4.44",
-    "scikit-learn>=1.5",
-    "pandas>=2.2",
     "numpy>=1.26",
+]
+# Everything needed to reproduce every number in RESULTS.md.
+research = [
+    "torch>=2.4",
+    "transformers>=4.44",
+    "numpy>=1.26",
+    "scikit-learn>=1.5",
+    "matplotlib>=3.8",
+    "openai>=1.40",
+    "huggingface-hub>=0.24",
+]
+dev = [
+    "pytest>=8.0",
 ]
 
 [project.scripts]

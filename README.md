@@ -60,14 +60,52 @@ RESULTS.md.
 
 ## Evaluation
 
-Chronological split only. Training uses text published before the cut
-date; the following year is never seen during training or model
-selection. All three systems are scored on the identical held-out
-sentences.
+Chronological split only. Training uses text published before
+2025-08-01; the year that follows is never seen during training or model
+selection. All three systems are scored on the identical 595 held-out
+sentences, on CPU.
 
-The eval table, the ablation, and the event study counts live in
-[RESULTS.md](RESULTS.md), each with the command, git commit, and date
-that produced it.
+| system | macro-F1 | hawkish F1 | dovish F1 | neutral F1 |
+|---|---|---|---|---|
+| dictionary (Apel & Blix Grimaldi) | 0.5794 | 0.4903 | 0.4217 | 0.8262 |
+| zero-shot GPT-5 | 0.8208 | 0.7863 | 0.7615 | 0.9146 |
+| cbsent (fine-tuned) | 0.6804 | 0.5429 | 0.6114 | 0.8868 |
+
+**These numbers are provisional and the fine-tune does not beat GPT-5
+here.** The reference labels for the held-out year currently come from an
+LLM bootstrap pass, not from a human. That makes the comparison unfair in
+GPT-5's favour: it shares a model family and a prompt with the labeller,
+so its row measures agreement with its own family rather than accuracy.
+The fine-tuned row is partly measured against its own training signal for
+the same reason. The one comparison that means something today is the
+margin over the dictionary baseline, which shares nothing with the
+labeller: **+0.101 macro-F1**. Alongside that, the fine-tuned model runs
+at 122 sentences/second locally at no marginal cost, against $2.46 per
+1,000 sentences for GPT-5.
+
+Turning this into a real headline number requires human-verified held-out
+labels; the review queue exists for exactly that, and
+[labeling/README.md](labeling/README.md) explains the priority order.
+
+Every number above, the negation ablation, the event study, and the cost
+comparison are in [RESULTS.md](RESULTS.md) with the command, git commit,
+and date that produced each one.
+
+## Event study
+
+![Fed minus BoC divergence and USD/CAD](docs/divergence.png)
+
+Point-in-time replay over the held-out year: for each of the 16 scheduled
+Fed and BoC decisions, the divergence index is computed from text
+published strictly before the release timestamp, then compared with the
+USD/CAD move over the hour after the release (intraday ticks for all 16).
+
+The honest result: **no decision in this window differed from the
+economist consensus**, so there are zero surprises to test against. Across
+all 15 decisions where the index change is defined, it moved in the same
+direction as the pair on 9, which a two-sided binomial test cannot
+distinguish from a coin flip (p = 0.607). The consensus source for every
+decision is cited row by row in [data/decisions.csv](data/decisions.csv).
 
 ## Labeling
 

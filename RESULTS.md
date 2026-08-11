@@ -190,3 +190,15 @@ Effect of cue marking: +0.0522 macro-F1 overall, +0.0163 on cue sentences.
 - FX alignment basis: intraday
 - horizon after release: 60 minutes (intraday) or next available daily rate
 - result: no consensus surprises occurred in this window: every scheduled decision matched the economist consensus recorded in data/decisions.csv. Across all 15 scheduled decisions, the index moved directionally ahead of the pair on 9 of 15 (two-sided binomial p = 0.607 against a fair coin, not distinguishable from chance).
+
+## Inference cost and speed (2026-08-11)
+
+- command: `python scripts/cost_compare.py --sample 40 --input-price 1.25 --output-price 10.0 --price-source https://developers.openai.com/api/docs/pricing`
+- git commit: `fac5165`
+- prices used: $1.25 per million input tokens, $10.0 per million output tokens, from https://developers.openai.com/api/docs/pricing
+- token counts are real API usage over 39 uncached sentences and include reasoning tokens, which are billed but absent from the response text
+
+| system | throughput | tokens per sentence | marginal cost per 1,000 sentences |
+|---|---|---|---|
+| cbsent (fine-tuned, local) | 122.0 sentences/s on cpu | n/a | $0.00 |
+| zero-shot gpt-5 | 1.8 sentences/s at 8 workers | 367 in + 200 out | $2.46 |

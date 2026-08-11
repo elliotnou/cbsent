@@ -13,6 +13,11 @@ from typing import List, Optional
 import torch
 import torch.nn as nn
 from transformers import DistilBertModel, DistilBertTokenizerFast
+from transformers import logging as hf_logging
+
+# Loading the backbone prints a report about the pretraining heads we do
+# not use, which is noise for a library caller.
+hf_logging.set_verbosity_error()
 
 from cbsent.labels import STANCES, TOPICS
 from cbsent.negation import mark_cues, special_tokens
