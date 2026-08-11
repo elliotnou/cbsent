@@ -11,8 +11,7 @@ import json
 import os
 from typing import Optional
 
-STANCES = ("hawkish", "dovish", "neutral")
-TOPICS = ("inflation", "employment", "growth", "financial_stability", "guidance")
+from cbsent.labels import STANCES, TOPICS
 
 SYSTEM_PROMPT = """\
 You label single sentences from Federal Reserve and Bank of Canada

@@ -14,7 +14,7 @@ import torch
 import torch.nn as nn
 from transformers import DistilBertModel, DistilBertTokenizerFast
 
-from cbsent.llm_label import STANCES, TOPICS
+from cbsent.labels import STANCES, TOPICS
 from cbsent.negation import mark_cues, special_tokens
 
 STANCE_LABELS: List[str] = list(STANCES)

@@ -11,23 +11,13 @@ import os
 from functools import lru_cache
 from typing import List, Optional
 
-from cbsent.model import TOPIC_LABELS, Scorer
+from cbsent.labels import DEFAULT_TOPIC_WEIGHT, TOPIC_WEIGHTS
+from cbsent.model import Scorer
 from cbsent.segment import segment_sentences
 
 DEFAULT_LOCAL_DIR = "export/cbsent"
 HUB_REPO_ENV = "CBSENT_HUB_REPO"
 LOCAL_DIR_ENV = "CBSENT_MODEL_DIR"
-
-# Topic weights for document aggregation. Sentences about the policy
-# decision and inflation move the pair; growth and labour detail matter
-# less, and financial stability language is largely descriptive.
-TOPIC_WEIGHTS = {
-    "guidance": 1.0,
-    "inflation": 1.0,
-    "employment": 0.7,
-    "growth": 0.7,
-    "financial_stability": 0.3,
-}
 
 
 def _resolve_model_dir() -> str:
@@ -65,7 +55,7 @@ def score(text: str, model_dir: Optional[str] = None) -> dict:
 
     numerator = denominator = 0.0
     for r in results:
-        w = TOPIC_WEIGHTS.get(r["topic"], 0.5)
+        w = TOPIC_WEIGHTS.get(r["topic"], DEFAULT_TOPIC_WEIGHT)
         numerator += r["score"] * w
         denominator += w
     doc_score = numerator / denominator if denominator else 0.0
