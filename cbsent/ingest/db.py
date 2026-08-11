@@ -40,6 +40,17 @@ CREATE TABLE IF NOT EXISTS sentences (
 CREATE INDEX IF NOT EXISTS idx_documents_published ON documents (published_at);
 CREATE INDEX IF NOT EXISTS idx_sentences_published ON sentences (published_at);
 CREATE INDEX IF NOT EXISTS idx_sentences_document ON sentences (document_id);
+
+CREATE TABLE IF NOT EXISTS labels (
+    id          SERIAL PRIMARY KEY,
+    sentence_id INTEGER NOT NULL REFERENCES sentences(id) ON DELETE CASCADE,
+    source      TEXT NOT NULL CHECK (source IN ('dictionary', 'llm', 'human')),
+    stance      TEXT NOT NULL CHECK (stance IN ('hawkish', 'dovish', 'neutral')),
+    topic       TEXT CHECK (topic IN ('inflation', 'employment', 'growth',
+                                      'financial_stability', 'guidance')),
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (sentence_id, source)
+);
 """
 
 
