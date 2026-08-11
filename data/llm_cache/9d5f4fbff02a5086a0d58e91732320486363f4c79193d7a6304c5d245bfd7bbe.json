@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The staff's inflation forecast was little revised relative to the previous projection, and supply\u00e2\u0080\u0093demand imbalances in both goods markets and labor markets were still judged to be easing only slowly.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

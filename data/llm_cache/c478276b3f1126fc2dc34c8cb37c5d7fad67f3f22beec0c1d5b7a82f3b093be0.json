@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Average hourly earnings for all employees rose 3.8 percent over the 12 months ending in August, and the four-quarter change in business-sector compensation per hour was 3.1 percent in the second quarter.", "label": {"stance": "neutral", "topic": "employment"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"employment\"}"}

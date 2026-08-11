@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Issuance of nonfinancial corporate bonds slowed further in July from the weak levels seen in the second quarter but rebounded somewhat in August and so far in September.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

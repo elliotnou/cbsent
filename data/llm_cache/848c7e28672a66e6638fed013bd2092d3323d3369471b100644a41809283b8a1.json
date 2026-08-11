@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "In the October Senior Loan Officer Opinion Survey on Bank Lending Practices (SLOOS), banks reported tightening standards and terms on C&I loans to firms of all sizes in the third quarter.", "label": {"stance": "hawkish", "topic": "financial_stability"}, "raw": "{\"stance\":\"hawkish\", \"topic\":\"financial_stability\"}"}

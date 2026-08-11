@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The dollar depreciated a bit further.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"financial_stability\"}"}

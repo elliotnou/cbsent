@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The risks around the inflation forecast were seen as tilted to the upside, as core inflation had not come down as much as expected in 2024 and the effects of trade policy changes could be larger than the staff had assumed.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

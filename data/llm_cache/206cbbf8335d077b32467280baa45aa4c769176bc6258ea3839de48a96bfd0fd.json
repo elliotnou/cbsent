@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The unemployment rate for African Americans moved down, while the rate for Hispanics rose, and both rates were above those for Asians and for Whites.", "label": {"stance": "neutral", "topic": "employment"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"employment\"}"}

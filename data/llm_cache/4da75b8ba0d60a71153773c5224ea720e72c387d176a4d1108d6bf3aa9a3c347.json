@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The unemployment rate had fallen to a post-pandemic low, and quits and job openings were at all-time highs.", "label": {"stance": "hawkish", "topic": "employment"}, "raw": "{\"stance\":\"hawkish\", \"topic\":\"employment\"}"}

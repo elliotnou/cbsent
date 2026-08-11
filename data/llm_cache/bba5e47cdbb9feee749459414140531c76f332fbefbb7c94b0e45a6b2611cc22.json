@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Committee Policy Actions In their discussions of monetary policy for this meeting, members agreed that available indicators suggested that economic activity had been expanding at a solid pace.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"growth\"}"}

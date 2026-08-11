@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "In May, the unemployment rate ticked up further to 4.0 percent, while the labor force participation rate and the employment-to-population ratio both moved down a little.", "label": {"stance": "neutral", "topic": "employment"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"employment\"}"}

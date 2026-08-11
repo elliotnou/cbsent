@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "A few participants commented that slowing the pace of increase could reduce the risk of instability in the financial system.", "label": {"stance": "dovish", "topic": "financial_stability"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"financial_stability\"}"}

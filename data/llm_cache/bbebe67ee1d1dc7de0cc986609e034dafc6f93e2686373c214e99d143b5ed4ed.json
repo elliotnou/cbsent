@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Al\u00adthough total nonfarm payroll employment rose at a faster pace in September than in previous months, the unemployment rate was unchanged at 3.8 percent", "label": {"stance": "neutral", "topic": "employment"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"employment\"}"}

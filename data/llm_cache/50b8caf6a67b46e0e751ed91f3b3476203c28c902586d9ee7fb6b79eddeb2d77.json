@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Implied equity price volatility remained at elevated levels.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"financial_stability\"}"}

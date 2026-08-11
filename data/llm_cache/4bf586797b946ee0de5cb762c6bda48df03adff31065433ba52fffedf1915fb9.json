@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "More recent Chinese data, however, especially a steep drop in lending to households and businesses in April, pointed to a considerable slowdown in China's economic activity in this quarter.", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\":\"dovish\", \"topic\":\"growth\"}"}

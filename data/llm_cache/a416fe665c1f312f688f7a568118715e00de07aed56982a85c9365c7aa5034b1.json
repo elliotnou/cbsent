@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "In the residential mortgage market, the volume of mortgage refinancing increased, but home-purchase borrowing remained subdued.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

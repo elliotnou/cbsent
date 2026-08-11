@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Staff Review of the Economic Situation The information available at the time of the meeting indicated that U.S. economic activity had advanced solidly so far this year, but at a markedly slower pace than in the second half of 2023.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"growth\"}"}

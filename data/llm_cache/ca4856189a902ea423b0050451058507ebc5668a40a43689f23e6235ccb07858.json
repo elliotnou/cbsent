@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "After that, inflation was projected to decline to 2 percent by 2027.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

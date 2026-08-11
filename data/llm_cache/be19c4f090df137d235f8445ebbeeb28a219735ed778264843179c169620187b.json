@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "A couple of participants observed that changes in wages tend to lag changes in prices, which can complicate the assessment of inflation pressures.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The government shutdown was expected to reduce GDP growth for as long as it continued, with a corresponding boost to growth once the government reopened and government production and purchases returned to normal levels.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"growth\"}"}

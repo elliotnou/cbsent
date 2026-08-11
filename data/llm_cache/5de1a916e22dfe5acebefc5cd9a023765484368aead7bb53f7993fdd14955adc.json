@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "They observed that job gains had slowed this year and that the unemployment rate had edged up but remained low through August.", "label": {"stance": "neutral", "topic": "employment"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"employment\"}"}

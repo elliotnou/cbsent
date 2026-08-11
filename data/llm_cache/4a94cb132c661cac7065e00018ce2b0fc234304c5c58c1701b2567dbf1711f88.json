@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Taking a somewhat longer perspective, the manager noted that financial conditions had changed little since March but eased notably since the fall.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

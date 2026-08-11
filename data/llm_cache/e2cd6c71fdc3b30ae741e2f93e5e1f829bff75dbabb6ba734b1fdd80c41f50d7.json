@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Core PCE price inflation, which excludes changes in consumer energy prices and many consumer food prices, was 5.0 percent over the 12 months ending in October, down 0.2 percentage point from its September reading.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

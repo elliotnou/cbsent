@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Broad equity prices rose, with more pronounced increases in stock prices in cyclical sectors amid increased investor optimism for corporate profits, and high-yield bond spreads narrowed.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

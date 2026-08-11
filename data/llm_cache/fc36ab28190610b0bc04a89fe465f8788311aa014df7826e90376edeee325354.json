@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Participants remained highly attentive to inflation risks and noted the uncertainty associated with the economic outlook.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

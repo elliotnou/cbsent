@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Staff Economic Outlook The economic forecast prepared by the staff for the June meeting was similar to the projection at the time of the previous meeting.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"growth\"}"}

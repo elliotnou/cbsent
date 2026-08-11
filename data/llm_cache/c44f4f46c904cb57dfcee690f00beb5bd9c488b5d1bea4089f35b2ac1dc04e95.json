@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Over the intermeeting period, the effective federal funds rate remained stable at a level just below the interest rate on reserve balances, and pressures in repo rates generally moderated.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"financial_stability\"}"}

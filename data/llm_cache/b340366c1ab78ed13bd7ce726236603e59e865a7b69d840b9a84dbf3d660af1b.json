@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "All told, total PCE price inflation was expected to be 5.0 percent in 2022, while core inflation was expected to be 4.1 percent.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

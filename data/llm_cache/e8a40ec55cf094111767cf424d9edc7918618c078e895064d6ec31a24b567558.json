@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Consumer credit remained available for most borrowers in July and August, with auto credit and credit card credit growing at a robust pace.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

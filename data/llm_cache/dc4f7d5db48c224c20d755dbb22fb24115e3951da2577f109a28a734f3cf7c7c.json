@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The meeting adjourned at 10:25 a.m. on March 19, 2025.", "label": {"stance": "neutral", "topic": "guidance"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"guidance\"}"}

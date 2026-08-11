@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Bank interest rates for both commercial and industrial (C&I) and commercial real estate (CRE) loans increased in May and were close to pre-pandemic levels.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"financial_stability\"}"}

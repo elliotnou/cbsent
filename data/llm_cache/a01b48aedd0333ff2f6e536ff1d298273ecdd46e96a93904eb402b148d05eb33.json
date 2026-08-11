@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Delinquency rates on credit cards continued to increase, albeit at a slower pace than earlier in the year, while delinquency rates on auto loans were unchanged.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

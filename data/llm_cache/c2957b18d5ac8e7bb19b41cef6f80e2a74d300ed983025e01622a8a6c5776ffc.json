@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Average hourly earnings rose 5.1 percent over the 12 months ending in November, close to the pace recorded in the employment cost index of hourly compensation in the private sector over the 12 months ending in September.", "label": {"stance": "neutral", "topic": "employment"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"employment\"}"}

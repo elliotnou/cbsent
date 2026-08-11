@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Bank credit data also indicate that the expansion in credit card balances continued in October before slowing in early November.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

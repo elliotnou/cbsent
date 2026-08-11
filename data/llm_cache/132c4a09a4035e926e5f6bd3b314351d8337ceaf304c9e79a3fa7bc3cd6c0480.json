@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The unemployment rate was little changed, on net, and stood at 3.7 percent in November, the same as its third-quarter average.", "label": {"stance": "neutral", "topic": "employment"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"employment\"}"}

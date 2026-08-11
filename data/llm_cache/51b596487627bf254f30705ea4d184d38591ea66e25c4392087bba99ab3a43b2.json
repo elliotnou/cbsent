@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The market-implied path of the policy rate over the latter half of this year increased during the intermeeting period, and related measures of uncertainty about the path of policy rose, partly reflecting a higher term premium.", "label": {"stance": "hawkish", "topic": "guidance"}, "raw": "{\"stance\":\"hawkish\", \"topic\":\"guidance\"}"}

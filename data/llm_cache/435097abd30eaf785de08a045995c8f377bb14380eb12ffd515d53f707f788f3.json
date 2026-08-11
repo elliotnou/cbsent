@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Nonfinancial business leverage was high, but the ability of public firms to service their debt remained solid, in large part due to strong earnings.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

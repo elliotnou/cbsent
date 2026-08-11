@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Participants observed that a restrictive policy stance would need to be maintained until the incoming data provided confidence that inflation was on a sustained downward path to 2 percent, which was likely to take some time.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

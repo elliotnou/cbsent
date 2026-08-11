@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Over the intermeeting period, foreign financial markets were driven by greater investor confidence in the U.S. economic outlook, foreign economic data releases, and political developments.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

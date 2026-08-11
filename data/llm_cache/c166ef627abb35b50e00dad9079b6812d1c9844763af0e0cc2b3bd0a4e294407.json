@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Participants observed that inflation had eased over the past year but remained elevated and above the Committee's longer-run goal of 2 percent.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Many foreign central banks eased policy during the intermeeting period, citing concerns about economic growth and, in some cases, further progress on restoring price stability.", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\":\"dovish\", \"topic\":\"growth\"}"}

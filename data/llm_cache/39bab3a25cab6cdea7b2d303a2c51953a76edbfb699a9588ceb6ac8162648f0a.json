@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Average monthly increases in total nonfarm payrolls over July and August were weak, and job gains were revised down notably in May and June.", "label": {"stance": "dovish", "topic": "employment"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"employment\"}"}

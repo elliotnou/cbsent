@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "In contrast to central banks in other advanced economies, the Bank of Japan confirmed its commitment to accommodative policy.", "label": {"stance": "dovish", "topic": "guidance"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"guidance\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Interest rates on credit card accounts edged up a touch in August.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

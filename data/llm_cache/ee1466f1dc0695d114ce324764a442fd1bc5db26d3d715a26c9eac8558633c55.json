@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Regarding the outlook for monetary policy, market-based measures of policy expectations suggested that the federal funds rate would reach a peak in May 2023 and that the target range would then move lower.", "label": {"stance": "dovish", "topic": "guidance"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"guidance\"}"}

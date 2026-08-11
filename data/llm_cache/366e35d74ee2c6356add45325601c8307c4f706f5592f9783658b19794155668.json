@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Net yields on money market funds rose further over the intermeeting period, mostly passing through the increase in administered rates, while bank deposit rates increased only slightly in October and November.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"financial_stability\"}"}

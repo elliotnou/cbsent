@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Broad equity indexes were little changed, on net, since the previous FOMC meeting, as strong economic data appeared to offset concerns regarding monetary policy, inflation, and the pandemic.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"financial_stability\"}"}

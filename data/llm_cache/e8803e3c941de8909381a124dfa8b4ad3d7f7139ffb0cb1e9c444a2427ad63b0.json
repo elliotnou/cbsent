@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Financial conditions eased modestly over the intermeeting period, reflecting lower long-term interest rates and higher equity prices.", "label": {"stance": "dovish", "topic": "financial_stability"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"financial_stability\"}"}

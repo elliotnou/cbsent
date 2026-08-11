@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The effective federal funds rate rose 25 basis points following the increase in the target range at the March FOMC meeting and remained stable throughout the period.", "label": {"stance": "hawkish", "topic": "guidance"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"guidance\"}"}

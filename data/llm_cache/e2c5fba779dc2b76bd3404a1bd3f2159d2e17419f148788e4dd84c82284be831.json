@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The volume of credit rating upgrades for nonfinancial bonds outpaced downgrades noticeably in July and August.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

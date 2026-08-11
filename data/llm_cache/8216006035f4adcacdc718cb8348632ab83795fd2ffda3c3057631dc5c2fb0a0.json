@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Information from participants' business contacts and from many surveys indicated some deterioration in household and business sentiment amid heightened uncertainty about government policies.", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"growth\"}"}

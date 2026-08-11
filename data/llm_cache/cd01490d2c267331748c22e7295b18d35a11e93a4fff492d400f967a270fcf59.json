@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The credit performance of corporate bonds and leveraged loans was generally stable.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"financial_stability\"}"}
