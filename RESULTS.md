@@ -217,3 +217,17 @@ Effect of cue marking: +0.0522 macro-F1 overall, +0.0163 on cue sentences.
 | cbsent (fine-tuned) | 0.67 (16/24) | 0.60 (6/10) | 0.71 (10/14) | 1 (hawkish) |
 
 cbsent (fine-tuned) answered `hawkish` for every one of the 10 negated items. Its score on that subset is therefore the label mix of the subset and carries no evidence of negation sensitivity.
+
+## Negation/hedge ablation across seeds, held-out 2025-08-01 to 2026-08-01 (2026-08-11)
+
+- command: `python scripts/ablation_sweep.py --seeds 20250811 7 1234 --epochs 6 --allow-bootstrap`
+- git commit: `b2feb9a`
+- eval sentences: 595, of which 168 contain a cue
+- inference device: cpu, training device: mps
+
+| variant | macro-F1 mean over 3 seeds | sd | cue-sentence macro-F1 mean | sd |
+|---|---|---|---|---|
+| with negation markers | 0.6254 | 0.0033 | 0.7015 | 0.0086 |
+| without negation markers | 0.6274 | 0.0184 | 0.7238 | 0.0145 |
+
+Effect of cue marking: -0.0020 macro-F1 overall and -0.0224 on cue sentences. The effect is smaller than the between-seed spread, so this corpus cannot distinguish the transform's effect from training noise.

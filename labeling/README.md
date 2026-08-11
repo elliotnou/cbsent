@@ -26,6 +26,20 @@ Human labels break that circle. Priority order is therefore:
 3. **A stratified sample of agreements**, to catch cases where both
    labellers are wrong in the same direction.
 
+## Negated sentences deserve extra attention
+
+The negation probe (`make probe`) shows the trained model answering
+hawkish for every negated item in it, while a zero-shot frontier LLM gets
+all of them right. The likely cause is coverage: negated policy
+constructions are rare in ordinary corpus sentences, so they carry almost
+no weight in either the training signal or the aggregate metric.
+
+When reviewing, treat any sentence containing "not", "no longer", "does
+not", or "unlikely" as high value even if it looks easy, and prefer
+correcting those over confirming a straightforward one. The queue does not
+currently over-sample them; doing so by hand is the cheapest available
+fix.
+
 ## Reviewing in the browser
 
 ```bash
