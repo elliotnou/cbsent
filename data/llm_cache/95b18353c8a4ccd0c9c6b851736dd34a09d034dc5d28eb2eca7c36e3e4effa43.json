@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "As supply shortages diminish, inflation is expected to decline reasonably quickly to about 3% by the end of this year and then gradually ease towards the target over the projection period.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

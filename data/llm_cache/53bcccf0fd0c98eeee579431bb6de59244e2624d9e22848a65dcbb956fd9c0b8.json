@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The Bank\u2019s preferred measures of core inflation have been below 3% for several months and the breadth of price increases across components of the CPI is now near its historical norm.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

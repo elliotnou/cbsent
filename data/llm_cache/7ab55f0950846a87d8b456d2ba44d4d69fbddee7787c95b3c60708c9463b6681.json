@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Core inflation has been easing and held steady at just above 2% in the most recent inflation report.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\", \"topic\":\"inflation\"}"}

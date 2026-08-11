@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The Bank will use its monetary policy tools to return inflation to target and keep inflation expectations well anchored.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

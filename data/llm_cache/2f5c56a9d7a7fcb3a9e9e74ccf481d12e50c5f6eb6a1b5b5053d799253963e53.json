@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Given the outlook, Governing Council decided to hold the policy rate at 5% and to continue to normalize the Bank\u2019s balance sheet.", "label": {"stance": "hawkish", "topic": "guidance"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"guidance\"}"}

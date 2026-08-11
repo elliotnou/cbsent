@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The Bank\u2019s preferred measures of core inflation averaged around 2 \u00bd% and the share of components of the consumer price index growing above 3% is roughly at its historical norm.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

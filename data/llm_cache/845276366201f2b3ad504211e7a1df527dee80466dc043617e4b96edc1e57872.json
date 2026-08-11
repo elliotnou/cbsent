@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Third-quarter growth was led by a rebound in consumption, particularly services, as restrictions were further eased and higher vaccination rates improved confidence.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"growth\"}"}

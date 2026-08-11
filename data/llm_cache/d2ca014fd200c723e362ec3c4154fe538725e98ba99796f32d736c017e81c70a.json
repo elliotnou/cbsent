@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "In the July MPR projection, CPI inflation is forecast to hover around 3% for the next year before gradually declining to 2% in the middle of 2025.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"inflation\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Economic growth in Canada was very strong in the fourth quarter of last year at 6.7%.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"growth\"}"}

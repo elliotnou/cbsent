@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Year-over-year and three-month measures of core inflation are now both running at about 3.5%, indicating there has been little recent downward momentum in underlying inflation.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\", \"topic\":\"inflation\"}"}

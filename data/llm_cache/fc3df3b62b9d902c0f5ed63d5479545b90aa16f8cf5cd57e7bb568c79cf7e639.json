@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "In Canada, the economy grew by 1% in the third quarter, somewhat below the Bank\u2019s October projection, and the fourth quarter also looks weaker than projected.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"growth\"}"}

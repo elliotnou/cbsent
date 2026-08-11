@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Labour market data show businesses continue to hire, although employment has been growing at a slower pace than the working-age population.", "label": {"stance": "neutral", "topic": "employment"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"employment\"}"}

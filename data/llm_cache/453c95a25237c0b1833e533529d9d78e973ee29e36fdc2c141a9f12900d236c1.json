@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The Bank expects CPI inflation to come down below core inflation in the second half of this year, largely because of base year effects on gasoline prices.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

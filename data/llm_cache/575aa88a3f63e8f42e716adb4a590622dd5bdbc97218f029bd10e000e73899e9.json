@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The Bank now forecasts Canada\u2019s economy will grow by 5 percent this year before moderating to 4\u00bc percent in 2022 and 3\u00be percent in 2023.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"growth\"}"}

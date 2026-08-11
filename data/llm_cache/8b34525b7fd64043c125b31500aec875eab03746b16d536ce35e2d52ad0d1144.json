@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Global inflation is easing, with lower energy prices and a decline in goods price inflation.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

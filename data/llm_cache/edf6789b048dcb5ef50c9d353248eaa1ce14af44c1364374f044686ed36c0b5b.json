@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Financial conditions have been volatile, reflecting daily developments in the Middle East and shifting market expectations for inflation and interest rates.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"financial_stability\"}"}

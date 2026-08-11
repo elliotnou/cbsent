@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The Governing Council judges that the Canadian economy still has considerable excess capacity, and that the recovery continues to require extraordinary monetary policy support.", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"growth\"}"}

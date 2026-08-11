@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Almost 70% of CPI categories now show inflation above 3%.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

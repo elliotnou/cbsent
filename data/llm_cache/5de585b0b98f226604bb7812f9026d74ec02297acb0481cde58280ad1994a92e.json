@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Growth is expected to slow to about 2% in the third quarter as consumption growth moderates and housing market activity pulls back following unsustainable strength during the pandemic.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"growth\"}"}

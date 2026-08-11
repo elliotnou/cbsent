@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "US inflation has been holding steady, with some price pressures persisting.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"inflation\"}"}

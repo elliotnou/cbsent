@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Job gains have been robust in recent months, and the unemployment rate has declined substantially.", "label": {"stance": "hawkish", "topic": "employment"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"employment\"}"}

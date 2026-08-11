@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "CPI inflation has been volatile in recent months\u20142.8% in June, 4.0% in August, and 3.8% in September.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

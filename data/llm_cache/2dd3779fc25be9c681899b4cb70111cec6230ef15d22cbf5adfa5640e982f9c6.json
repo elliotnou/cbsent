@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Inflation in the United States and the euro area continued to ease.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

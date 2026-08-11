@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The Bank of Canada today reduced its target for the overnight rate to 3\u00bc%, with the Bank Rate at 3\u00bd% and the deposit rate at 3\u00bc%.", "label": {"stance": "dovish", "topic": "guidance"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"guidance\"}"}

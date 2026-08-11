@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Commodity prices have been volatile: oil, wheat and lumber prices have moderated while natural gas prices have risen.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"inflation\"}"}

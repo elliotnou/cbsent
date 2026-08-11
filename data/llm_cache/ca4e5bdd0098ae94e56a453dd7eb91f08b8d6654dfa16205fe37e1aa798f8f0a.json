@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "While this global growth outlook is little changed from the July Monetary Policy Report (MPR), the composition has shifted, with the US economy proving stronger and economic activity in China weaker than expected.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"growth\"}"}

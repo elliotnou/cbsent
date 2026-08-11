@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Job gains have remained strong, and the unemployment rate has remained low.", "label": {"stance": "neutral", "topic": "employment"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"employment\"}"}

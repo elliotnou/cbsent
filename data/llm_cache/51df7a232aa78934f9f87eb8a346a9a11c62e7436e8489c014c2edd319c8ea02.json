@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "As it sets monetary policy, Governing Council will be particularly focused on these indicators, and the evolution of core inflation, to gauge the progress of CPI inflation back to target.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"inflation\"}"}

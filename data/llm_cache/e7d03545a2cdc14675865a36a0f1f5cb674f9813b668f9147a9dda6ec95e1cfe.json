@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "CPI inflation is expected to stay elevated in June and then ease gradually in the coming months, returning to around 2% in early 2027, although this forecast is dependent on the path for oil and gasoline prices.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

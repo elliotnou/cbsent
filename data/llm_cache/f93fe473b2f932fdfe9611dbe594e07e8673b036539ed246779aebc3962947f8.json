@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The Bank is closely watching inflation expectations and labour costs to ensure that the temporary forces pushing up prices do not become embedded in ongoing inflation.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\", \"topic\":\"inflation\"}"}

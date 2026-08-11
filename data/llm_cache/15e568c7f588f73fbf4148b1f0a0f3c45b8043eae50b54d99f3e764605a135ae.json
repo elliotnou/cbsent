@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "While economic growth around the world is softening in the face of higher interest rates, major central banks are signalling that interest rates may have to rise further to restore price stability.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

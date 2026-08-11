@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Real GDP contracted at a rate of 1.1% in the third quarter, following growth of 1.4% in the second quarter.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"growth\"}"}

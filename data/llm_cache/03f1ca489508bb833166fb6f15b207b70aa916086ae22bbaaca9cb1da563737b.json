@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "GDP growth is forecast to strengthen gradually over the projection horizon, supported by lower interest rates.", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"growth\"}"}

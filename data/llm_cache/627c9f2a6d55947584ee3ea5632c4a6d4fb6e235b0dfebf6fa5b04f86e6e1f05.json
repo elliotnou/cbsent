@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The unemployment rate has stabilized at a low level in recent months, and labor market conditions remain solid.", "label": {"stance": "hawkish", "topic": "employment"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"employment\"}"}

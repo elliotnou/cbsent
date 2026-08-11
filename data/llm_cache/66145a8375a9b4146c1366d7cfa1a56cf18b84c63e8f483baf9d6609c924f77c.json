@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The July outlook has inflation starting to come back down later this year, easing to about 3% by the end of next year and returning to the 2% target by the end of 2024.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The global economy expanded by about 2\u00bd% in the second quarter, consistent with projections in the Bank\u2019s July Monetary Policy Report (MPR).", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"growth\"}"}

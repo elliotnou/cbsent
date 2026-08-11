@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "However, with underlying inflation persisting, central banks continue to be vigilant.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\", \"topic\":\"inflation\"}"}

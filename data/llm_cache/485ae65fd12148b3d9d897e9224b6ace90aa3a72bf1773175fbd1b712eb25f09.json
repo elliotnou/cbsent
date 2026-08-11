@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Wages continue to grow at 4% to 5%, while productivity has declined in recent quarters.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\", \"topic\":\"inflation\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Global financial conditions have eased and the Canadian dollar has depreciated in the face of broad-based strength in the US dollar.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

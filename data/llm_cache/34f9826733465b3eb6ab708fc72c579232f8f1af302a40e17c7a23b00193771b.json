@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Voting against the monetary policy action were Beth M. Hammack, Neel Kashkari, and Lorie K. Logan, who preferred to raise the target range for the federal funds rate by 1/4 percentage point at this meeting.", "label": {"stance": "hawkish", "topic": "guidance"}, "raw": "{\"stance\": \"hawkish\", \"topic\": \"guidance\"}"}

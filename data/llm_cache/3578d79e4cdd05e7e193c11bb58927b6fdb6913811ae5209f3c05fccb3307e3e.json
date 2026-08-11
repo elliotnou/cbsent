@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Governing Council is closely watching the evolution of core inflation and remains particularly focused on the balance between demand and supply in the economy, inflation expectations, wage growth, and corporate pricing behaviour.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

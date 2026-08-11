@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Inflation in Canada eased to 3.4% in May, a substantial and welcome drop from its peak of 8.1% last summer.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

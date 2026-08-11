@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Gasoline prices, which had been a major factor pushing up CPI inflation, have recently declined.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"inflation\"}"}

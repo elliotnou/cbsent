@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "In Canada, GDP contracted by about 1 percent in the second quarter, weaker than anticipated in the Bank\u2019s July Monetary Policy Report (MPR).", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\":\"dovish\", \"topic\":\"growth\"}"}

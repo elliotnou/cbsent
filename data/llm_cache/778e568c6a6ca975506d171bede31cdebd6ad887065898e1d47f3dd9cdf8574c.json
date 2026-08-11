@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Near-term inflation expectations have moved up with higher gasoline prices and still-elevated food price inflation, but longer-term inflation expectations have remained anchored.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"inflation\"}"}

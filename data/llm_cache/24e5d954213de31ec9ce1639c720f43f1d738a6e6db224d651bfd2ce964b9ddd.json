@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The global economic recovery from the COVID-19 pandemic is progressing.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"growth\"}"}

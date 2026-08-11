@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The Committee remains highly attentive to inflation risks.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Inflation has eased over the past year but remains somewhat elevated.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

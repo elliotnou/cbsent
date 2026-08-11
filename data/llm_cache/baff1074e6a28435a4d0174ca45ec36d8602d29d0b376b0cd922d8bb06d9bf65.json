@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "National accounts data for the first quarter of 2022 showed GDP growth of 3.1 percent, in line with the Bank\u2019s April Monetary Policy Report (MPR) projection.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"growth\"}"}

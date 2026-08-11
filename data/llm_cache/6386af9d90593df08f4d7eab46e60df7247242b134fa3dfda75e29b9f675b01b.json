@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Given elevated inflation and inflation expectations, as well as ongoing demand pressures in the economy, the Governing Council expects that the policy interest rate will need to rise further.", "label": {"stance": "hawkish", "topic": "guidance"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"guidance\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "In Canada, CPI inflation eased in July to 7.6% from 8.1% because of a drop in gasoline prices.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"inflation\"}"}

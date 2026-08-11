@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "With the recent increase in gasoline prices, CPI inflation is expected to be higher in the near term before easing again.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"inflation\"}"}

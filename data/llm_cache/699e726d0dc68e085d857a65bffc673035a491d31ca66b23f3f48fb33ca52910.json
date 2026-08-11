@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Excess supply in the economy continues to put downward pressure on inflation, while price increases in shelter and some other services are holding inflation up.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

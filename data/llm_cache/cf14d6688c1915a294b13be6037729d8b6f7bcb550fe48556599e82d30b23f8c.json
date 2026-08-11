@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Financial conditions remain restrictive but have eased since October, and the Canadian dollar has been relatively stable against the US dollar.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

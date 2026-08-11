@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "In Canada, the economy grew in the fourth quarter by more than expected, although the pace remained weak and below potential.", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\": \"dovish\", \"topic\": \"growth\"}"}

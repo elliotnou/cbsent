@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The labour market remains soft\u2014the unemployment rate was at 6.5% in September.", "label": {"stance": "dovish", "topic": "employment"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"employment\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Governing Council continues to assess how tighter monetary policy is working to slow demand, how supply challenges are resolving, and how inflation and inflation expectations are responding.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"inflation\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "CPI inflation ticked up in April to 4.4%, the first increase in 10 months, with prices for a broad range of goods and services coming in higher than expected.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

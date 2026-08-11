@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Inflation is coming down in many countries, largely reflecting lower energy prices as well as improvements in global supply chains.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Inflation continues to slow across most advanced economies, although progress will likely be bumpy.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

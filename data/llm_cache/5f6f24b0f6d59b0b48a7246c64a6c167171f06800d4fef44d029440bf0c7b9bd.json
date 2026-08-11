@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Recent data is reinforcing Governing Council\u2019s confidence that inflation will continue to decline in the next few months.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

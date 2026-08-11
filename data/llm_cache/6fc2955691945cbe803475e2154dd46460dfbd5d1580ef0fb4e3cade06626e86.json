@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "CPI inflation remained at 6.9% in October, with many of the goods and services Canadians regularly buy showing large price increases.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

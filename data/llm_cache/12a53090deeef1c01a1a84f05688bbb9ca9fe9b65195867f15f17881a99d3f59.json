@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Globally, consumer price inflation is coming down, largely reflecting lower energy prices compared to a year ago, but underlying inflation remains stubbornly high.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

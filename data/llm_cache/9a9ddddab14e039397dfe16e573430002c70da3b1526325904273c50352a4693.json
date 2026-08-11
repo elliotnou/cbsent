@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Overall, the Bank forecasts GDP growth of 0.8% in 2024 and 2.4% in 2025, roughly unchanged from its October projection.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"growth\"}"}

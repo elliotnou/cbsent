@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The longer high inflation persists, the greater the risk that elevated inflation becomes entrenched, making it more difficult to restore price stability.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

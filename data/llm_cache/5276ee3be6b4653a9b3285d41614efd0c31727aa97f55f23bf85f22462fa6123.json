@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The Bank projects global GDP will grow by 6\u00bd percent in 2021 \u2013 a strong pace but less than projected in the July Monetary Policy Report (MPR) \u2013 and by 4\u00bc percent in 2022 and about 3\u00bd percent in 2023.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"growth\"}"}

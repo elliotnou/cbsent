@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Global financial conditions have eased, with lower bond yields, buoyant equity prices, and robust corporate debt issuance.", "label": {"stance": "neutral", "topic": "financial_stability"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"financial_stability\"}"}

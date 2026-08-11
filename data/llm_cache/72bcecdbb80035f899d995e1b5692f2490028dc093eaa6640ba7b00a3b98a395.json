@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The economic outlook is uncertain, and the Committee remains highly attentive to inflation risks.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\": \"neutral\", \"topic\": \"inflation\"}"}

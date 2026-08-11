@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "In recent months, the Bank\u2019s preferred measures of core inflation have been around 3\u00bd-4%, with the October data coming in towards the lower end of this range.", "label": {"stance": "neutral", "topic": "inflation"}, "raw": "{\"stance\":\"neutral\", \"topic\":\"inflation\"}"}

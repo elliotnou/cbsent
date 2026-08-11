@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Third-quarter GDP growth was pulled down by business investment, inventories and exports.", "label": {"stance": "neutral", "topic": "growth"}, "raw": "{\"stance\":\"neutral\",\"topic\":\"growth\"}"}

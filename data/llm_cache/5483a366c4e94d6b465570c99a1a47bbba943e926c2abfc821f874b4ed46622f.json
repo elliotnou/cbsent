@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Since the April Monetary Policy Report (MPR), global economic prospects have been dented by higher oil prices stemming from the Middle East conflict.", "label": {"stance": "dovish", "topic": "growth"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"growth\"}"}

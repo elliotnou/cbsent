@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "The global economy continues to slow and inflation has eased further.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Based on the assumption that oil prices will ease, inflation is forecast to come down to the 2% target early next year and remain around 2% over the projection horizon.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}

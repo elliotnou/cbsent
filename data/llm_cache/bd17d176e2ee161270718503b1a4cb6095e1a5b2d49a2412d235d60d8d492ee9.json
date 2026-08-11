@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Short-term inflation expectations remain elevated.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

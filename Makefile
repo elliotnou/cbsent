@@ -2,7 +2,7 @@ PY := .venv/bin/python
 CUT := 2025-08-01
 EVAL_END := 2026-08-01
 
-.PHONY: test ingest snapshot bootstrap review train ablate eval event-study
+.PHONY: test ingest snapshot bootstrap review review-html train ablate eval event-study
 
 test:
 	$(PY) -m pytest tests/ -q
@@ -18,6 +18,9 @@ bootstrap:
 
 review:
 	$(PY) labeling/review.py --eval-start $(CUT)
+
+review-html:
+	$(PY) labeling/review_html.py --eval-start $(CUT)
 
 train:
 	$(PY) scripts/train.py --cut-date $(CUT) --export-dir export/cbsent

@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Governing Council continues to assess whether monetary policy is sufficiently restrictive to relieve price pressures and remains prepared to raise the policy rate further if needed to return inflation to the 2% target.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

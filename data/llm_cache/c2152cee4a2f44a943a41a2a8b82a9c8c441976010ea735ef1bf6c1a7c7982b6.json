@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "Inflation in Canada is higher and more persistent than the Bank expected in its April Monetary Policy Report (MPR), and will likely remain around 8% in the next few months.", "label": {"stance": "hawkish", "topic": "inflation"}, "raw": "{\"stance\":\"hawkish\",\"topic\":\"inflation\"}"}

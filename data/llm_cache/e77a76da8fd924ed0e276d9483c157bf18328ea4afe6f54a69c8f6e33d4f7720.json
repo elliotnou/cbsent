@@ -1,0 +1,1 @@
+{"model": "gpt-5-mini", "sentence": "US inflation looks to have resumed its downward path.", "label": {"stance": "dovish", "topic": "inflation"}, "raw": "{\"stance\":\"dovish\",\"topic\":\"inflation\"}"}
