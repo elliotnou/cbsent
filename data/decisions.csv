@@ -1,0 +1,17 @@
+bank,decision_date,release_ts_utc,actual_bps,consensus_bps,is_surprise,consensus_source,note
+FED,2025-09-17,2025-09-17T18:00:00,-25,-25,no,https://investinglive.com/centralbank/fomc-interest-rate-decision-federal-reserve-cuts-by-25-bps-as-expected-20250917/,Reuters poll 105 of 107 economists forecast a 25 bp cut
+BOC,2025-09-17,2025-09-17T13:45:00,-25,-25,no,https://www.hl.co.uk/shares/stock-market-news/company--news/bank-of-canada-cuts-rates-to-2.5-as-expected,cut to 2.50 per cent as expected
+FED,2025-10-29,2025-10-29T18:00:00,-25,-25,no,https://www.cnbc.com/2025/10/29/fed-rate-decision-october-2025.html,cut to 3.75-4.00 per cent on a 10-2 vote as expected
+BOC,2025-10-29,2025-10-29T13:45:00,-25,-25,no,https://tradingeconomics.com/canada/interest-rate/news/497167,majority of economists polled by Reuters expected a second consecutive 25 bp cut
+FED,2025-12-10,2025-12-10T19:00:00,-25,-25,no,https://www.cnbc.com/2025/12/10/fed-interest-rate-decision-december-2025-.html,widely expected 25 bp cut with three dissents
+BOC,2025-12-10,2025-12-10T14:45:00,0,0,no,https://invested.mdm.ca/balancing-act-canada-holds-while-the-u-s-cuts-interest-rates-to-close-the-year/,held at 2.25 per cent at the final 2025 meeting
+FED,2026-01-28,2026-01-28T19:00:00,0,0,no,https://gulfnews.com/business/banking/us-federal-reserve-keeps-key-interest-rate-unchanged-in-first-decision-of-2026-1.500423983,hold on a 10-2 vote described as widely expected
+BOC,2026-01-28,2026-01-28T14:45:00,0,0,no,https://ca.finance.yahoo.com/news/bank-canada-hold-rates-steady-143834484.html,all 35 economists in the January 20-23 Reuters poll forecast a hold
+FED,2026-03-18,2026-03-18T18:00:00,0,0,no,https://tradingeconomics.com/united-states/interest-rate/news/451954,second consecutive hold at 3.50-3.75 per cent in line with expectations
+BOC,2026-03-18,2026-03-18T13:45:00,0,0,no,https://www.ratehub.ca/blog/bank-of-canada-holds-rate-at-2-25-for-third-time-in-march-2026-announcement/,third consecutive hold widely anticipated by economists and markets
+FED,2026-04-29,2026-04-29T18:00:00,0,0,no,https://www.cnbc.com/2026/04/29/fed-interest-rate-decision-april-2026.html,third straight hold in line with market expectations despite four dissents
+BOC,2026-04-29,2026-04-29T13:45:00,0,0,no,https://www.bankofcanada.ca/2026/04/fad-press-release-2026-04-29/,held at 2.25 per cent
+FED,2026-06-17,2026-06-17T18:00:00,0,0,no,https://www.cnbc.com/2026/06/17/fed-interest-rate-decision-june-2026.html,held rates steady
+BOC,2026-06-10,2026-06-10T13:45:00,0,0,no,https://ca.finance.yahoo.com/news/bank-canada-hold-rates-steady-143834484.html,all 34 economists surveyed by Reuters expected a hold at the June 10 meeting
+FED,2026-07-29,2026-07-29T18:00:00,0,0,no,https://www.cnbc.com/2026/07/29/fed-rate-decision-july-2026.html,divided committee held rates steady
+BOC,2026-07-15,2026-07-15T13:45:00,0,0,no,https://www.cbc.ca/news/business/bank-of-canada-interest-july-2026-9.7270689,all 36 economists surveyed by Reuters ahead of the announcement expected a hold

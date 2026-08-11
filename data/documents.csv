@@ -1,0 +1,120 @@
+id,bank,doc_type,url,title,published_at,meeting_date
+84,BOC,rate_announcement,https://www.bankofcanada.ca/2021/09/fad-press-release-2021-09-08/,"Bank of Canada maintains policy rate, continues forward guidance  and current pace of quantitative easing",2021-09-08 14:00:00+00:00,2021-09-08
+1,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20210922a.htm,Federal Reserve issues FOMC statement,2021-09-22 18:00:00+00:00,2021-09-22
+2,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20210922.htm,Federal Open Market Committee,2021-10-13 18:00:00+00:00,2021-09-22
+85,BOC,rate_announcement,https://www.bankofcanada.ca/2021/10/fad-press-release-2021-10-27/,"Bank of Canada maintains policy rate and forward guidance,  ends quantitative easing",2021-10-27 14:00:00+00:00,2021-10-27
+3,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20211103a.htm,Federal Reserve issues FOMC statement,2021-11-03 18:00:00+00:00,2021-11-03
+4,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20211103.htm,Federal Open Market Committee,2021-11-24 19:00:00+00:00,2021-11-03
+86,BOC,rate_announcement,https://www.bankofcanada.ca/2021/12/fad-press-release-2021-12-08/,Bank of Canada maintains policy rate and forward guidance,2021-12-08 15:00:00+00:00,2021-12-08
+5,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20211215a.htm,Federal Reserve issues FOMC statement,2021-12-15 19:00:00+00:00,2021-12-15
+6,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20211215.htm,Federal Open Market Committee,2022-01-05 19:00:00+00:00,2021-12-15
+87,BOC,rate_announcement,https://www.bankofcanada.ca/2022/01/fad-press-release-2022-01-26/,"Bank of Canada maintains policy rate, removes exceptional forward guidance",2022-01-26 15:00:00+00:00,2022-01-26
+7,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20220126a.htm,Federal Reserve issues FOMC statement,2022-01-26 19:00:00+00:00,2022-01-26
+8,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20220126.htm,Federal Open Market Committee,2022-02-16 19:00:00+00:00,2022-01-26
+88,BOC,rate_announcement,https://www.bankofcanada.ca/2022/03/fad-press-release-2022-03-02/,Bank of Canada increases policy interest rate,2022-03-02 15:00:00+00:00,2022-03-02
+9,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20220316a.htm,Federal Reserve issues FOMC statement,2022-03-16 18:00:00+00:00,2022-03-16
+10,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20220316.htm,Federal Open Market Committee,2022-04-06 18:00:00+00:00,2022-03-16
+89,BOC,rate_announcement,https://www.bankofcanada.ca/2022/04/fad-press-release-2022-04-13/,"Bank of Canada increases policy interest rate by 50 basis points, begins quantitative tightening",2022-04-13 14:00:00+00:00,2022-04-13
+11,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20220504a.htm,Federal Reserve issues FOMC statement,2022-05-04 18:00:00+00:00,2022-05-04
+12,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20220504.htm,Federal Open Market Committee,2022-05-25 18:00:00+00:00,2022-05-04
+90,BOC,rate_announcement,https://www.bankofcanada.ca/2022/06/fad-press-release-2022-06-01/,"Bank of Canada increases policy interest rate by 50 basis points, continues quantitative tightening",2022-06-01 14:00:00+00:00,2022-06-01
+13,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20220615a.htm,Federal Reserve issues FOMC statement,2022-06-15 18:00:00+00:00,2022-06-15
+14,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20220615.htm,Federal Open Market Committee,2022-07-06 18:00:00+00:00,2022-06-15
+91,BOC,rate_announcement,https://www.bankofcanada.ca/2022/07/fad-press-release-2022-07-13/,"Bank of Canada increases policy interest rate by 100 basis points, continues quantitative tightening",2022-07-13 14:00:00+00:00,2022-07-13
+15,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20220727a.htm,Federal Reserve issues FOMC statement,2022-07-27 18:00:00+00:00,2022-07-27
+16,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20220727.htm,Federal Open Market Committee,2022-08-17 18:00:00+00:00,2022-07-27
+92,BOC,rate_announcement,https://www.bankofcanada.ca/2022/09/fad-press-release-2022-09-07/,"Bank of Canada increases policy interest rate by 75 basis points,  continues quantitative tightening",2022-09-07 14:00:00+00:00,2022-09-07
+17,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20220921a.htm,Federal Reserve issues FOMC statement,2022-09-21 18:00:00+00:00,2022-09-21
+18,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20220921.htm,Federal Open Market Committee,2022-10-12 18:00:00+00:00,2022-09-21
+93,BOC,rate_announcement,https://www.bankofcanada.ca/2022/10/fad-press-release-2022-10-26/,"Bank of Canada increases policy interest rate by 50 basis points, continues quantitative tightening",2022-10-26 14:00:00+00:00,2022-10-26
+19,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20221102a.htm,Federal Reserve issues FOMC statement,2022-11-02 18:00:00+00:00,2022-11-02
+20,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20221102.htm,Federal Open Market Committee,2022-11-23 19:00:00+00:00,2022-11-02
+94,BOC,rate_announcement,https://www.bankofcanada.ca/2022/12/fad-press-release-2022-12-07/,"Bank of Canada increases policy interest rate by 50 basis points,  continues quantitative tightening",2022-12-07 15:00:00+00:00,2022-12-07
+21,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20221214a.htm,Federal Reserve issues FOMC statement,2022-12-14 19:00:00+00:00,2022-12-14
+22,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20221214.htm,Federal Open Market Committee,2023-01-04 19:00:00+00:00,2022-12-14
+95,BOC,rate_announcement,https://www.bankofcanada.ca/2023/01/fad-press-release-2023-01-25/,"Bank of Canada increases policy interest rate by 25 basis points, continues quantitative tightening",2023-01-25 15:00:00+00:00,2023-01-25
+23,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20230201a.htm,Federal Reserve issues FOMC statement,2023-02-01 19:00:00+00:00,2023-02-01
+24,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20230201.htm,Federal Open Market Committee,2023-02-22 19:00:00+00:00,2023-02-01
+96,BOC,rate_announcement,https://www.bankofcanada.ca/2023/03/fad-press-release-2023-03-08/,"Bank of Canada maintains policy rate, continues quantitative tightening",2023-03-08 15:00:00+00:00,2023-03-08
+25,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20230322a.htm,Federal Reserve issues FOMC statement,2023-03-22 18:00:00+00:00,2023-03-22
+97,BOC,rate_announcement,https://www.bankofcanada.ca/2023/04/fad-press-release-2023-04-12/,"Bank of Canada maintains policy rate, continues quantitative tightening",2023-04-12 14:00:00+00:00,2023-04-12
+26,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20230322.htm,Federal Open Market Committee,2023-04-12 18:00:00+00:00,2023-03-22
+27,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20230503a.htm,Federal Reserve issues FOMC statement,2023-05-03 18:00:00+00:00,2023-05-03
+28,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20230503.htm,Federal Open Market Committee,2023-05-24 18:00:00+00:00,2023-05-03
+98,BOC,rate_announcement,https://www.bankofcanada.ca/2023/06/fad-press-release-2023-06-07/,"Bank of Canada raises policy rate 25 basis points, continues quantitative tightening",2023-06-07 14:00:00+00:00,2023-06-07
+29,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20230614a.htm,Federal Reserve issues FOMC statement,2023-06-14 18:00:00+00:00,2023-06-14
+30,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20230614.htm,Federal Open Market Committee,2023-07-05 18:00:00+00:00,2023-06-14
+99,BOC,rate_announcement,https://www.bankofcanada.ca/2023/07/fad-press-release-2023-07-12/,"Bank of Canada raises policy rate 25 basis points, continues quantitative tightening",2023-07-12 14:00:00+00:00,2023-07-12
+31,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20230726a.htm,Federal Reserve issues FOMC statement,2023-07-26 18:00:00+00:00,2023-07-26
+32,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20230726.htm,Federal Open Market Committee,2023-08-16 18:00:00+00:00,2023-07-26
+100,BOC,rate_announcement,https://www.bankofcanada.ca/2023/09/fad-press-release-2023-09-06/,"Bank of Canada maintains policy rate, continues quantitative tightening",2023-09-06 14:00:00+00:00,2023-09-06
+33,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20230920a.htm,Federal Reserve issues FOMC statement,2023-09-20 18:00:00+00:00,2023-09-20
+34,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20230920.htm,Federal Open Market Committee,2023-10-11 18:00:00+00:00,2023-09-20
+101,BOC,rate_announcement,https://www.bankofcanada.ca/2023/10/fad-press-release-2023-10-25/,"Bank of Canada maintains policy rate, continues quantitative tightening",2023-10-25 14:00:00+00:00,2023-10-25
+35,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20231101a.htm,Federal Reserve issues FOMC statement,2023-11-01 18:00:00+00:00,2023-11-01
+36,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20231101.htm,Federal Open Market Committee,2023-11-21 19:00:00+00:00,2023-11-01
+102,BOC,rate_announcement,https://www.bankofcanada.ca/2023/12/fad-press-release-2023-12-06/,"Bank of Canada maintains policy rate, continues quantitative tightening",2023-12-06 15:00:00+00:00,2023-12-06
+37,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20231213a.htm,Federal Reserve issues FOMC statement,2023-12-13 19:00:00+00:00,2023-12-13
+38,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20231213.htm,Federal Open Market Committee,2024-01-03 19:00:00+00:00,2023-12-13
+103,BOC,rate_announcement,https://www.bankofcanada.ca/2024/01/fad-press-release-2024-01-24/,"Bank of Canada maintains policy rate, continues quantitative tightening",2024-01-24 14:45:00+00:00,2024-01-24
+39,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20240131a.htm,Federal Reserve issues FOMC statement,2024-01-31 19:00:00+00:00,2024-01-31
+40,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20240131.htm,Federal Open Market Committee,2024-02-21 19:00:00+00:00,2024-01-31
+104,BOC,rate_announcement,https://www.bankofcanada.ca/2024/03/fad-press-release-2024-03-06/,"Bank of Canada maintains policy rate, continues quantitative tightening",2024-03-06 14:45:00+00:00,2024-03-06
+41,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20240320a.htm,Federal Reserve issues FOMC statement,2024-03-20 18:00:00+00:00,2024-03-20
+105,BOC,rate_announcement,https://www.bankofcanada.ca/2024/04/fad-press-release-2024-04-10/,"Bank of Canada maintains policy rate, continues quantitative tightening",2024-04-10 13:45:00+00:00,2024-04-10
+42,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20240320.htm,Federal Open Market Committee,2024-04-10 18:00:00+00:00,2024-03-20
+43,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20240501a.htm,Federal Reserve issues FOMC statement,2024-05-01 18:00:00+00:00,2024-05-01
+44,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20240501.htm,Federal Open Market Committee,2024-05-22 18:00:00+00:00,2024-05-01
+106,BOC,rate_announcement,https://www.bankofcanada.ca/2024/06/fad-press-release-2024-06-05/,Bank of Canada reduces policy rate by 25 basis points,2024-06-05 13:45:00+00:00,2024-06-05
+45,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20240612a.htm,Federal Reserve issues FOMC statement,2024-06-12 18:00:00+00:00,2024-06-12
+46,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20240612.htm,Federal Open Market Committee,2024-07-03 18:00:00+00:00,2024-06-12
+107,BOC,rate_announcement,https://www.bankofcanada.ca/2024/07/fad-press-release-2024-07-24/,Bank of Canada reduces policy rate by 25 basis points to 4½%,2024-07-24 13:45:00+00:00,2024-07-24
+47,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20240731a.htm,Federal Reserve issues FOMC statement,2024-07-31 18:00:00+00:00,2024-07-31
+48,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20240731.htm,Federal Open Market Committee,2024-08-21 18:00:00+00:00,2024-07-31
+108,BOC,rate_announcement,https://www.bankofcanada.ca/2024/09/fad-press-release-2024-09-04/,Bank of Canada reduces policy rate by 25 basis points to 4¼%,2024-09-04 13:45:00+00:00,2024-09-04
+49,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20240918a.htm,Federal Reserve issues FOMC statement,2024-09-18 18:00:00+00:00,2024-09-18
+50,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20240918.htm,Federal Open Market Committee,2024-10-09 18:00:00+00:00,2024-09-18
+109,BOC,rate_announcement,https://www.bankofcanada.ca/2024/10/fad-press-release-2024-10-23/,Bank of Canada reduces policy rate by 50 basis points to 3¾%,2024-10-23 13:45:00+00:00,2024-10-23
+51,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20241107a.htm,Federal Reserve issues FOMC statement,2024-11-07 19:00:00+00:00,2024-11-07
+52,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20241107.htm,Federal Open Market Committee,2024-11-26 19:00:00+00:00,2024-11-07
+110,BOC,rate_announcement,https://www.bankofcanada.ca/2024/12/fad-press-release-2024-12-11/,Bank of Canada reduces policy rate by 50 basis points to 3¼%,2024-12-11 14:45:00+00:00,2024-12-11
+53,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20241218a.htm,Federal Reserve issues FOMC statement,2024-12-18 19:00:00+00:00,2024-12-18
+54,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20241218.htm,Federal Open Market Committee,2025-01-08 19:00:00+00:00,2024-12-18
+111,BOC,rate_announcement,https://www.bankofcanada.ca/2025/01/fad-press-release-2025-01-29/,"Bank of Canada reduces policy rate by 25 basis points to 3%, announces end of quantitative tightening",2025-01-29 14:45:00+00:00,2025-01-29
+55,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20250129a.htm,Federal Reserve issues FOMC statement,2025-01-29 19:00:00+00:00,2025-01-29
+56,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20250129.htm,Federal Open Market Committee,2025-02-19 19:00:00+00:00,2025-01-29
+112,BOC,rate_announcement,https://www.bankofcanada.ca/2025/03/fad-press-release-2025-03-12/,Bank of Canada reduces policy rate by 25 basis points to 2¾%,2025-03-12 13:45:00+00:00,2025-03-12
+57,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20250319a.htm,Federal Reserve issues FOMC statement,2025-03-19 18:00:00+00:00,2025-03-19
+58,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20250319.htm,Federal Open Market Committee,2025-04-09 18:00:00+00:00,2025-03-19
+113,BOC,rate_announcement,https://www.bankofcanada.ca/2025/04/fad-press-release-2025-04-16/,Bank of Canada holds policy rate at 2¾%,2025-04-16 13:45:00+00:00,2025-04-16
+59,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20250507a.htm,Federal Reserve issues FOMC statement,2025-05-07 18:00:00+00:00,2025-05-07
+60,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20250507.htm,Federal Open Market Committee,2025-05-28 18:00:00+00:00,2025-05-07
+114,BOC,rate_announcement,https://www.bankofcanada.ca/2025/06/fad-press-release-2025-06-04/,Bank of Canada holds policy rate at 2¾%,2025-06-04 13:45:00+00:00,2025-06-04
+61,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20250618a.htm,Federal Reserve issues FOMC statement,2025-06-18 18:00:00+00:00,2025-06-18
+62,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20250618.htm,Federal Open Market Committee,2025-07-09 18:00:00+00:00,2025-06-18
+115,BOC,rate_announcement,https://www.bankofcanada.ca/2025/07/fad-press-release-2025-07-30/,Bank of Canada holds policy rate at 2¾%,2025-07-30 13:45:00+00:00,2025-07-30
+63,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20250730a.htm,Federal Reserve issues FOMC statement,2025-07-30 18:00:00+00:00,2025-07-30
+64,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20250730.htm,Federal Open Market Committee,2025-08-20 18:00:00+00:00,2025-07-30
+116,BOC,rate_announcement,https://www.bankofcanada.ca/2025/09/fad-press-release-2025-09-17/,Bank of Canada lowers policy rate to 2½%,2025-09-17 13:45:00+00:00,2025-09-17
+66,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20250917a.htm,Federal Reserve issues FOMC statement,2025-09-17 18:00:00+00:00,2025-09-17
+67,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20250917.htm,Federal Open Market Committee,2025-10-08 18:00:00+00:00,2025-09-17
+117,BOC,rate_announcement,https://www.bankofcanada.ca/2025/10/fad-press-release-2025-10-29/,Bank of Canada lowers policy rate to 2¼%,2025-10-29 13:45:00+00:00,2025-10-29
+68,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20251029a.htm,Federal Reserve issues FOMC statement,2025-10-29 18:00:00+00:00,2025-10-29
+69,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20251029.htm,Federal Open Market Committee,2025-11-19 19:00:00+00:00,2025-10-29
+118,BOC,rate_announcement,https://www.bankofcanada.ca/2025/12/fad-press-release-2025-12-10/,Bank of Canada maintains policy rate at 2¼%,2025-12-10 14:45:00+00:00,2025-12-10
+70,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20251210a.htm,Federal Reserve issues FOMC statement,2025-12-10 19:00:00+00:00,2025-12-10
+71,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20251210.htm,Federal Open Market Committee,2025-12-30 19:00:00+00:00,2025-12-10
+119,BOC,rate_announcement,https://www.bankofcanada.ca/2026/01/fad-press-release-2026-01-28/,Bank of Canada maintains policy rate at 2¼%,2026-01-28 14:45:00+00:00,2026-01-28
+72,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20260128a.htm,Federal Reserve issues FOMC statement,2026-01-28 19:00:00+00:00,2026-01-28
+73,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20260128.htm,Federal Open Market Committee,2026-02-18 19:00:00+00:00,2026-01-28
+120,BOC,rate_announcement,https://www.bankofcanada.ca/2026/03/fad-press-release-2026-03-18/,Bank of Canada maintains policy rate at 2¼%,2026-03-18 13:45:00+00:00,2026-03-18
+74,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20260318a.htm,Federal Reserve issues FOMC statement,2026-03-18 18:00:00+00:00,2026-03-18
+75,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20260318.htm,Federal Open Market Committee,2026-04-08 18:00:00+00:00,2026-03-18
+81,BOC,rate_announcement,https://www.bankofcanada.ca/2026/04/fad-press-release-2026-04-29/,Bank of Canada maintains policy rate at 2¼%,2026-04-29 13:45:00+00:00,2026-04-29
+76,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20260429a.htm,Federal Reserve issues FOMC statement,2026-04-29 18:00:00+00:00,2026-04-29
+77,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20260429.htm,Federal Open Market Committee,2026-05-20 18:00:00+00:00,2026-04-29
+82,BOC,rate_announcement,https://www.bankofcanada.ca/2026/06/fad-press-release-2026-06-10/,Bank of Canada maintains the policy rate at 2¼%,2026-06-10 13:45:00+00:00,2026-06-10
+78,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617a.htm,Federal Reserve issues FOMC statement,2026-06-17 18:00:00+00:00,2026-06-17
+79,FED,minutes,https://www.federalreserve.gov/monetarypolicy/fomcminutes20260617.htm,Federal Open Market Committee,2026-07-08 18:00:00+00:00,2026-06-17
+83,BOC,rate_announcement,https://www.bankofcanada.ca/2026/07/fad-press-release-2026-07-15/,Bank of Canada maintains the policy rate at 2¼%,2026-07-15 13:45:00+00:00,2026-07-15
+80,FED,statement,https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm,Federal Reserve issues FOMC statement,2026-07-29 18:00:00+00:00,2026-07-29

@@ -28,14 +28,17 @@ def main():
 
     earliest = datetime.date.fromisoformat(args.earliest)
 
+    # Discovery runs before the database connection is opened: probing
+    # candidate announcement dates can take many minutes on a cold cache,
+    # long enough for a managed Postgres to drop an idle connection.
+    fed_releases = fed.list_releases(args.cache_dir, earliest)
+    boc_releases = boc.list_releases(args.cache_dir, earliest)
+    print(f"Fed releases listed: {len(fed_releases)}")
+    print(f"BoC releases listed: {len(boc_releases)}")
+
     with db.connect() as conn:
         db.ensure_schema(conn)
         known = db.existing_urls(conn)
-
-        fed_releases = fed.list_releases(args.cache_dir, earliest)
-        boc_releases = boc.list_releases(args.cache_dir, earliest)
-        print(f"Fed releases listed: {len(fed_releases)}")
-        print(f"BoC releases listed: {len(boc_releases)}")
 
         inserted = skipped = failed = 0
         jobs = [(fed, r) for r in fed_releases] + [(boc, r) for r in boc_releases]
