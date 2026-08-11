@@ -252,3 +252,43 @@ This is consistent with the negation probe result recorded above: the
 model does not read negation scope, so an input transform whose only
 purpose is to expose that scope has nothing to contribute. The bottleneck
 is the training signal, not the encoding.
+
+## Headline verdict: the fine-tune does not beat the LLM baseline (2026-08-11)
+
+- git commit: `18611ae`
+- based on the CPU-pinned three-way table, the negation probe, the
+  multi-seed ablation, and the cost measurement, all recorded above
+
+On the held-out year 2025-08-01 to 2026-08-01 the fine-tuned model reaches
+0.6804 stance macro-F1 against 0.8208 for zero-shot GPT-5 and 0.5794 for
+the dictionary method. The fine-tune loses to the LLM by 0.140 macro-F1.
+
+What was tried before writing this down: class weighting from the training
+window only, an epoch budget chosen by chronological validation rather
+than picked by hand (14 epochs, best checkpoint at epoch 12, validation
+peaking there), and the negation/hedge input transform, which the seed
+sweep then showed to be worth nothing.
+
+What was deliberately not tried: tuning further against this target. The
+reference labels are gpt-5-mini's, so "beat GPT-5" currently means "agree
+with gpt-5-mini's opinions better than GPT-5 does", and GPT-5 shares a
+model family and a prompt with the labeller. Optimising that gap harder
+would be optimising a circular metric, and any win would evaporate the
+moment real labels arrived. The honest move is to get human labels on the
+held-out year first; the review queue is built and prioritised for that.
+
+The honest alternative claim, as of this commit:
+
+| claim | value |
+|---|---|
+| margin over the dictionary baseline | +0.1010 macro-F1 (0.6804 vs 0.5794) |
+| margin over zero-shot GPT-5 | -0.1404 macro-F1 (0.6804 vs 0.8208) |
+| local throughput | 122.0 sentences/second on CPU |
+| marginal cost, 1,000 sentences, local | $0.00 |
+| marginal cost, 1,000 sentences, GPT-5 | $2.46 |
+| negation minimal pairs, 10 negated items | cbsent 0.60 with one label used, GPT-5 1.00 |
+
+So the defensible position is a cheap, local, reproducible scorer that
+clearly beats the literature's dictionary method and clearly loses to a
+frontier LLM, and that does not yet read negation. It is not a
+state-of-the-art claim and this file should not be read as making one.
