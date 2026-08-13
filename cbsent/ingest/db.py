@@ -22,7 +22,7 @@ SCHEMA_SQL = """
 CREATE TABLE IF NOT EXISTS documents (
     id           SERIAL PRIMARY KEY,
     bank         TEXT NOT NULL CHECK (bank IN ('FED', 'BOC')),
-    doc_type     TEXT NOT NULL CHECK (doc_type IN ('statement', 'minutes', 'rate_announcement')),
+    doc_type     TEXT NOT NULL,
     url          TEXT NOT NULL UNIQUE,
     title        TEXT,
     published_at TIMESTAMPTZ NOT NULL,
@@ -86,9 +86,22 @@ def connect():
         conn.close()
 
 
+DOC_TYPES = ("statement", "minutes", "rate_announcement", "speech", "testimony")
+
+
 def ensure_schema(conn) -> None:
     with conn.cursor() as cur:
         cur.execute(SCHEMA_SQL)
+        # The doc_type check predates speeches and testimony; rebuild it to
+        # the current vocabulary so old databases migrate in place.
+        cur.execute(
+            "ALTER TABLE documents DROP CONSTRAINT IF EXISTS documents_doc_type_check"
+        )
+        quoted = ", ".join(f"'{t}'" for t in DOC_TYPES)
+        cur.execute(
+            f"ALTER TABLE documents ADD CONSTRAINT documents_doc_type_check "
+            f"CHECK (doc_type IN ({quoted}))"
+        )
     conn.commit()
 
 

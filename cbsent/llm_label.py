@@ -45,8 +45,8 @@ guidance, balance sheet policy, and voting.
 Respond with JSON: {"stance": "...", "topic": "..."}"""
 
 
-def _cache_key(model: str, sentence: str) -> str:
-    payload = json.dumps({"m": model, "p": SYSTEM_PROMPT, "s": sentence}, sort_keys=True)
+def _cache_key(model: str, sentence: str, system_prompt: str) -> str:
+    payload = json.dumps({"m": model, "p": system_prompt, "s": sentence}, sort_keys=True)
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
@@ -73,11 +73,13 @@ def prime_from_csv(path: str) -> int:
 
 
 def label_many(sentences, model: str, cache_dir: str, workers: int = 32,
-               progress_every: int = 200):
+               progress_every: int = 200, **kwargs):
     """Label a list of sentences in parallel, returning one dict or None each.
 
     Order matches the input. Cached sentences cost nothing, so re-running
     is cheap and the same call can be used to top up a partial cache.
+    Extra keyword arguments (system_prompt, require_topic) pass through to
+    label_sentence.
     """
     from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -85,7 +87,7 @@ def label_many(sentences, model: str, cache_dir: str, workers: int = 32,
     done = 0
     with ThreadPoolExecutor(max_workers=workers) as pool:
         futures = {
-            pool.submit(label_sentence, s, model, cache_dir): i
+            pool.submit(label_sentence, s, model, cache_dir, **kwargs): i
             for i, s in enumerate(sentences)
         }
         for future in as_completed(futures):
@@ -101,13 +103,19 @@ def label_many(sentences, model: str, cache_dir: str, workers: int = 32,
 
 
 def label_sentence(sentence: str, model: str, cache_dir: str,
-                   client=None) -> Optional[dict]:
-    """Return {"stance": ..., "topic": ...} for one sentence, cached."""
-    primed = _PRIMED.get((model, sentence))
-    if primed is not None:
-        return primed
+                   client=None, system_prompt: str = SYSTEM_PROMPT,
+                   require_topic: bool = True) -> Optional[dict]:
+    """Return {"stance": ..., "topic": ...} for one sentence, cached.
 
-    key = _cache_key(model, sentence)
+    A different system_prompt gets its own cache entries; benchmark
+    prompts that classify stance only pass require_topic=False.
+    """
+    if system_prompt is SYSTEM_PROMPT:
+        primed = _PRIMED.get((model, sentence))
+        if primed is not None:
+            return primed
+
+    key = _cache_key(model, sentence, system_prompt)
     path = os.path.join(cache_dir, key + ".json")
     if os.path.exists(path):
         with open(path, encoding="utf-8") as f:
@@ -120,7 +128,7 @@ def label_sentence(sentence: str, model: str, cache_dir: str,
     resp = client.chat.completions.create(
         model=model,
         messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": sentence},
         ],
         response_format={"type": "json_object"},
@@ -130,10 +138,12 @@ def label_sentence(sentence: str, model: str, cache_dir: str,
 
     stance = str(parsed.get("stance", "")).lower().strip()
     topic = str(parsed.get("topic", "")).lower().strip()
-    if stance not in STANCES or topic not in TOPICS:
+    if stance not in STANCES:
+        return None
+    if require_topic and topic not in TOPICS:
         return None
 
-    label = {"stance": stance, "topic": topic}
+    label = {"stance": stance, "topic": topic if topic in TOPICS else None}
     # Usage is recorded because reasoning tokens are billed but never
     # appear in the response text, so cost cannot be reconstructed later.
     usage = {}
