@@ -5,7 +5,8 @@ EVAL_END := 2026-08-01
 EPOCHS := 14
 
 .PHONY: test ingest snapshot bootstrap export-labels review review-html train \
-	ablate ablate-single eval eval-provisional event-study probe cost all
+	ablate ablate-single eval eval-provisional event-study probe cost all \
+	ingest-expanded pretrain train-benchmark gpt5-benchmark yield-study
 
 test:
 	$(PY) -m pytest tests/ -q
@@ -54,6 +55,22 @@ event-study:
 
 probe:
 	$(PY) scripts/negation_probe.py
+
+# Expanded corpus and the benchmark track.
+ingest-expanded:
+	$(PY) scripts/ingest_expanded.py
+
+pretrain:
+	caffeinate -is $(PY) scripts/pretrain_dapt.py
+
+train-benchmark:
+	$(PY) scripts/train_benchmark.py
+
+gpt5-benchmark:
+	$(PY) scripts/gpt5_benchmark.py
+
+yield-study:
+	$(PY) scripts/yield_study.py
 
 cost:
 	$(PY) scripts/cost_compare.py --input-price 1.25 --output-price 10.00 \
