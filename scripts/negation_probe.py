@@ -34,6 +34,27 @@ CACHE_DIR = "data/llm_cache"
 LLM_LABELS_CSV = "data/llm_labels.csv"
 
 
+def _model_predictions(model_dir: str, device: str, texts):
+    """Predict stances with either model format this project produces."""
+    if os.path.exists(os.path.join(model_dir, "model.pt")):
+        from cbsent.model import Scorer
+        return [r["stance"] for r in
+                Scorer(model_dir, device=device).score_sentences(texts)]
+
+    # Hugging Face format from the benchmark track.
+    import torch
+    from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+    tokenizer = AutoTokenizer.from_pretrained(model_dir)
+    model = AutoModelForSequenceClassification.from_pretrained(model_dir)
+    model.eval()
+    with torch.no_grad():
+        enc = tokenizer(texts, max_length=128, padding=True, truncation=True,
+                        return_tensors="pt")
+        preds = model(**enc).logits.argmax(dim=-1).tolist()
+    return [model.config.id2label[p] for p in preds]
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model-dir", default="export/cbsent")
@@ -66,11 +87,9 @@ def main():
             l["stance"] if l else "neutral" for l in labels
         ]
 
-    from cbsent.model import Scorer
-    scorer = Scorer(args.model_dir, device=args.device)
-    systems["cbsent (fine-tuned)"] = [
-        r["stance"] for r in scorer.score_sentences(texts)
-    ]
+    systems[f"fine-tune ({args.model_dir})"] = _model_predictions(
+        args.model_dir, args.device, texts
+    )
 
     def accuracy(preds, idx=None):
         idx = range(len(preds)) if idx is None else idx
