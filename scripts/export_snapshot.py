@@ -33,10 +33,17 @@ def main():
             w.writerow(["id", "bank", "doc_type", "url", "title", "published_at", "meeting_date"])
             w.writerows(doc_rows)
 
+        # The sentence snapshot covers the core corpus that labels and
+        # evaluations run on. Speeches and testimony exist for MLM
+        # adaptation only, are an order of magnitude larger, and are
+        # reproducible from scripts/ingest_expanded.py plus the fetch
+        # cache, so they stay out of git.
         cur.execute(
             """
-            SELECT id, document_id, seq, text, published_at
-            FROM sentences ORDER BY document_id, seq
+            SELECT s.id, s.document_id, s.seq, s.text, s.published_at
+            FROM sentences s JOIN documents d ON s.document_id = d.id
+            WHERE d.doc_type IN ('statement', 'minutes', 'rate_announcement')
+            ORDER BY s.document_id, s.seq
             """
         )
         sent_rows = cur.fetchall()

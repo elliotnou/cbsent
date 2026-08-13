@@ -15,6 +15,7 @@ from typing import List, Optional
 
 import psycopg2
 from dotenv import load_dotenv
+from psycopg2.extras import execute_values
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -129,13 +130,15 @@ def insert_document(conn, doc: Document, sentence_texts: List[str]) -> int:
             conn.rollback()
             return 0
         doc_id = row[0]
-        for seq, text in enumerate(sentence_texts):
-            cur.execute(
-                """
-                INSERT INTO sentences (document_id, seq, text, published_at)
-                VALUES (%s, %s, %s, %s)
-                """,
-                (doc_id, seq, text, doc.published_at),
-            )
+        execute_values(
+            cur,
+            """
+            INSERT INTO sentences (document_id, seq, text, published_at)
+            VALUES %s
+            """,
+            [(doc_id, seq, text, doc.published_at)
+             for seq, text in enumerate(sentence_texts)],
+            page_size=500,
+        )
     conn.commit()
     return doc_id

@@ -31,7 +31,26 @@ def parse_year_range(spec: str):
     return range(int(lo), int(hi) + 1)
 
 
-def insert_all(conn, known, jobs, fetcher, fixup=None):
+class ConnectionBox:
+    """Reconnects on dropped connections; managed Postgres closes idle ones."""
+
+    def __init__(self):
+        self.conn = None
+        self.reconnect()
+
+    def reconnect(self):
+        if self.conn is not None:
+            try:
+                self.conn.close()
+            except Exception:
+                pass
+        import psycopg2
+        self.conn = psycopg2.connect(db._database_url())
+
+
+def insert_all(box, known, jobs, fetcher, fixup=None):
+    import psycopg2
+
     inserted = skipped = failed = 0
     for job in jobs:
         if job.url in known:
@@ -48,7 +67,13 @@ def insert_all(conn, known, jobs, fetcher, fixup=None):
         if len(sentences) < 3:
             failed += 1
             continue
-        if db.insert_document(conn, doc, sentences):
+        try:
+            ok = db.insert_document(box.conn, doc, sentences)
+        except psycopg2.OperationalError:
+            print("  connection dropped, reconnecting")
+            box.reconnect()
+            ok = db.insert_document(box.conn, doc, sentences)
+        if ok:
             inserted += 1
             known.add(doc.url)
             if inserted % 50 == 0:
@@ -94,28 +119,29 @@ def main():
             )
         return doc_dict
 
-    with db.connect() as conn:
-        db.ensure_schema(conn)
-        known = db.existing_urls(conn)
-        totals = [0, 0, 0]
+    box = ConnectionBox()
+    db.ensure_schema(box.conn)
+    known = db.existing_urls(box.conn)
+    totals = [0, 0, 0]
 
-        for name, batch in jobs.items():
-            if name == "history":
-                fetcher = lambda r: fed.fetch_document(r, args.cache_dir)
-                result = insert_all(conn, known, batch, fetcher, fix_history_ts)
-            elif name in ("speeches", "testimony"):
-                fetcher = lambda i: fed_feeds.fetch_document(i, args.cache_dir)
-                result = insert_all(conn, known, batch, fetcher)
-            else:
-                fetcher = lambda s: boc_speeches.fetch_document(s, args.cache_dir)
-                result = insert_all(conn, known, batch, fetcher)
-            print(f"{name}: {result[0]} inserted, {result[1]} skipped, {result[2]} failed")
-            totals = [a + b for a, b in zip(totals, result)]
+    for name, batch in jobs.items():
+        if name == "history":
+            fetcher = lambda r: fed.fetch_document(r, args.cache_dir)
+            result = insert_all(box, known, batch, fetcher, fix_history_ts)
+        elif name in ("speeches", "testimony"):
+            fetcher = lambda i: fed_feeds.fetch_document(i, args.cache_dir)
+            result = insert_all(box, known, batch, fetcher)
+        else:
+            fetcher = lambda s: boc_speeches.fetch_document(s, args.cache_dir)
+            result = insert_all(box, known, batch, fetcher)
+        print(f"{name}: {result[0]} inserted, {result[1]} skipped, {result[2]} failed")
+        totals = [a + b for a, b in zip(totals, result)]
 
-        print(f"\ntotal: {totals[0]} inserted, {totals[1]} skipped, {totals[2]} failed")
-        with conn.cursor() as cur:
-            cur.execute("SELECT count(*) FROM sentences")
-            print(f"sentences in corpus: {cur.fetchone()[0]}")
+    print(f"\ntotal: {totals[0]} inserted, {totals[1]} skipped, {totals[2]} failed")
+    with box.conn.cursor() as cur:
+        cur.execute("SELECT count(*) FROM sentences")
+        print(f"sentences in corpus: {cur.fetchone()[0]}")
+    box.conn.close()
 
 
 if __name__ == "__main__":
