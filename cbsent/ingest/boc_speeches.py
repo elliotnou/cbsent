@@ -1,9 +1,11 @@
-"""Bank of Canada speeches, from the press listing pages.
+"""Bank of Canada speeches, discovered through the paged RSS feed.
 
-The listing at /press/speeches/ paginates ten items per page back through
-the archive. Multimedia entries (press-conference videos) are skipped;
-speech articles live at dated /YYYY/MM/slug/ URLs with the same
-post-content structure as press releases.
+The /press/speeches/ listing page renders through a JavaScript module and
+serves identical content for every page number, so it cannot be walked.
+The WordPress feed for the speeches content type does paginate:
+/feed/?content_type=speeches&paged=N returns ten items per page in
+reverse-chronological order back through the archive, each with its URL,
+title and publication date.
 
 Speech pages carry a publication date but no clock time, so documents are
 stamped 11:59 p.m. ET: for anything computed point-in-time, text with an
@@ -20,11 +22,18 @@ from bs4 import BeautifulSoup
 from cbsent.ingest import fetch
 from cbsent.ingest.times import ET
 
-LISTING_URL = "https://www.bankofcanada.ca/press/speeches/page/{page}/"
+FEED_URL = ("https://www.bankofcanada.ca/feed/"
+            "?content_type=speeches&post_type[0]=post&paged={page}")
 
-_ARTICLE_RE = re.compile(r"https://www\.bankofcanada\.ca/(\d{4})/(\d{2})/[a-z0-9-]+/$")
+_ARTICLE_RE = re.compile(r"https://www\.bankofcanada\.ca/\d{4}/\d{2}/[a-z0-9-]+/$")
+# The feed is RSS 1.0 (RDF): items carry a dc:date rather than a pubDate.
+_ITEM_RE = re.compile(
+    r"<item rdf:about=\"[^\"]+\">.*?<title>(.*?)</title>"
+    r".*?<link>(.*?)</link>.*?<dc:date>(.*?)</dc:date>",
+    re.S,
+)
 
-MAX_PAGES = 150
+MAX_PAGES = 200
 
 
 @dataclass
@@ -34,37 +43,35 @@ class BocSpeech:
     listed_date: Optional[datetime.date]
 
 
+def _unescape(text: str) -> str:
+    text = re.sub(r"<!\[CDATA\[(.*?)\]\]>", r"\1", text, flags=re.S)
+    return (text.replace("&amp;", "&").replace("&#8217;", "'")
+            .replace("&#8211;", "-").strip())
+
+
 def list_speeches(cache_dir: str, earliest: datetime.date) -> List[BocSpeech]:
     seen = {}
     for page in range(1, MAX_PAGES + 1):
         try:
-            html = fetch.get(LISTING_URL.format(page=page), cache_dir)
+            xml = fetch.get(FEED_URL.format(page=page), cache_dir)
         except Exception:
             break
-        soup = BeautifulSoup(html, "lxml")
-        headings = soup.find_all("h3", class_="media-heading")
-        if not headings:
+        items = _ITEM_RE.findall(xml)
+        if not items:
             break
         page_dates = []
-        for h3 in headings:
-            a = h3.find("a")
-            if not a or not a.get("href"):
-                continue
-            url = a["href"]
+        for title, url, pub in items:
+            url = url.strip()
             if not _ARTICLE_RE.match(url):
                 continue
-            date_span = h3.find_previous("span", class_="media-date")
-            listed = None
-            if date_span:
-                try:
-                    listed = datetime.datetime.strptime(
-                        date_span.get_text(strip=True), "%B %d, %Y"
-                    ).date()
-                except ValueError:
-                    pass
+            try:
+                listed = datetime.date.fromisoformat(pub.strip()[:10])
+            except ValueError:
+                listed = None
             if listed:
                 page_dates.append(listed)
-            seen[url] = BocSpeech(url, a.get_text(strip=True), listed)
+            seen[url] = BocSpeech(url, _unescape(title), listed)
+        # Reverse-chronological: once a whole page is older, stop.
         if page_dates and max(page_dates) < earliest:
             break
 
