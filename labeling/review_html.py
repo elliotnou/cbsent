@@ -147,7 +147,7 @@ def main():
     args = parser.parse_args()
 
     with db.connect() as conn:
-        queue, n_eval, n_dis, n_sample = build_queue(
+        queue, n_eval, n_dis, n_neg, n_sample = build_queue(
             conn, args.eval_start, args.sample_per_cell
         )
     if args.limit:
@@ -169,7 +169,8 @@ def main():
     with open(args.out, "w", encoding="utf-8") as f:
         f.write(page)
     print(f"wrote {len(items)} sentences to {args.out} "
-          f"({n_eval} held-out window, {n_dis} disagreements, {n_sample} sampled)")
+          f"({n_eval} held-out window, {n_dis} disagreements, "
+          f"{n_neg} negation cues, {n_sample} sampled)")
     print("open it, review, download the CSV, then run "
           "python scripts/import_review.py reviewed.csv")
 

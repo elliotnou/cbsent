@@ -4,7 +4,10 @@ Serves sentences in priority order:
   1. every sentence in the evaluation window (chronological holdout) that
      has any bootstrap label — the eval set must be fully human-verified,
   2. every dictionary/LLM stance disagreement outside the window,
-  3. a stratified random sample of agreements (bank x year x stance).
+  3. every remaining sentence carrying a negation cue — the negation
+     probe showed negated constructions are where models fail and they
+     are rare in the corpus, so each one is disproportionately valuable,
+  4. a stratified random sample of agreements (bank x year x stance).
 
 Decisions are written as source='human' labels. Progress is resumable;
 quit any time with q.
@@ -23,6 +26,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from cbsent.ingest import db
 from cbsent.llm_label import STANCES, TOPICS
+from cbsent.negation import mark_cues
 
 SEED = 20250811
 
@@ -52,8 +56,14 @@ def build_queue(conn, eval_start: str, sample_per_cell: int):
     pending = [r for r in rows if not r[8]]
     eval_rows = [r for r in pending if r[4]]
     rest = [r for r in pending if not r[4]]
-    disagree = [r for r in rest if r[5] is not None and r[6] is not None and r[5] != r[6]]
-    agree = [r for r in rest if r not in disagree]
+    disagree_set = {r[0] for r in rest
+                    if r[5] is not None and r[6] is not None and r[5] != r[6]}
+    disagree = [r for r in rest if r[0] in disagree_set]
+    remaining = [r for r in rest if r[0] not in disagree_set]
+
+    negated = [r for r in remaining if mark_cues(r[1]) != r[1]]
+    negated_set = {r[0] for r in negated}
+    agree = [r for r in remaining if r[0] not in negated_set]
 
     rng = random.Random(SEED)
     cells = {}
@@ -64,8 +74,8 @@ def build_queue(conn, eval_start: str, sample_per_cell: int):
         pool = cells[cell]
         sampled.extend(rng.sample(pool, min(sample_per_cell, len(pool))))
 
-    queue = eval_rows + disagree + sampled
-    return queue, len(eval_rows), len(disagree), len(sampled)
+    queue = eval_rows + disagree + negated + sampled
+    return queue, len(eval_rows), len(disagree), len(negated), len(sampled)
 
 
 def main():
@@ -76,14 +86,15 @@ def main():
     args = parser.parse_args()
 
     with db.connect() as conn:
-        queue, n_eval, n_dis, n_sample = build_queue(
+        queue, n_eval, n_dis, n_neg, n_sample = build_queue(
             conn, args.eval_start, args.sample_per_cell
         )
         if args.limit:
             queue = queue[: args.limit]
 
         print(f"queue: {len(queue)} sentences "
-              f"({n_eval} eval window, {n_dis} disagreements, {n_sample} sampled)")
+              f"({n_eval} eval window, {n_dis} disagreements, "
+              f"{n_neg} negation cues, {n_sample} sampled)")
         print("keys: [h]awkish [d]ovish [n]eutral, then topic 1-5, "
               "[s]kip, [q]uit\n")
 
