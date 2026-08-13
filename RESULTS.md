@@ -342,3 +342,16 @@ remain checkable against the hashes as recorded.
 
 Weights are distributed through the Hugging Face Hub, per
 `scripts/publish_hub.py`, and are not intended to live in git.
+
+## Zero-shot gpt-5 on the TDW benchmark test split (2026-08-12)
+
+- command: `python scripts/gpt5_benchmark.py --model gpt-5`
+- git commit: `01735dd`
+- prompt: benchmark label definitions, stance only, cached
+- test sentences: 496, invalid responses: 0
+
+| metric | value |
+|---|---|
+| weighted F1 (benchmark standard) | 0.7133 |
+| macro F1 | 0.7019 |
+| accuracy | 0.7137 |
