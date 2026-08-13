@@ -399,3 +399,24 @@ intraday resolution; BoC speeches carry no clock time and are stamped
 
 Fed statement+minutes releases since 2011-01-01: 244, which is the
 candidate set for the yield study.
+
+## Reproducibility finding: fp32 ModernBERT is pathologically slow on MPS (2026-08-13)
+
+- git commit: `26d1e72`
+- command: single AdamW training steps of ModernBERT-base at batch 32,
+  sequence length 128, timed after one warmup step on the same tensors
+
+| configuration | seconds per step |
+|---|---|
+| MPS, float32 | ~50 (0.02 it/s observed over 600 steps) |
+| MPS, autocast bf16 over fp32 weights | 25.6 |
+| CPU, float32, 8 threads | 6.9 |
+| MPS, pure bfloat16 | 2.9 |
+
+Full-precision ModernBERT on this machine's MPS backend is ~17x slower
+than pure bfloat16; short sequences (as in the initial smoke test) do not
+trigger the slow path, which is why it was not caught before launch. The
+first pretraining launch was killed at step 600 of 4,100 with a 52-hour
+ETA. Domain-adaptive pretraining therefore runs in bfloat16 end to end
+(losses finite and decreasing; float16 produced NaN without loss scaling)
+and the adapted weights are exported as float32.

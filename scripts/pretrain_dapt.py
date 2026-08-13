@@ -72,6 +72,7 @@ def main():
     parser.add_argument("--mlm-probability", type=float, default=0.30)
     parser.add_argument("--val-fraction", type=float, default=0.02)
     parser.add_argument("--out", default="export/modernbert-cb-dapt")
+    parser.add_argument("--dtype", default="bf16", choices=["bf16", "fp32"])
     args = parser.parse_args()
 
     from transformers import (
@@ -101,7 +102,12 @@ def main():
         tokenizer=tokenizer, mlm_probability=args.mlm_probability,
     )
 
-    model = AutoModelForMaskedLM.from_pretrained(args.backbone)
+    # Full-precision ModernBERT hits a pathologically slow kernel path on
+    # MPS (about 50 s/step at sequence length 128, roughly 17x slower than
+    # bfloat16; measured in RESULTS.md). Training runs in bf16 end to end
+    # and the adapted weights are cast back to fp32 for export.
+    dtype = torch.bfloat16 if args.dtype == "bf16" else torch.float32
+    model = AutoModelForMaskedLM.from_pretrained(args.backbone, dtype=dtype)
     model.to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr,
                                   weight_decay=0.01)
@@ -160,6 +166,7 @@ def main():
 
     final_val = val_loss()
     os.makedirs(args.out, exist_ok=True)
+    model.float()
     model.save_pretrained(args.out)
     tokenizer.save_pretrained(args.out)
 
@@ -177,6 +184,7 @@ def main():
         "batch_size": args.batch_size,
         "lr": args.lr,
         "mlm_probability": args.mlm_probability,
+        "train_dtype": args.dtype,
         "final_val_mlm_loss": round(final_val, 4),
         "git_commit": commit,
         "device": str(device),
