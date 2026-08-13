@@ -371,3 +371,31 @@ Weights are distributed through the Hugging Face Hub, per
 | cbsent (fine-tuned) | 0.6770 | 0.5390 | 0.6051 | 0.8868 |
 
 PROVISIONAL. 601 of 601 reference labels come from the gpt-5-mini bootstrap pass rather than a human. Two of the three systems are therefore partly measured against themselves: the zero-shot baseline shares a model family and prompt with the labeller, and the fine-tuned model was trained on those labels. Read the zero-shot row as an upper bound inflated by that overlap, not as accuracy. The headline comparison is the margin over the dictionary baseline, which shares nothing with the labeller. This table becomes a headline result only when the held-out labels are human-verified.
+
+## Corpus expansion for domain adaptation (2026-08-12)
+
+- commands: `python scripts/ingest_expanded.py` then
+  `python scripts/ingest_expanded.py --sources boc` then
+  `python scripts/ingest.py --earliest 2015-01-01`
+- git commit: `2c1693e`
+
+| source | documents |
+|---|---|
+| Fed speeches (official JSON feed, 2006-2026, exact datetimes) | 1,326 |
+| Fed testimony (official JSON feed) | 278 |
+| FOMC minutes (incl. archive pages to 2011) | 116 |
+| FOMC statements (incl. archive pages to 2011) | 128 |
+| BoC rate announcements (fixed announcement dates to 2015) | 93 |
+| BoC speeches (paged RSS feed; the listing page is JS-only) | 413 |
+| total | 2,354 |
+
+Sentences in the corpus: 269,210. Notes recorded rather than absorbed:
+283 BoC speech pages failed extraction (no post-content body or under 500
+characters, typically PDF-only pages); statement release times before
+March 2013 are stamped 2:15 p.m. ET without distinguishing the 12:30
+press-conference meetings of 2011-2012, which nothing downstream reads at
+intraday resolution; BoC speeches carry no clock time and are stamped
+11:59 p.m. ET so point-in-time queries can never see them early.
+
+Fed statement+minutes releases since 2011-01-01: 244, which is the
+candidate set for the yield study.
