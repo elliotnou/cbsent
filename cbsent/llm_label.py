@@ -45,14 +45,47 @@ guidance, balance sheet policy, and voting.
 Respond with JSON: {"stance": "...", "topic": "..."}"""
 
 
+# Adapted from the benchmark's annotation guide: sentence-level monetary
+# policy stance of FOMC communication.
+TDW_BENCH_PROMPT = """\
+You classify single sentences from FOMC communications (meeting minutes,
+speeches, press conferences) by monetary policy stance. Answer with
+exactly one of: hawkish, dovish, neutral.
+
+- hawkish: the sentence indicates a tightening of monetary policy or an
+  economic reading that supports tightening: rising or above-target
+  inflation or inflation expectations, an overheating economy or labour
+  market, rate increases, reduced accommodation or balance sheet runoff.
+- dovish: the sentence indicates an easing of monetary policy or an
+  economic reading that supports easing: falling or below-target
+  inflation, economic weakness or slack, rate cuts, added accommodation
+  or asset purchases.
+- neutral: mixed or balanced readings, statements of fact with no
+  directional implication for policy, or procedural/descriptive language.
+
+Judge the sentence on its own. Respond with JSON: {"stance": "..."}"""
+
+
 def _cache_key(model: str, sentence: str, system_prompt: str) -> str:
     payload = json.dumps({"m": model, "p": system_prompt, "s": sentence}, sort_keys=True)
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
 # Labels loaded from the committed export, consulted before any API call so
-# reported numbers can be reproduced without a key.
+# reported numbers can be reproduced without a key. Keyed by prompt as well
+# as model and sentence: the codebook prompt and the benchmark prompt ask
+# subtly different questions and must never answer for each other.
 _PRIMED: dict = {}
+
+PROMPT_NAMES = {"codebook": None, "tdw_bench": None}
+
+
+def _prompt_name(system_prompt: str):
+    if system_prompt == SYSTEM_PROMPT:
+        return "codebook"
+    if system_prompt == TDW_BENCH_PROMPT:
+        return "tdw_bench"
+    return None
 
 
 def prime_from_csv(path: str) -> int:
@@ -65,9 +98,15 @@ def prime_from_csv(path: str) -> int:
     with open(path, encoding="utf-8") as f:
         for row in csv.DictReader(f):
             stance, topic = row.get("stance"), row.get("topic")
-            if stance not in STANCES or topic not in TOPICS:
+            prompt = row.get("prompt", "codebook")
+            if stance not in STANCES or prompt not in PROMPT_NAMES:
                 continue
-            _PRIMED[(row["model"], row["sentence"])] = {"stance": stance, "topic": topic}
+            if prompt == "codebook" and topic not in TOPICS:
+                continue
+            _PRIMED[(row["model"], prompt, row["sentence"])] = {
+                "stance": stance,
+                "topic": topic if topic in TOPICS else None,
+            }
             loaded += 1
     return loaded
 
@@ -110,8 +149,9 @@ def label_sentence(sentence: str, model: str, cache_dir: str,
     A different system_prompt gets its own cache entries; benchmark
     prompts that classify stance only pass require_topic=False.
     """
-    if system_prompt is SYSTEM_PROMPT:
-        primed = _PRIMED.get((model, sentence))
+    name = _prompt_name(system_prompt)
+    if name is not None:
+        primed = _PRIMED.get((model, name, sentence))
         if primed is not None:
             return primed
 

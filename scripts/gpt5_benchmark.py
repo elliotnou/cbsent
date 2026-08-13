@@ -22,31 +22,11 @@ from dotenv import load_dotenv
 from sklearn.metrics import accuracy_score, classification_report, f1_score
 
 from cbsent import llm_label
+from cbsent.llm_label import TDW_BENCH_PROMPT
 
 BENCH_DIR = "data/benchmark"
 CACHE_DIR = "data/llm_cache"
 ID2LABEL = {0: "dovish", 1: "hawkish", 2: "neutral"}
-
-# Adapted from the benchmark's annotation guide: sentence-level monetary
-# policy stance of FOMC communication.
-BENCH_PROMPT = """\
-You classify single sentences from FOMC communications (meeting minutes,
-speeches, press conferences) by monetary policy stance. Answer with
-exactly one of: hawkish, dovish, neutral.
-
-- hawkish: the sentence indicates a tightening of monetary policy or an
-  economic reading that supports tightening: rising or above-target
-  inflation or inflation expectations, an overheating economy or labour
-  market, rate increases, reduced accommodation or balance sheet runoff.
-- dovish: the sentence indicates an easing of monetary policy or an
-  economic reading that supports easing: falling or below-target
-  inflation, economic weakness or slack, rate cuts, added accommodation
-  or asset purchases.
-- neutral: mixed or balanced readings, statements of fact with no
-  directional implication for policy, or procedural/descriptive language.
-
-Judge the sentence on its own. Respond with JSON: {"stance": "..."}"""
-
 
 def main():
     parser = argparse.ArgumentParser()
@@ -65,7 +45,7 @@ def main():
 
     labels = llm_label.label_many(
         texts, args.model, CACHE_DIR, workers=args.workers,
-        system_prompt=BENCH_PROMPT, require_topic=False,
+        system_prompt=TDW_BENCH_PROMPT, require_topic=False,
     )
     missing = sum(1 for l in labels if l is None)
     preds = [l["stance"] if l else "neutral" for l in labels]

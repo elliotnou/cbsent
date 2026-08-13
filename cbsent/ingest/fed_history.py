@@ -46,8 +46,11 @@ def list_releases(years, cache_dir: str) -> List[FedRelease]:
         html = fetch.get(HISTORY_URL.format(year=year), cache_dir)
         soup = BeautifulSoup(html, "lxml")
 
+        # Archive pages label the policy statement link "Statement"; the
+        # current calendar page labels it "HTML". Both point at the
+        # monetaryYYYYMMDDa.htm press release.
         for a in soup.find_all("a", href=_STATEMENT_RE):
-            if a.get_text(strip=True) != "HTML":
+            if a.get_text(strip=True) not in ("HTML", "Statement"):
                 continue
             meeting = _parse_date(_STATEMENT_RE.search(a["href"]).group(1))
             releases.append(

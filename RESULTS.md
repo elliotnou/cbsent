@@ -355,3 +355,19 @@ Weights are distributed through the Hugging Face Hub, per
 | weighted F1 (benchmark standard) | 0.7133 |
 | macro F1 | 0.7019 |
 | accuracy | 0.7137 |
+
+## Stance macro-F1, held-out 2025-08-01 to 2026-08-01 (2026-08-12)
+
+- command: `python scripts/eval.py --cut-date 2025-08-01 --eval-end 2026-08-01 --allow-bootstrap`
+- git commit: `aa5f844`
+- eval sentences: 601 (0/601 human-verified)
+- inference device: cpu
+- label provenance: includes bootstrap labels
+
+| system | macro-F1 | hawkish F1 | dovish F1 | neutral F1 |
+|---|---|---|---|---|
+| dictionary | 0.5796 | 0.4872 | 0.4260 | 0.8255 |
+| zero-shot gpt-5 | 0.8196 | 0.7863 | 0.7580 | 0.9145 |
+| cbsent (fine-tuned) | 0.6770 | 0.5390 | 0.6051 | 0.8868 |
+
+PROVISIONAL. 601 of 601 reference labels come from the gpt-5-mini bootstrap pass rather than a human. Two of the three systems are therefore partly measured against themselves: the zero-shot baseline shares a model family and prompt with the labeller, and the fine-tuned model was trained on those labels. Read the zero-shot row as an upper bound inflated by that overlap, not as accuracy. The headline comparison is the margin over the dictionary baseline, which shares nothing with the labeller. This table becomes a headline result only when the held-out labels are human-verified.
