@@ -73,6 +73,9 @@ def main():
     parser.add_argument("--val-fraction", type=float, default=0.02)
     parser.add_argument("--out", default="export/modernbert-cb-dapt")
     parser.add_argument("--dtype", default="bf16", choices=["bf16", "fp32"])
+    parser.add_argument("--checkpoint-every", type=int, default=400)
+    parser.add_argument("--resume", action="store_true",
+                        help="continue from the newest checkpoint in --out")
     args = parser.parse_args()
 
     from transformers import (
@@ -107,7 +110,24 @@ def main():
     # bfloat16; measured in RESULTS.md). Training runs in bf16 end to end
     # and the adapted weights are cast back to fp32 for export.
     dtype = torch.bfloat16 if args.dtype == "bf16" else torch.float32
-    model = AutoModelForMaskedLM.from_pretrained(args.backbone, dtype=dtype)
+
+    # A sleep/wake cycle can hang the MPS queue and lose an uncheckpointed
+    # run, so weights are checkpointed periodically and --resume continues
+    # from the newest one (fresh optimizer, remaining schedule; recorded in
+    # the exported config when it happens).
+    ckpt_path = os.path.join(args.out, "checkpoint.pt")
+    meta_path = os.path.join(args.out, "checkpoint_meta.json")
+    start_step = 0
+    load_from = args.backbone
+    if args.resume and os.path.exists(ckpt_path) and os.path.exists(meta_path):
+        with open(meta_path, encoding="utf-8") as f:
+            start_step = json.load(f)["step"]
+        print(f"resuming from checkpoint at step {start_step}")
+
+    model = AutoModelForMaskedLM.from_pretrained(load_from, dtype=dtype)
+    if start_step:
+        state = torch.load(ckpt_path, map_location="cpu", weights_only=True)
+        model.load_state_dict(state)
     model.to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr,
                                   weight_decay=0.01)
@@ -121,6 +141,8 @@ def main():
         ),
     )
     print(f"steps per epoch: {steps_per_epoch}, total: {total_steps}")
+    for _ in range(start_step):
+        scheduler.step()
 
     def masked_batch(idx_tensor):
         rows = [{"input_ids": row.tolist()} for row in idx_tensor]
@@ -140,13 +162,20 @@ def main():
 
     print(f"initial val MLM loss: {val_loss():.4f}")
 
+    os.makedirs(args.out, exist_ok=True)
     model.train()
     step = 0
     t0 = time.time()
     for epoch in range(1, args.epochs + 1):
         order = torch.randperm(len(train_blocks), generator=g)
         running = 0.0
+        window = 0
         for i in range(0, len(train_blocks), args.batch_size):
+            # On resume, replay the seeded shuffles but skip completed steps
+            # so the data order stays the run's own.
+            if step < start_step:
+                step += 1
+                continue
             ids, labels = masked_batch(train_blocks[order[i:i + args.batch_size]])
             out = model(input_ids=ids, labels=labels)
             out.loss.backward()
@@ -155,14 +184,22 @@ def main():
             scheduler.step()
             optimizer.zero_grad()
             running += out.loss.item()
+            window += 1
             step += 1
             if step % 200 == 0:
-                rate = step / (time.time() - t0)
+                done_here = step - start_step
+                rate = done_here / (time.time() - t0)
                 remaining = (total_steps - step) / rate / 60
-                print(f"step {step}/{total_steps}  loss {running/200:.4f}  "
+                print(f"step {step}/{total_steps}  loss {running/max(1,window):.4f}  "
                       f"{rate:.2f} it/s  ~{remaining:.0f} min left")
                 running = 0.0
-        print(f"epoch {epoch}/{args.epochs} done, val MLM loss: {val_loss():.4f}")
+                window = 0
+            if step % args.checkpoint_every == 0:
+                torch.save(model.state_dict(), ckpt_path)
+                with open(meta_path, "w") as f:
+                    json.dump({"step": step}, f)
+        if step > start_step:
+            print(f"epoch {epoch}/{args.epochs} done, val MLM loss: {val_loss():.4f}")
 
     final_val = val_loss()
     os.makedirs(args.out, exist_ok=True)
@@ -185,6 +222,7 @@ def main():
         "lr": args.lr,
         "mlm_probability": args.mlm_probability,
         "train_dtype": args.dtype,
+        "resumed_from_step": start_step,
         "final_val_mlm_loss": round(final_val, 4),
         "git_commit": commit,
         "device": str(device),
