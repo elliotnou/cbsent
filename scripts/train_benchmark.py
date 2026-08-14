@@ -161,9 +161,12 @@ def main():
     print(f"train {len(tr)} / val {len(va)}")
 
     tokenizer = AutoTokenizer.from_pretrained(args.backbone)
+    # bf16 on MPS: full-precision ModernBERT hits the slow kernel path
+    # measured in RESULTS.md. Test inference happens in fp32 on CPU.
+    dtype = torch.bfloat16 if device.type == "mps" else torch.float32
     model = AutoModelForSequenceClassification.from_pretrained(
         args.backbone, num_labels=3,
-        id2label=ID2LABEL, label2id=LABEL2ID,
+        id2label=ID2LABEL, label2id=LABEL2ID, dtype=dtype,
     )
     model.to(device)
 
@@ -207,7 +210,8 @@ def main():
             torch.save(model.state_dict(), state_path)
 
     model.load_state_dict(torch.load(state_path, weights_only=True))
-    # Test-set inference on CPU for reproducibility, as everywhere else.
+    # Test-set inference in fp32 on CPU for reproducibility, as everywhere else.
+    model.float()
     model.to("cpu")
     tt, tp = evaluate(model, test_dl, torch.device("cpu"))
     weighted = f1_score(tt, tp, average="weighted")
