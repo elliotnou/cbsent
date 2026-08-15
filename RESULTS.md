@@ -568,3 +568,19 @@ model starts better on central bank text than the adapted base ended
 (1.79 vs 1.61 unadapted-large vs adapted-base is not directly comparable
 across capacities, but the 28% in-run drop is roughly double the base
 model's per-epoch improvement), so the capacity is being used.
+
+## Dictionary baseline on the TDW benchmark test split (2026-08-15)
+
+- command: `python -c` over `cbsent.dictionary.classify` on
+  data/benchmark/test.csv (the same 496 sentences the other systems see)
+- git commit: `02b9d83`
+
+| system | weighted F1 | macro F1 | accuracy |
+|---|---|---|---|
+| dictionary (Apel & Blix Grimaldi) | 0.5478 | 0.5156 | 0.5605 |
+| cbsent fine-tune, 3-seed mean | 0.658 | | |
+| zero-shot gpt-5 | 0.7133 | 0.7019 | 0.7137 |
+
+Run so that all three systems have a number on the same benchmark split.
+The fine-tune beats the dictionary by +11.0 weighted F1 and trails
+zero-shot GPT-5 by -5.5.
