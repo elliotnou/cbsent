@@ -420,3 +420,24 @@ first pretraining launch was killed at step 600 of 4,100 with a 52-hour
 ETA. Domain-adaptive pretraining therefore runs in bfloat16 end to end
 (losses finite and decreasing; float16 produced NaN without loss scaling)
 and the adapted weights are exported as float32.
+
+## Domain-adaptive pretraining, ModernBERT-base (2026-08-14)
+
+- command: `python scripts/pretrain_dapt.py --epochs 2` (final leg resumed
+  with `--resume` from the step-2800 checkpoint after a battery-power stall)
+- git commit: `6070027`
+- corpus: 269,210 sentences / 2,354 documents, packed into 66,930 blocks
+  of 128 tokens (8.6M tokens)
+- training: bfloat16 on MPS, batch 32, lr 5e-5, 30% masking, 4,100 steps
+  (2 epochs), linear warmup/decay; weights exported as float32
+
+Validation MLM loss: 2.1210 before adaptation, 1.6064 after (24% lower).
+The epoch-1 value (1.6066) from an earlier interrupted run of the same
+seed reproduced to the third decimal on the restart, and the loss
+plateaued during epoch 2, so two epochs saturate this corpus at this
+scale.
+
+Operational note: two stalls interrupted training, both traced to the
+machine sleeping (an MPS command queue does not always survive
+sleep/wake). Checkpointing every 400 steps plus --resume was added after
+the first; the second cost 20 minutes instead of a full run.
