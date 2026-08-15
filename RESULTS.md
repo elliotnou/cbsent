@@ -468,3 +468,22 @@ Consequence: fine-tuning runs in fp32 on CPU (with per-batch dynamic
 padding and linear warmup/decay added at the same time), while MLM
 pretraining stays bf16 on MPS. The stopped run's number above is
 retained but superseded.
+
+## Addendum to the precision finding (2026-08-15)
+
+- git commit: `975ab92`
+
+Two further controlled 2-epoch runs complete the picture. Vanilla
+ModernBERT-base (no domain adaptation) in bf16 scored 0.5622 at epoch 1
+and then diverged to 0.0860 at epoch 2, so bf16 fine-tuning is unstable,
+not merely lossy, and the adapted backbone was never the problem. fp16
+with static loss scaling (scale 1024, skipping non-finite steps) reached
+0.5641 / 0.6360 - stable and 6x faster than CPU, but still 0.024 weighted
+F1 under fp32 at equal steps. With the evaluation target this close, the
+sweep stays on fp32.
+
+| configuration | epoch 1 | epoch 2 |
+|---|---|---|
+| CPU fp32 (reference) | 0.5858 | 0.6595 |
+| MPS fp16 + loss scaling | 0.5641 | 0.6360 |
+| MPS bf16, vanilla backbone | 0.5622 | 0.0860 (diverged) |
