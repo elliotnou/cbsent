@@ -46,7 +46,7 @@ def _resolve_model_dir() -> str:
     except ImportError as exc:
         raise RuntimeError(
             "no local model and huggingface_hub is not installed; "
-            'install it with pip install "cbsent[model]"'
+            'install it with pip install "cbsent[inference]"'
         ) from exc
 
     try:

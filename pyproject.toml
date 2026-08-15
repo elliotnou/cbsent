@@ -14,11 +14,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# Everything needed to score text with the model.
-model = [
+# Everything needed to score text: PyTorch and the tokenizer stack.
+inference = [
     "torch>=2.4",
     "transformers>=4.44",
     "numpy>=1.26",
+    "huggingface-hub>=0.24",
 ]
 # Everything needed to reproduce every number in RESULTS.md.
 research = [

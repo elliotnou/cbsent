@@ -12,7 +12,7 @@ that reproduce every number in [RESULTS.md](RESULTS.md).
 ## Install
 
 ```bash
-pip install -e ".[model]"      # scoring
+pip install -e ".[inference]"   # scoring
 pip install -e ".[research]"   # scoring plus everything RESULTS.md needs
 ```
 

@@ -63,7 +63,7 @@ Or through the package, which adds central-bank sentence segmentation and
 document-level aggregation:
 
 ```bash
-pip install cbsent
+pip install "cbsent[inference]"
 cbsent score "Inflation remains elevated."
 ```
 
