@@ -523,3 +523,35 @@ final table shows.
 | dictionary | 0.58 (14/24) | 0.20 (2/10) | 0.86 (12/14) | 3 (dovish, hawkish, neutral) |
 | zero-shot gpt-5 | 1.00 (24/24) | 1.00 (10/10) | 1.00 (14/14) | 2 (dovish, hawkish) |
 | fine-tune (export/bench-sweep/boc1200-20250811) | 0.62 (15/24) | 0.40 (4/10) | 0.79 (11/14) | 3 (dovish, hawkish, neutral) |
+
+## 2-year yield study (2026-08-15)
+
+- command: `python scripts/yield_study.py --model-dir export/bench-sweep/boc1200-20250811 --start 2011-01-01 --doc-types statement,minutes`
+- git commit: `36d9af4`
+- releases scored: 243 Fed (statement+minutes), 2011-01-01 onward
+- yield: FRED DGS2 daily close, same-day change over prior business day, basis points
+- score: mean P(hawkish)-P(dovish) over sentences, export/bench-sweep/boc1200-20250811, cpu
+
+| relation | Pearson r | permutation p (two-sided) | n |
+|---|---|---|---|
+| score level vs same-day 2y move | +0.0136 | 0.8309 | 243 |
+| score change vs same-day 2y move | +0.2105 | 0.0010 | 241 |
+
+## Yield study by document type (2026-08-15)
+
+- command: recomputed from `data/yield_study.csv` (same run as the entry
+  above); subset by doc_type, computed after the pooled result was seen
+  and reported for both types, not just the better one
+- git commit: `36d9af4`
+
+| subset | n | score-change vs same-day 2y move, Pearson r | permutation p |
+|---|---|---|---|
+| all releases | 241 | +0.2105 | 0.0010 |
+| statements only | 126 | +0.2711 | 0.0027 |
+| minutes only | 115 | +0.0831 | 0.3765 |
+
+The signal lives in statements; minutes releases move yields far less
+predictably, which is consistent with their content describing a meeting
+three weeks past. The honest headline from this study is a statistically
+significant but modest correlation, roughly 0.21 pooled or 0.27 on
+statements, not anything near 0.5.
