@@ -584,3 +584,29 @@ model's per-epoch improvement), so the capacity is being used.
 Run so that all three systems have a number on the same benchmark split.
 The fine-tune beats the dictionary by +11.0 weighted F1 and trails
 zero-shot GPT-5 by -5.5.
+
+## ModernBERT-large fine-tune preview, fp16 on MPS (2026-08-15)
+
+- command: preview script in the session scratchpad, same data recipe as
+  the flagship base run (TDW train + 1,200 BoC, seed 20250811), fp16 with
+  static loss scaling, 6 epochs, test scored at each new validation peak
+- git commit: `9f6fd74`
+- purpose: decide whether a full fp32 large-model run is worth its cost
+
+| epoch | val weighted F1 | non-finite steps skipped (of ~180) | test weighted F1 at val peak |
+|---|---|---|---|
+| 1 | 0.6546 | 34 | 0.5769 |
+| 2 | 0.7282 | 43 | 0.6557 |
+| 3 | 0.7051 | 33 | |
+| 4 | 0.7126 | 55 | |
+| 5 | 0.6956 | 77 | |
+| 6 | 0.6902 | 101 | |
+
+Best test score 0.6557, statistically indistinguishable from the base
+model's 3-seed mean of 0.658 and still below zero-shot GPT-5 at 0.7133.
+The skipped-step count climbing from 34 to 101 shows fp16 degrading as
+training proceeds: by the last epoch more than half the updates were
+discarded, so this preview is a floor on the large model rather than a
+fair measurement of it. An fp32 run is therefore still worth its cost,
+with the expectation of roughly 0.68 to 0.70 rather than a result that
+overtakes the LLM.
