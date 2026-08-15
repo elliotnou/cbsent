@@ -18,9 +18,14 @@ from cbsent.segment import segment_sentences
 HUB_REPO_ENV = "CBSENT_HUB_REPO"
 LOCAL_DIR_ENV = "CBSENT_MODEL_DIR"
 
-# Searched in order. The benchmark fine-tune is the better scorer and is
-# preferred; the two-headed model is the fallback because it also predicts
-# topic, which document aggregation uses when available.
+# Published weights, downloaded on first use when no local model exists.
+# Override with CBSENT_HUB_REPO to point at a fork or a private copy.
+DEFAULT_HUB_REPO = "elliotnou/cbsent"
+
+# Searched first, so a working copy of the repository uses its own freshly
+# trained weights rather than the published ones. The benchmark fine-tune
+# is the better scorer; the two-headed model is the fallback because it
+# also predicts topic, which document aggregation uses when available.
 DEFAULT_MODEL_DIRS = (
     "export/cbsent-bench",
     "export/bench-sweep/boc1200-20250811",
@@ -34,15 +39,27 @@ def _resolve_model_dir() -> str:
     for local in candidates:
         if is_hf_export(local) or os.path.exists(os.path.join(local, "model.pt")):
             return local
-    repo = os.getenv(HUB_REPO_ENV)
-    if repo:
+
+    repo = os.getenv(HUB_REPO_ENV, DEFAULT_HUB_REPO)
+    try:
         from huggingface_hub import snapshot_download
+    except ImportError as exc:
+        raise RuntimeError(
+            "no local model and huggingface_hub is not installed; "
+            'install it with pip install "cbsent[model]"'
+        ) from exc
+
+    try:
+        print(f"no local model found, downloading {repo} from the Hugging Face Hub "
+              f"(about 600 MB, once)")
         return snapshot_download(repo_id=repo)
-    raise FileNotFoundError(
-        "no model found in " + ", ".join(c for c in candidates if c) +
-        f"; train one (make train-benchmark) or set {HUB_REPO_ENV} to a "
-        "Hugging Face repo id"
-    )
+    except Exception as exc:
+        raise FileNotFoundError(
+            f"no local model in {', '.join(c for c in candidates if c)} and "
+            f"could not download {repo} from the Hugging Face Hub ({exc}). "
+            f"Train one with make train-benchmark, or set {LOCAL_DIR_ENV} to a "
+            f"model directory, or {HUB_REPO_ENV} to a different repo."
+        ) from exc
 
 
 @lru_cache(maxsize=2)
