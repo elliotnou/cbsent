@@ -610,3 +610,30 @@ discarded, so this preview is a floor on the large model rather than a
 fair measurement of it. An fp32 run is therefore still worth its cost,
 with the expectation of roughly 0.68 to 0.70 rather than a result that
 overtakes the LLM.
+
+## History rewrite to remove the weights blob (2026-08-15)
+
+- command: `git-filter-repo --path export/cbsent/model.pt --invert-paths --force`
+- git commit (post-rewrite HEAD at time of writing): `ae2b50d`
+
+The 253 MB `export/cbsent/model.pt` had been committed five times before
+`.gitignore` covered `export/`, putting five copies in the object store
+and taking the repository to 1.6 GB. GitHub rejects any file over 100 MB,
+so the repository could not be pushed at all.
+
+That one path was removed from all 135 commits. Nothing else changed:
+same commits, same messages, same order, same contents. The repository is
+now 267 MB, of which the largest remaining items are the retired React
+frontend's assets (11.8 MB) and the corpus snapshots
+(`data/sentences.csv`, 10.8 MB across versions).
+
+Every commit hash cited in the entries above therefore changed. The
+complete old-to-new mapping for all 137 objects is committed as
+`data/commit-map-pre-rewrite.txt`, so any hash quoted earlier in this
+file can still be resolved to the commit that produced the number. Commit
+messages and dates were untouched and are an independent way to locate
+any entry's commit.
+
+Model weights are distributed through the Hugging Face Hub
+(`scripts/publish_hub.py`), which is where they belong; the accident was
+committing them to git at all.
