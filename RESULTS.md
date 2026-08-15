@@ -510,3 +510,16 @@ ModernBERT-large domain adaptation is running as the next lever. A +9
 margin over GPT-5 would require 0.80 weighted F1, above anything
 published on this benchmark; that context stays attached to whatever the
 final table shows.
+
+## Negation probe (2026-08-15)
+
+- command: `python scripts/negation_probe.py`
+- git commit: `16354c4`
+- probe: 24 hand-written minimal pairs in `data/negation_probe.csv`, labelled by the codebook rules cited per row, 10 of them carrying a negation cue
+- inference device: cpu
+
+| system | all items | negated items | non-negated items | distinct labels used on negated items |
+|---|---|---|---|---|
+| dictionary | 0.58 (14/24) | 0.20 (2/10) | 0.86 (12/14) | 3 (dovish, hawkish, neutral) |
+| zero-shot gpt-5 | 1.00 (24/24) | 1.00 (10/10) | 1.00 (14/14) | 2 (dovish, hawkish) |
+| fine-tune (export/bench-sweep/boc1200-20250811) | 0.62 (15/24) | 0.40 (4/10) | 0.79 (11/14) | 3 (dovish, hawkish, neutral) |
