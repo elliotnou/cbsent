@@ -441,3 +441,30 @@ Operational note: two stalls interrupted training, both traced to the
 machine sleeping (an MPS command queue does not always survive
 sleep/wake). Checkpointing every 400 steps plus --resume was added after
 the first; the second cost 20 minutes instead of a full run.
+
+## Reproducibility finding: pure-bf16 fine-tuning degrades accuracy (2026-08-15)
+
+- git commit: `e473632`
+- command: the same 2-epoch fine-tune of the adapted backbone on the TDW
+  train split (identical seed, split, and batch order), varying only
+  numeric precision and learning rate
+
+| configuration | val weighted F1, epoch 1 | epoch 2 |
+|---|---|---|
+| MPS bf16, lr 2e-5 (first sweep run, 8 epochs, test set) | | 0.5122 |
+| MPS bf16, lr 8e-5 | 0.5509 | 0.5735 |
+| CPU fp32, lr 2e-5 | 0.5858 | 0.6595 |
+
+bf16 was adopted for pretraining because fp32 ModernBERT is ~17x slower
+on this machine's MPS (recorded above), and it was fine there: MLM val
+loss matched the fp32 trajectory to three decimals. Fine-tuning is a
+different regime: with only ~2,000 supervised sentences, pure-bf16
+weights and optimizer state cost roughly 0.09 weighted F1 against fp32
+at equal steps, and a 4x learning rate did not close the gap. The first
+benchmark sweep was stopped after one run when its 0.5122 came in far
+below the ~0.69 a RoBERTa-base baseline reaches on this benchmark.
+
+Consequence: fine-tuning runs in fp32 on CPU (with per-batch dynamic
+padding and linear warmup/decay added at the same time), while MLM
+pretraining stays bf16 on MPS. The stopped run's number above is
+retained but superseded.

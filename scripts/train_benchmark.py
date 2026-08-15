@@ -80,23 +80,30 @@ def load_boc_extension(n: int, cut_date: str, seed: int):
 
 
 class TextDataset(Dataset):
-    def __init__(self, texts, labels, tokenizer):
+    def __init__(self, texts, labels):
         self.texts = texts
         self.labels = labels
-        self.tokenizer = tokenizer
 
     def __len__(self):
         return len(self.texts)
 
     def __getitem__(self, i):
-        enc = self.tokenizer(self.texts[i], max_length=MAX_LEN,
-                             padding="max_length", truncation=True,
-                             return_tensors="pt")
+        return self.texts[i], self.labels[i]
+
+
+def make_collate(tokenizer):
+    """Pad to the batch maximum, not MAX_LEN: benchmark sentences average
+    about 30 tokens, so fixed-width padding wastes most of the compute."""
+    def collate(batch):
+        texts, labels = zip(*batch)
+        enc = tokenizer(list(texts), max_length=MAX_LEN, padding=True,
+                        truncation=True, return_tensors="pt")
         return {
-            "input_ids": enc["input_ids"].squeeze(0),
-            "attention_mask": enc["attention_mask"].squeeze(0),
-            "label": torch.tensor(self.labels[i]),
+            "input_ids": enc["input_ids"],
+            "attention_mask": enc["attention_mask"],
+            "label": torch.tensor(labels),
         }
+    return collate
 
 
 def evaluate(model, loader, device):
@@ -122,6 +129,7 @@ def main():
     parser.add_argument("--lr", type=float, default=2e-5)
     parser.add_argument("--seed", type=int, default=20250811)
     parser.add_argument("--val-fraction", type=float, default=0.1)
+    parser.add_argument("--device", default="cpu")
     parser.add_argument("--out", default="export/cbsent-bench")
     parser.add_argument("--no-results-append", action="store_true")
     args = parser.parse_args()
@@ -131,7 +139,11 @@ def main():
     random.seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
-    device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+    # CPU on purpose: pure-bf16 fine-tuning on MPS cost 0.09 weighted F1 at
+    # equal steps in a controlled comparison (RESULTS.md), and fp32 on MPS
+    # hits the slow kernel path. fp32 on CPU with dynamic padding is both
+    # correct and fast enough.
+    device = torch.device(args.device)
 
     train_texts, train_labels = load_split("train")
     test_texts, test_labels = load_split("test")
@@ -161,26 +173,32 @@ def main():
     print(f"train {len(tr)} / val {len(va)}")
 
     tokenizer = AutoTokenizer.from_pretrained(args.backbone)
-    # bf16 on MPS: full-precision ModernBERT hits the slow kernel path
-    # measured in RESULTS.md. Test inference happens in fp32 on CPU.
-    dtype = torch.bfloat16 if device.type == "mps" else torch.float32
     model = AutoModelForSequenceClassification.from_pretrained(
         args.backbone, num_labels=3,
-        id2label=ID2LABEL, label2id=LABEL2ID, dtype=dtype,
+        id2label=ID2LABEL, label2id=LABEL2ID,
     )
     model.to(device)
 
+    collate = make_collate(tokenizer)
     make = lambda idx: TextDataset([train_texts[i] for i in idx],
-                                   [train_labels[i] for i in idx], tokenizer)
+                                   [train_labels[i] for i in idx])
     g = torch.Generator().manual_seed(args.seed)
     train_dl = DataLoader(make(tr), batch_size=args.batch_size, shuffle=True,
-                          generator=g)
-    val_dl = DataLoader(make(va), batch_size=64)
-    test_dl = DataLoader(TextDataset(test_texts, test_labels, tokenizer),
-                         batch_size=64)
+                          generator=g, collate_fn=collate)
+    val_dl = DataLoader(make(va), batch_size=64, collate_fn=collate)
+    test_dl = DataLoader(TextDataset(test_texts, test_labels),
+                         batch_size=64, collate_fn=collate)
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr,
                                   weight_decay=0.01)
+    total_steps = args.epochs * ((len(tr) + args.batch_size - 1) // args.batch_size)
+    warmup = max(20, total_steps // 20)
+    scheduler = torch.optim.lr_scheduler.LambdaLR(
+        optimizer,
+        lambda t: min(1.0, t / warmup) * max(
+            0.0, (total_steps - t) / max(1, total_steps - warmup)
+        ),
+    )
     criterion = nn.CrossEntropyLoss()
 
     best_val = -1.0
@@ -198,6 +216,7 @@ def main():
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             optimizer.step()
+            scheduler.step()
             optimizer.zero_grad()
             total += loss.item() * batch["label"].size(0)
         vt, vp = evaluate(model, val_dl, device)
@@ -210,8 +229,7 @@ def main():
             torch.save(model.state_dict(), state_path)
 
     model.load_state_dict(torch.load(state_path, weights_only=True))
-    # Test-set inference in fp32 on CPU for reproducibility, as everywhere else.
-    model.float()
+    # Test-set inference on CPU for reproducibility, as everywhere else.
     model.to("cpu")
     tt, tp = evaluate(model, test_dl, torch.device("cpu"))
     weighted = f1_score(tt, tp, average="weighted")
