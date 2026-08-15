@@ -1,198 +1,211 @@
 # cbsent
 
-A hawkish-dovish sentiment engine for Federal Reserve and Bank of Canada
-communications. Sentence-level stance and topic from a fine-tuned
-DistilBERT, evaluated against the dictionary method from the literature
-and zero-shot GPT-5 on a chronologically held-out year, and validated
-with a point-in-time event study against USD/CAD.
+Central bank tone engine. Scores Federal Reserve and Bank of Canada
+communications for hawkish/dovish stance at the sentence level, evaluated
+against a published benchmark, the literature's dictionary method, and
+zero-shot GPT-5, and validated point-in-time against the 2-year Treasury
+market.
 
-This is a library, not a hosted app: an importable package, a CLI, and
-scripts that reproduce every number reported in
-[RESULTS.md](RESULTS.md).
+A library, not a hosted app: an importable package, a CLI, and scripts
+that reproduce every number in [RESULTS.md](RESULTS.md).
 
 ## Install
 
 ```bash
-pip install -e ".[model]"     # scoring
-pip install -e ".[research]"  # scoring plus everything RESULTS.md needs
+pip install -e ".[model]"      # scoring
+pip install -e ".[research]"   # scoring plus everything RESULTS.md needs
 ```
-
-Bare `pip install -e .` installs only the ingest and segmentation layer,
-which is deliberately free of PyTorch.
 
 ## Use
 
-```python
-from cbsent import score
+```bash
+$ cbsent score "Inflation remains elevated and the labour market is tight."
+score:  +1.0000   (up)
+stance: hawkish
+sentences scored: 1
 
-result = score("Economic activity has weakened and the unemployment rate has risen substantially.")
-print(result["score"], result["stance"])
-# -0.951 dovish
+$ cbsent score "Economic growth has slowed and slack has increased."
+score:  -0.1967   (down)
+stance: dovish
 ```
 
-Weights are found at `export/cbsent`, or set `CBSENT_HUB_REPO` to pull
-them from the Hugging Face Hub; the `distilbert-base-uncased` backbone is
-fetched from the Hub the first time a model loads.
-
-From the shell:
+Scores are `P(hawkish) - P(dovish)`, so they run from -1 to +1 and 0 means
+no directional signal. Whole documents get segmented, scored per sentence,
+and aggregated, with the breakdown available so a reader can audit the
+verdict rather than trust it:
 
 ```bash
-cbsent score statement.txt
-cbsent segment statement.txt
+$ cbsent score -f fomc_statement.txt --sentences
+score:  +0.7101   (up)
+stance: hawkish
+sentences scored: 5
+
+  +0.998  hawk    Recent indicators suggest that economic activity has continued to...
+  +0.998  hawk    Job gains have been robust in recent months, and the unemployment...
+  +0.583  hawk    Inflation remains elevated.
+  +0.971  hawk    The Committee decided to raise the target range for the federal f...
+  +0.000  neut    In assessing the appropriate stance of monetary policy, the Commi...
 ```
 
-## What it does
+Also `cbsent score -f -` to read stdin, `--json` for machine-readable
+output, and in Python:
 
-```
-official sites          release timestamps        stance + topic          index
--------------           -----------------         --------------          -----
-FOMC statements    -->  documents table      -->  DistilBERT        -->   Fed level
-FOMC minutes            (published_at)            two heads:              minus
-BoC announcements  -->  sentences table      -->  stance 3-class    -->   BoC level
-                        (published_at)            topic 5-class           = divergence
+```python
+from cbsent import score
+result = score(open("boc_announcement.txt").read())
+print(result["score"], result["stance"])
 ```
 
-Every document is stamped with its exact release time (FOMC 2:00 p.m. ET;
-BoC 10:00 a.m. ET before 2024-01-24, 9:45 a.m. ET after), and every
-sentence row carries that timestamp. The divergence index at any instant
-reads only sentences whose `published_at` precedes it, so look-ahead is a
-schema violation rather than a code review question.
+## What it is
 
-Sentence segmentation is tuned to central bank prose: decimal rates,
-dotted abbreviations, enumerated clauses in minutes, and long
-semicolon-chained sentences that each carry their own stance.
+```
+official sites        release timestamps      domain adaptation      task
+-------------         -----------------       -----------------      ----
+FOMC statements  -->  documents table    -->  ModernBERT MLM    -->  stance
+FOMC minutes          (published_at)          on 269k sentences      3-class
+Fed speeches     -->  sentences table         8.6M tokens            + topic
+BoC announcements     (published_at)                                 (legacy head)
+BoC speeches
+```
 
-Negation and hedge cues are marked inline before encoding, the intent
-being that "it is not yet appropriate to raise rates" is not read as
-hawkish. **On the current model that intent is not met.** A probe of 24
-hand-written minimal pairs, each flipping only the negation while holding
-the policy vocabulary fixed, is in
-[data/negation_probe.csv](data/negation_probe.csv):
+**Corpus.** 2,354 documents, 269,210 sentences: FOMC statements and
+minutes back to 2011, 1,326 Fed speeches and 278 testimony appearances
+from the official feeds, Bank of Canada rate announcements and 413
+speeches. Every document carries its exact release timestamp (FOMC 2:00
+p.m. ET, 2:15 p.m. before March 2013; BoC 9:45 a.m. ET, 10:00 a.m. before
+2024-01-24) and every sentence row denormalizes it, so a point-in-time
+query cannot see the future without violating the schema.
 
-| system | all 24 items | 10 negated items | distinct labels used on negated items |
+**Segmentation** is tuned to central bank prose: decimal rates, dotted
+abbreviations, enumerated clauses in minutes, and semicolon-chained
+sentences that each carry their own stance.
+
+**Two model tracks.** A multi-task DistilBERT (stance + topic) trained on
+this project's own labels and evaluated on a chronologically held-out
+year, and a ModernBERT domain-adapted on the unlabelled corpus then
+fine-tuned on the public FOMC benchmark. The second is the better scorer
+and is what the CLI loads by default.
+
+## What it shows
+
+All three systems on the benchmark's held-out test split (496 sentences,
+human-annotated by its authors):
+
+| system | weighted F1 |
+|---|---|
+| dictionary method (Apel & Blix Grimaldi) | 0.5478 |
+| **cbsent fine-tune, 3-seed mean** | **0.658** |
+| zero-shot GPT-5 | 0.7133 |
+
+The fine-tune beats the literature's dictionary method by **+11 F1** and
+trails zero-shot GPT-5 by **5.5**. It is not state of the art and this
+repository does not claim to be; for context, the benchmark's own authors
+reported roughly 0.71 with RoBERTa-large.
+
+What it buys instead, measured: **122 sentences/second** locally at **zero
+marginal cost**, against ~1.8/second and **$2.46 per 1,000 sentences**
+through the API. Scoring this corpus once costs about $660 and 41 hours
+via GPT-5, or 37 minutes and nothing locally. Inference is CPU-pinned and
+bit-exact across runs, so a number reported today reproduces in three
+years, which an API model cannot promise.
+
+**Market validation.** Document tone changes track same-day 2-year
+Treasury yield moves across 243 Fed releases since 2011, computed
+point-in-time from text published before each release:
+
+| subset | n | Pearson r | permutation p |
 |---|---|---|---|
-| dictionary | 0.58 | 0.20 | 3 |
-| zero-shot GPT-5 | 1.00 | 1.00 | 2 |
-| cbsent (fine-tuned) | 0.67 | 0.60 | 1 |
+| all releases | 241 | +0.2105 | 0.0010 |
+| statements only | 126 | +0.2711 | 0.0027 |
+| minutes only | 115 | +0.0831 | 0.3765 |
 
-cbsent answers "hawkish" for every negated item, so its 0.60 there is the
-label mix of the subset and no evidence of negation sensitivity. The
-dictionary, which is negation-blind by design, scores 0.20. GPT-5 gets all
-ten right.
+Significant but modest, and concentrated in statements. Minutes describe a
+meeting three weeks past and move yields far less predictably.
 
-The ablation agrees. Training both variants at three seeds each, cue
-marking is worth -0.0020 macro-F1 overall against a between-seed spread of
-0.0033 to 0.0184: no measurable effect. A single run per variant had
-suggested +0.0522, which turned out to be training noise, and RESULTS.md
-records both along with the correction.
+## What it does not show
 
-Reading negation is the clearest thing the frontier LLM does that this
-model does not. The bottleneck looks like the training signal rather than
-the encoding: the labels are an LLM's opinions over ordinary corpus
-sentences, in which negated policy constructions are rare, so an input
-transform that merely exposes negation scope has nothing to learn from.
-The cheapest available fix is over-sampling negated cases into the human
-review queue.
+Kept here deliberately, because a repository that only reports its wins is
+not evidence of anything.
 
-## Evaluation
+- **Negation is handled poorly.** On a 24-item minimal-pair probe the
+  fine-tune gets 4 of 10 negated sentences right; GPT-5 gets 10 of 10, the
+  dictionary 2. An inline negation-marking transform was built to fix
+  this, then measured across seeds at **-0.002 F1** and abandoned. A
+  single-run measurement had suggested +0.052 before the seed sweep
+  showed it was noise.
+- **The FX event study is null.** Every scheduled decision in the held-out
+  year matched economist consensus, so there were no surprises to test.
+  Across all 15 decisions the divergence index moved with USD/CAD on 9,
+  which a binomial test cannot separate from a coin flip (p = 0.607).
+- **The held-out-year evaluation is provisional.** Its reference labels
+  come from an LLM bootstrap, so the GPT-5 row there is inflated by shared
+  model family and prompt. Only the benchmark table above uses independent
+  human labels.
+- **Bigger did not help.** ModernBERT-large, domain-adapted the same way,
+  scored 0.6557 in an fp16 preview, statistically level with the base
+  model. An fp32 rerun is outstanding.
 
-Chronological split only. Training uses text published before
-2025-08-01; the year that follows is never seen during training or model
-selection. All three systems are scored on the identical 595 held-out
-sentences, on CPU.
+## Engineering notes
 
-| system | macro-F1 | hawkish F1 | dovish F1 | neutral F1 |
-|---|---|---|---|---|
-| dictionary (Apel & Blix Grimaldi) | 0.5794 | 0.4903 | 0.4217 | 0.8262 |
-| zero-shot GPT-5 | 0.8208 | 0.7863 | 0.7615 | 0.9146 |
-| cbsent (fine-tuned) | 0.6804 | 0.5429 | 0.6114 | 0.8868 |
+Three findings that cost real time and are recorded so they cost nobody
+else any:
 
-**These numbers are provisional and the fine-tune does not beat GPT-5
-here.** The reference labels for the held-out year currently come from an
-LLM bootstrap pass, not from a human. That makes the comparison unfair in
-GPT-5's favour: it shares a model family and a prompt with the labeller,
-so its row measures agreement with its own family rather than accuracy.
-The fine-tuned row is partly measured against its own training signal for
-the same reason. The one comparison that means something today is the
-margin over the dictionary baseline, which shares nothing with the
-labeller: **+0.101 macro-F1**. Alongside that, the fine-tuned model runs
-at 122 sentences/second locally at no marginal cost, against $2.46 per
-1,000 sentences for GPT-5.
-
-Turning this into a real headline number requires human-verified held-out
-labels; the review queue exists for exactly that, and
-[labeling/README.md](labeling/README.md) explains the priority order.
-
-Every number above, the negation ablation, the event study, and the cost
-comparison are in [RESULTS.md](RESULTS.md) with the command, git commit,
-and date that produced each one.
-
-## Event study
-
-![Fed minus BoC divergence and USD/CAD](docs/divergence.png)
-
-Point-in-time replay over the held-out year: for each of the 16 scheduled
-Fed and BoC decisions, the divergence index is computed from text
-published strictly before the release timestamp, then compared with the
-USD/CAD move over the hour after the release (intraday ticks for all 16).
-
-The honest result: **no decision in this window differed from the
-economist consensus**, so there are zero surprises to test against. Across
-all 15 decisions where the index change is defined, it moved in the same
-direction as the pair on 9, which a two-sided binomial test cannot
-distinguish from a coin flip (p = 0.607). The consensus source for every
-decision is cited row by row in [data/decisions.csv](data/decisions.csv).
-
-## Labeling
-
-[labeling/codebook.md](labeling/codebook.md) defines the stance and topic
-schemes, cites the literature they adapt, and gives worked
-negation/hedge cases. Labels are bootstrapped with the dictionary method
-plus an LLM pass, then human-reviewed through
-[labeling/review.py](labeling/review.py); the review queue prioritizes
-the held-out window and every bootstrap disagreement.
+- **MPS inference is not deterministic.** Identical input and weights
+  disagreed on up to 79 of 595 sentences between repeats, swinging results
+  by ~2 F1. CPU repeats were exact. Everything that reports a number now
+  runs on CPU.
+- **fp32 ModernBERT hits a pathological kernel path on MPS**, about 50
+  s/step against 2.9 s/step in bfloat16, a 17x penalty that does not
+  appear at short sequence lengths. Pretraining runs in bf16.
+- **bf16 is fine for pretraining and wrong for fine-tuning.** With only
+  ~2,000 supervised examples it cost 0.09 weighted F1 against fp32, and on
+  a vanilla backbone it diverged outright (0.5622 then 0.0860).
 
 ## Reproducibility
 
 One command per reported number, each appending to RESULTS.md with the
-command, the git commit, and the date:
+command, git commit, and date:
 
 ```bash
-make ingest             # scrape and load documents and sentences
+make ingest             # core corpus
+make ingest-expanded    # speeches, testimony, archives
 make bootstrap          # dictionary + LLM first-pass labels
 make review             # human review queue (review-html for the browser)
-make train              # fine-tune, chronological split, on Apple MPS
-make ablate             # negation/hedge ablation across seeds
-make eval-provisional   # the three-way macro-F1 table recorded today
-make eval               # the same table, human labels only
+make pretrain           # domain-adaptive pretraining
+make train-benchmark    # fine-tune on the public benchmark
+make gpt5-benchmark     # zero-shot LLM baseline
+make eval-provisional   # three-way table on the held-out year
 make probe              # negation minimal-pair probe
-make event-study        # decisions, FX alignment, and the chart
-make cost               # inference cost and speed against the LLM baseline
+make yield-study        # 2-year Treasury correlation
+make event-study        # FX decisions and the chart
+make cost               # inference cost and speed
 make test               # unit tests
 ```
 
-`make eval` deliberately fails until human-verified held-out labels
-exist, and says so; `make eval-provisional` is the command that produced
-the table above. Everything except `make ingest`, `make bootstrap` and
-`make cost` runs without network access or an API key: the LLM labels
-behind the reported rows are committed in
-[data/llm_labels.csv](data/llm_labels.csv) and consulted before any
-request, so `make eval-provisional` and `make probe` reproduce their
-numbers offline at zero cost.
+The LLM labels behind every reported row are committed in
+[data/llm_labels.csv](data/llm_labels.csv) and consulted before any API
+call, so `make eval-provisional` and `make probe` reproduce their numbers
+**offline with no API key**. Requires PostgreSQL (`DATABASE_URL`);
+`OPENAI_API_KEY` only for fresh labelling. Pinned dependencies in
+[requirements.lock](requirements.lock).
 
-Every script that reports a number scores on CPU by default. This is
-deliberate: MPS inference on this model is not deterministic, and the
-same evaluation swung by about two macro-F1 points between repeats on
-MPS while CPU repeats were exact. The measurement is in RESULTS.md.
-Training still runs on MPS, where nondeterminism only perturbs the
-optimisation path and the resulting weights are kept as an artefact.
+## Data sources
 
-Requires PostgreSQL (`DATABASE_URL`) and, for the LLM passes,
-`OPENAI_API_KEY`. Pinned dependencies are in
-[requirements.lock](requirements.lock). Data sources: the Federal
-Reserve and Bank of Canada websites; USD/CAD from Dukascopy tick history
-with the Bank of Canada Valet daily rate as fallback.
+Federal Reserve and Bank of Canada websites; the FOMC hawkish-dovish
+benchmark of Shah, Paturi & Chava (2023), CC BY-NC 4.0; USD/CAD from
+Dukascopy tick history with the Bank of Canada Valet API as fallback;
+2-year Treasury yields from FRED (DGS2). Labeling scheme and its sources
+are in [labeling/codebook.md](labeling/codebook.md).
+
+## Open threads
+
+- No-DAPT control run, to measure whether domain adaptation improves the
+  benchmark score or only the language-modelling loss
+- ModernBERT-large fine-tune in fp32
+- Human review of the held-out labels, which is what would turn the
+  provisional evaluation into a headline one
 
 ## License
 
-MIT
+MIT for the code. The benchmark data is CC BY-NC 4.0; anything trained on
+it inherits that restriction.
