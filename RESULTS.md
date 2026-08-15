@@ -555,3 +555,16 @@ predictably, which is consistent with their content describing a meeting
 three weeks past. The honest headline from this study is a statistically
 significant but modest correlation, roughly 0.21 pooled or 0.27 on
 statements, not anything near 0.5.
+
+## Domain-adaptive pretraining, ModernBERT-large (2026-08-15)
+
+- command: `python scripts/pretrain_dapt.py --backbone answerdotai/ModernBERT-large --epochs 1 --batch-size 16 --out export/modernbert-large-cb-dapt`
+- git commit: `c494c1a`
+- same corpus and packing as the base run (66,930 blocks, 8.6M tokens),
+  bfloat16 on MPS, one epoch
+
+Validation MLM loss: 1.7926 before adaptation, 1.2871 after. The large
+model starts better on central bank text than the adapted base ended
+(1.79 vs 1.61 unadapted-large vs adapted-base is not directly comparable
+across capacities, but the 28% in-run drop is roughly double the base
+model's per-epoch improvement), so the capacity is being used.
