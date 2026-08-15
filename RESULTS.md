@@ -487,3 +487,26 @@ sweep stays on fp32.
 | CPU fp32 (reference) | 0.5858 | 0.6595 |
 | MPS fp16 + loss scaling | 0.5641 | 0.6360 |
 | MPS bf16, vanilla backbone | 0.5622 | 0.0860 (diverged) |
+
+## TDW benchmark, first fp32 flagship run (2026-08-15)
+
+- command: run 1 of `python scripts/benchmark_sweep.py` (fp32, cpu),
+  backbone export/modernbert-cb-dapt, BoC extension 1,200 sentences
+  (0 human-labelled), seed 20250811, 8 epochs, best epoch 5 by validation
+- git commit: `40fa498` (run trained at 40fa498)
+
+| metric | value |
+|---|---|
+| test weighted F1 | 0.6826 |
+| test macro F1 | 0.6570 |
+| test accuracy | 0.6855 |
+| zero-shot GPT-5 on the same split (recorded above) | 0.7133 weighted F1 |
+
+First honest read: the domain-adapted ModernBERT-base fine-tune lands in
+the range the benchmark's authors reported for RoBERTa-base, and sits
+3.1 weighted-F1 points below zero-shot GPT-5, not above it. The remaining
+sweep runs measure seed spread and the BoC extension's effect;
+ModernBERT-large domain adaptation is running as the next lever. A +9
+margin over GPT-5 would require 0.80 weighted F1, above anything
+published on this benchmark; that context stays attached to whatever the
+final table shows.
