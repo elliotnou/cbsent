@@ -36,7 +36,7 @@ def run_one(backbone: str, boc: int, seed: int, epochs: int) -> dict:
     ]
     print(f"  training boc={boc} seed={seed}")
     subprocess.run(cmd, check=True, capture_output=True, text=True)
-    with open(os.path.join(out_dir, "config.json"), encoding="utf-8") as f:
+    with open(os.path.join(out_dir, "train_config.json"), encoding="utf-8") as f:
         return json.load(f)
 
 

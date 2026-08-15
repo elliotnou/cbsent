@@ -248,7 +248,8 @@ def main():
         "train_device": str(device),
         "test_device": "cpu",
     }
-    with open(os.path.join(args.out, "config.json"), "w") as f:
+    # Not config.json: that name is the model's own Hugging Face config.
+    with open(os.path.join(args.out, "train_config.json"), "w") as f:
         json.dump(config, f, indent=2)
 
     if not args.no_results_append:
