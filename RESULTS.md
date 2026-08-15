@@ -637,3 +637,22 @@ any entry's commit.
 Model weights are distributed through the Hugging Face Hub
 (`scripts/publish_hub.py`), which is where they belong; the accident was
 committing them to git at all.
+
+## Second rewrite: the stale LFS-tracked weights (2026-08-15)
+
+- command: `git-filter-repo --path backend/analysis/model/export/model.pt --invert-paths --force`
+- git commit (post-rewrite HEAD at time of writing): `db733b8`
+
+The original project tracked its DistilBERT weights through Git LFS. That
+backend was deleted when the dashboard was retired, but the LFS object
+remained referenced by old commits, so pushing re-uploaded 266 MB against
+a 1 GB free quota; the same quota exhaustion had previously broken the
+project's CI.
+
+Verified stale before removal: no LFS files in the working tree, no
+`.gitattributes`, and one path ever tracked. After removal the repository
+references zero LFS objects, and the stale local LFS cache was deleted.
+
+The repository is now 13 MB, down from 1.6 GB, across the same 136
+commits. `data/commit-map-pre-rewrite.txt` has been regenerated to map
+hashes from this rewrite as well.
