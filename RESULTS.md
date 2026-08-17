@@ -656,3 +656,30 @@ references zero LFS objects, and the stale local LFS cache was deleted.
 The repository is now 13 MB, down from 1.6 GB, across the same 136
 commits. `data/commit-map-pre-rewrite.txt` has been regenerated to map
 hashes from this rewrite as well.
+
+## Does the Bank of Canada extension help? Three seeds each way (2026-08-17)
+
+- command: `python scripts/train_benchmark.py --backbone export/modernbert-cb-dapt --boc-sentences {1200,0} --seed {20250811,7,1234} --epochs 8`
+- git commit: `c7528bf`
+- identical in every other respect: same adapted backbone, same benchmark
+  split, same schedule, test scored once per run on cpu
+
+| seed | with 1,200 BoC | without | delta |
+|---|---|---|---|
+| 20250811 | 0.6826 | 0.6659 | +0.0167 |
+| 7 | 0.6316 | 0.6401 | -0.0085 |
+| 1234 | 0.6607 | 0.6556 | +0.0051 |
+| **mean** | **0.6583** (sd 0.0256) | **0.6539** (sd 0.0130) | **+0.0044** |
+
+The extension is worth +0.0044 weighted F1 on average, against a
+between-seed spread of 0.013 to 0.026, and it changes sign across seeds.
+On this benchmark the 1,200 Bank of Canada sentences have no measurable
+effect.
+
+Two caveats on interpretation. The benchmark's test split is FOMC text
+only, so BoC training data has no in-domain test to help on; a fair test
+of the extension's value would need Canadian evaluation data, which this
+benchmark does not provide. And all 1,200 sentences carry LLM bootstrap
+labels rather than human ones, so this measures the value of adding
+LLM-labelled out-of-domain data, not the value of the sentences
+themselves.
