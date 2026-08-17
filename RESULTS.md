@@ -683,3 +683,41 @@ benchmark does not provide. And all 1,200 sentences carry LLM bootstrap
 labels rather than human ones, so this measures the value of adding
 LLM-labelled out-of-domain data, not the value of the sentences
 themselves.
+
+## Does domain-adaptive pretraining help the task? Three seeds each way (2026-08-17)
+
+- command: `python scripts/train_benchmark.py --backbone {export/modernbert-cb-dapt,answerdotai/ModernBERT-base} --boc-sentences 1200 --seed {20250811,7,1234} --epochs 8`
+- git commit: `4d92f56`
+- identical in every other respect: same data, same schedule, same splits,
+  test scored once per run on cpu
+
+| seed | adapted backbone | off-the-shelf ModernBERT | delta |
+|---|---|---|---|
+| 20250811 | 0.6826 | 0.6754 | +0.0072 |
+| 7 | 0.6316 | 0.6354 | -0.0038 |
+| 1234 | 0.6607 | 0.6688 | -0.0081 |
+| **mean** | **0.6583** (sd 0.0256) | **0.6599** (sd 0.0214) | **-0.0016** |
+
+Domain-adaptive pretraining is worth -0.0016 weighted F1 on this
+benchmark: nothing, and if anything slightly negative. The 8.6M-token
+adaptation run cut held-out masked-language-model loss by 24% (2.1210 to
+1.6064), which is a real effect on the pretraining objective, and it does
+not transfer to downstream classification accuracy here.
+
+This is the honest finding and it supersedes any reading of the earlier
+DAPT entry as evidence of task improvement. That entry measured MLM loss
+and said so; it should not be cited as showing the adaptation helped the
+classifier, because measured directly, it does not.
+
+Plausible reasons, none of them verified: 8.6M tokens is small for
+adaptation (published domain-adaptation work typically uses hundreds of
+millions to billions), ModernBERT-base was already trained on 2 trillion
+tokens including substantial financial and news text, and the benchmark's
+training set may be large enough relative to the task's difficulty that
+better representations do not change the decision boundary.
+
+Combined with the Bank of Canada extension result above, the two
+components that made this pipeline more than a plain fine-tune are both
+measured at no effect. What remains defensible is the fine-tune itself,
+its margin over the dictionary baseline, its cost and speed profile, and
+the yield study.
